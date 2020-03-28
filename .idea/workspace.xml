@@ -81,12 +81,26 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="dynamic.classpath" value="false" />
-    <property name="last_opened_file_path" value="E:/Logiciels/IntelliJ/javafx-sdk-11.0.2/lib" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/src/main" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="recentsLimit" value="5" />
     <property name="settings.editor.selected.configurable" value="PMD" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\Thibaut Juzeau\Documents\études\Ingénieur\Informatique\Java\Projets\3e année\FastMath\src\main\resources\view" />
+      <recent name="E:\Thibaut Juzeau\Documents\études\Ingénieur\Informatique\Java\Projets\3e année\FastMath\src\code\view" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\Thibaut Juzeau\Documents\études\Ingénieur\Informatique\Java\Projets\3e année\FastMath\src\code\view" />
+      <recent name="E:\Thibaut Juzeau\Documents\études\Ingénieur\Informatique\Java\Projets\3e année\FastMath\src\code" />
+      <recent name="E:\Thibaut Juzeau\Documents\études\Ingénieur\Informatique\Java\Projets\3e année\FastMath\src\code\app" />
+      <recent name="E:\Thibaut Juzeau\Documents\études\Ingénieur\Informatique\Java\Projets\3e année\FastMath\src\resources\view" />
+      <recent name="E:\Thibaut Juzeau\Documents\études\Ingénieur\Informatique\Java\Projets\3e année\FastMath\src\resources" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration default="true" type="Applet" factoryName="Applet">
@@ -114,24 +128,17 @@
       <Host>localhost</Host>
       <Port>5050</Port>
     </configuration>
-    <configuration name="Main" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="sample.Launcher" />
+    <configuration name="FastMath" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="code.app.FastMath" />
       <module name="FastMath" />
       <option name="VM_PARAMETERS" value="--module-path E:\Logiciels\IntelliJ\javafx-sdk-11.0.2\lib --add-modules javafx.controls,javafx.fxml" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="sample.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="MAIN_CLASS_NAME" value="java.app.FastMath" />
+      <option name="VM_PARAMETERS" value="--module-path E:\Logiciels\IntelliJ\javafx-sdk-11.0.2\lib --add-modules javafx.controls,javafx.fxml" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -182,6 +189,9 @@
       <workItem from="1585218315780" duration="128000" />
       <workItem from="1585218532909" duration="875000" />
       <workItem from="1585219462740" duration="2488000" />
+      <workItem from="1585388389563" duration="2039000" />
+      <workItem from="1585390482033" duration="1853000" />
+      <workItem from="1585392385971" duration="1068000" />
     </task>
     <servers />
   </component>
@@ -197,37 +207,53 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="360" y="16" key="#Custom_Plugin_Repositories/0.0.1536.824@0.0.1536.824" timestamp="1585221365966" />
+    <state x="361" y="71" key="#Notifications" timestamp="1585393020263">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="361" y="71" key="#Notifications/0.0.1536.824@0.0.1536.824" timestamp="1585393020263" />
     <state x="393" y="116" key="#Project_Structure" timestamp="1585218679919">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="393" y="116" key="#Project_Structure/0.0.1536.824@0.0.1536.824" timestamp="1585218679919" />
-    <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1585219703413">
+    <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1585393424615">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1585219703413" />
+    <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1585393424615" />
+    <state x="498" y="195" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1585390611564">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="498" y="195" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1536.824@0.0.1536.824" timestamp="1585390611564" />
+    <state x="499" y="159" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1585392521648">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="499" y="159" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1536.824@0.0.1536.824" timestamp="1585392521648" />
     <state x="505" y="199" key="FileChooserDialogImpl" timestamp="1585218912540">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="505" y="199" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1585218912540" />
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom" timestamp="1585222001669">
+    <state width="1493" height="212" key="GridCell.Tab.0.bottom" timestamp="1585393458041">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1585222001669" />
-    <state width="1493" height="210" key="GridCell.Tab.0.center" timestamp="1585222001669">
+    <state width="1493" height="212" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1585393458041" />
+    <state width="1493" height="212" key="GridCell.Tab.0.center" timestamp="1585393458041">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1585222001669" />
-    <state width="1493" height="210" key="GridCell.Tab.0.left" timestamp="1585222001669">
+    <state width="1493" height="212" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1585393458041" />
+    <state width="1493" height="212" key="GridCell.Tab.0.left" timestamp="1585393458040">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1585222001669" />
-    <state width="1493" height="210" key="GridCell.Tab.0.right" timestamp="1585222001669">
+    <state width="1493" height="212" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1585393458040" />
+    <state width="1493" height="212" key="GridCell.Tab.0.right" timestamp="1585393458041">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1585222001669" />
-    <state x="277" y="0" key="SettingsEditor" timestamp="1585221994948">
+    <state width="1493" height="212" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1585393458041" />
+    <state x="277" y="0" key="SettingsEditor" timestamp="1585392612796">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="277" y="0" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1585221994948" />
+    <state x="277" y="0" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1585392612796" />
+    <state x="584" y="190" key="chooseDestDirectoryDialog" timestamp="1585393365725">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="584" y="190" key="chooseDestDirectoryDialog/0.0.1536.824@0.0.1536.824" timestamp="1585393365725" />
   </component>
 </project>
