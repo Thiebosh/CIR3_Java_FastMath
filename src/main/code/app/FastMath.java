@@ -12,13 +12,17 @@ import javafx.stage.Stage;
  */
 public class FastMath extends Application {
 
-    public static void main(String[] args) {
+    /**
+     *
+     * @param args
+     */
+    public static final void main(final String[] args) {
         launch(args);
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("/view/sample.fxml"));
+    public final void start(final Stage primaryStage) throws Exception{
+        final Parent root = FXMLLoader.load(getClass().getResource("/view/sample.fxml"));
         primaryStage.getIcons().add(new Image("file:src/main/resources/images/icon.png"));
         primaryStage.setTitle("FastMath");
         primaryStage.setScene(new Scene(root, 300, 275));
