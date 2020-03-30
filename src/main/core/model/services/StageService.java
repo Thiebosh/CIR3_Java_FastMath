@@ -1,30 +1,72 @@
 package core.model.services;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
-public class StageService {
-    //to test : pattern singleton plutot que classe interne
-    private Stage currentStage;
+import java.io.IOException;
 
-    public static StageService getInstance() {
-        return StageServiceHolder.INSTANCE;
+/**
+ * Gestionnaire auto-hébergé de contenu de fenêtre
+ */
+public class StageService {//NOPMD
+    /**
+     * unique instance auto hébergée de la fenêtre
+     */
+    private Stage stage;
+
+    /**
+     * getter : récupérer l'instance de fenêtre contrôlée
+     * @return
+     */
+    protected Stage getStage() {
+        return stage;
     }
 
-    private static class StageServiceHolder {
-        private static final StageService INSTANCE = new StageService();
+    /**
+     * setter : modifier la fenêtre affichée/contrôlée
+     * @param newStage fenêtre à contrôler
+     */
+    public void setStage(final Stage newStage) {
+        this.stage = newStage;
     }
 
 
-    public Stage getCurrentStage() {
-        return currentStage;
-    }
+    /**
+     * partie statique : accès à l'instance
+     */
+    public static class Holder {//NOPMD
+        /**
+         * unique instance de la classe, accès à la scène
+         */
+        protected static final StageService INSTANCE = new StageService();
 
-    public void setCurrentStage(final Stage currentStage) {
-        this.currentStage = currentStage;
-    }
+        /**
+         * getter : accès à l'unique instance de scène
+         *
+         * @return unique instance de la classe
+         */
+        public static StageService getInstance() {
+            return INSTANCE;
+        }
 
-    public void closeStage() {
-        currentStage.fireEvent(new WindowEvent(currentStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+        /**
+         * met à jour la scène affichée dans la fenêtre
+         *
+         * @param pageName nom du fichier fxml à afficher
+         */
+        public static void loadScene(final String pageName) {
+            final FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(StageService.class.getResource("/view/scene/" + pageName + ".fxml"));
+
+            try {
+                final VBox sceneRoot = loader.load();//VBox : rootNodeScene type
+                INSTANCE.getStage().setScene(new Scene(sceneRoot));
+                INSTANCE.getStage().show();
+            } catch (IOException e) {
+                e.printStackTrace();//passer en projet maven puis suivre https://www.baeldung.com/logback
+            }
+        }
     }
 }

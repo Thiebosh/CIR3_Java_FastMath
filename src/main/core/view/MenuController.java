@@ -2,42 +2,32 @@ package core.view;
 
 import core.model.services.StageService;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.layout.VBox;
 
-import java.io.IOException;
-
+/**
+ * Contrôleur du fichier menu.fxml
+ */
 public class MenuController {
-    @FXML
-    private static VBox screenAnchorPane;
-
-    private void switchPage(final String pageName) {
-        final FXMLLoader loader = new  FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/"+pageName+".fxml"));
-        try {
-            screenAnchorPane = loader.load();
-            StageService.getInstance().getCurrentStage().setScene(new Scene(screenAnchorPane));
-            StageService.getInstance().getCurrentStage().show();
-
-        }
-        catch (IOException e ) {
-            e.printStackTrace();// projet maven puis https://www.baeldung.com/logback
-        }
-    }
-
+    /**
+     * callback bouton - charger la page d'accueil
+     */
     @FXML
     public void handleHomePageButton() {
-        switchPage("homePage");
+        StageService.Holder.loadScene("home");
     }
 
+    /**
+     * callback bouton - charger la page d'édition
+     */
     @FXML
     public void handleEditPageButton() {
-        switchPage("editPage");
+        StageService.Holder.loadScene("edit");
     }
 
+    /**
+     * callback bouton - charger la page de visualisation
+     */
     @FXML
     public void handleVisualPageButton() {
-        switchPage("visualPage");
+        StageService.Holder.loadScene("visual");
     }
 }
