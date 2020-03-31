@@ -1,4 +1,4 @@
-package core.view.scene;
+package core.view.workScene;
 
 /**
  * Contrôleur du fichier visual.fxml

@@ -12,8 +12,8 @@
         </Menu>
         <Menu mnemonicParsing="false" text="Pages">
             <items>
-                <MenuItem onAction="#handleEditPageButton" mnemonicParsing="false" text="Edition" />
-                <MenuItem onAction="#handleVisualPageButton" mnemonicParsing="false" text="Visualisation" />
+                <MenuItem onAction="#handleMainPageButton" mnemonicParsing="false" text="Espace de travail" />
+                <MenuItem onAction="#handleMemoryPageButton" mnemonicParsing="false" text="réflexion - Stockage/BDD" />
             </items>
         </Menu>
     </menus>

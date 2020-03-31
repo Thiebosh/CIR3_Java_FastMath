@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+  <children>
+    <fx:include source="menu.fxml" />
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+      <children>
+            <TabPane prefHeight="374.0" prefWidth="640.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="Edition">
+                  <content>
+                    <fx:include source="workScene/edit.fxml" />
+                  </content>
+                </Tab>
+                  <Tab text="Evaluation">
+                    <content>
+                      <fx:include source="workScene/value.fxml" />
+                    </content>
+                  </Tab>
+                <Tab text="Visualisation">
+                  <content>
+                    <fx:include source="workScene/visual.fxml" />
+                  </content>
+                </Tab>
+                  <Tab text="Résolution">
+                    <content>
+                      <fx:include source="workScene/solve.fxml" />
+                    </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+      </children>
+    </AnchorPane>
+  </children>
+</VBox>

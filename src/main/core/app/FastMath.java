@@ -25,7 +25,7 @@ public class FastMath extends Application {//NOPMD
         primaryStage.setTitle("FastMath");
 
         StageService.Holder.getInstance().setStage(primaryStage);
-        StageService.Holder.loadScene("home");
+        StageService.Holder.loadScene("homePage");
     }
 
 }

@@ -12,22 +12,22 @@ public class MenuController {
      */
     @FXML
     public void handleHomePageButton() {
-        StageService.Holder.loadScene("home");
+        StageService.Holder.loadScene("homePage");
     }
 
     /**
-     * callback bouton - charger la page d'édition
+     * callback bouton - charger la page principale
      */
     @FXML
-    public void handleEditPageButton() {
-        StageService.Holder.loadScene("edit");
+    public void handleMainPageButton() {
+        StageService.Holder.loadScene("workPage");
     }
 
     /**
-     * callback bouton - charger la page de visualisation
+     * callback bouton - charger la page de stockage
      */
     @FXML
-    public void handleVisualPageButton() {
-        StageService.Holder.loadScene("visual");
+    public void handleMemoryPageButton() {
+        StageService.Holder.loadScene("memoryPage");
     }
 }
