@@ -38,6 +38,11 @@ public class StageService {//NOPMD
      */
     public static class Holder {//NOPMD
         /**
+         * chemin d'accès aux fichiers fxml
+         */
+        private final static String RESSOURCE_FOLDER_PATH = "/view/scene/";
+
+        /**
          * unique instance de la classe, accès à la scène
          */
         protected static final StageService INSTANCE = new StageService();
@@ -58,7 +63,7 @@ public class StageService {//NOPMD
          */
         public static void loadScene(final String pageName) {
             final FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(StageService.class.getResource("/view/scene/" + pageName + ".fxml"));
+            loader.setLocation(StageService.class.getResource(RESSOURCE_FOLDER_PATH + pageName + ".fxml"));
 
             try {
                 final VBox sceneRoot = loader.load();//VBox : rootNodeScene type
