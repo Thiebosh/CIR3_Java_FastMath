@@ -1,4 +1,4 @@
-package core.view.scene;
+package core.view;
 
 import javafx.fxml.FXML;
 

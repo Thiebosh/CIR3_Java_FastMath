@@ -40,7 +40,7 @@ public class StageService {//NOPMD
         /**
          * chemin d'accès aux fichiers fxml
          */
-        private final static String RESSOURCE_FOLDER_PATH = "/view/scene/";
+        private final static String RESSOURCE_FOLDER_PATH = "/view/";
 
         /**
          * unique instance de la classe, accès à la scène

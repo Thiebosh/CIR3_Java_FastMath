@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<MenuBar fx:controller="core.view.MenuController" VBox.vgrow="NEVER" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<MenuBar fx:controller="core.view.components.MenuController" VBox.vgrow="NEVER" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <menus>
         <Menu>
             <graphic>
@@ -12,8 +12,8 @@
         </Menu>
         <Menu mnemonicParsing="false" text="Pages">
             <items>
-                <MenuItem onAction="#handleEditPageButton" mnemonicParsing="false" text="Edition" />
-                <MenuItem onAction="#handleVisualPageButton" mnemonicParsing="false" text="Visualisation" />
+                <MenuItem onAction="#handleComputePageButton" mnemonicParsing="false" text="Calcul algébrique" />
+                <MenuItem onAction="#handleGraphicPageButton" mnemonicParsing="false" text="Visualisation graphique" />
             </items>
         </Menu>
     </menus>

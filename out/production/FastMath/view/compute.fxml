@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.view.ComputeController">
+  <children>
+    <fx:include source="components/menu.fxml" />
+      <SplitPane dividerPositions="0.4" prefHeight="386.0" prefWidth="1093.0">
+         <items>
+          <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="374.0" prefWidth="550.0">
+               <children>
+                  <Text layoutX="51.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Liste des fonctions" underline="true">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="68.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cliquez sur un champ&#10;pour le modifier !" textAlignment="CENTER" />
+                  <TableView editable="true" layoutX="7.0" layoutY="88.0" prefHeight="218.0" prefWidth="236.0">
+                    <columns>
+                      <TableColumn prefWidth="81.60000324249268" text="Nom" />
+                      <TableColumn prefWidth="152.8000030517578" text="Expression" />
+                    </columns>
+                  </TableView>
+                  <Button layoutX="71.0" layoutY="324.0" mnemonicParsing="false" text="Ajouter une ligne" />
+               </children>
+          </AnchorPane>
+            <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="374.0" prefWidth="401.0">
+               <children>
+                  <Text layoutX="122.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Calcul algébrique" underline="true">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <TabPane layoutY="48.0" prefHeight="324.0" prefWidth="382.0" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                        <Tab text="Evaluation">
+                            <content>
+                                <fx:include source="components/evaluate.fxml" />
+                            </content>
+                        </Tab>
+                        <Tab text="Equation">
+                           <content>
+                                <fx:include source="components/equation.fxml" />
+                           </content>
+                        </Tab>
+                        <Tab text="Dérivée">
+                            <content>
+                                <fx:include source="components/prim_deriv.fxml" />
+                            </content>
+                        </Tab>
+                        <Tab text="Primitive">
+                            <content>
+                                <fx:include source="components/prim_deriv.fxml" />
+                            </content>
+                        </Tab>
+                    </tabs>
+                  </TabPane>
+               </children>
+            </AnchorPane>
+         </items>
+      </SplitPane>
+  </children>
+</VBox>

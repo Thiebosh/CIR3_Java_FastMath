@@ -1,4 +1,4 @@
-package core.view;
+package core.view.components;
 
 import core.model.services.StageService;
 import javafx.fxml.FXML;
@@ -19,15 +19,15 @@ public class MenuController {
      * callback bouton - charger la page d'édition
      */
     @FXML
-    public void handleEditPageButton() {
-        StageService.Holder.loadScene("edit");
+    public void handleComputePageButton() {
+        StageService.Holder.loadScene("compute");
     }
 
     /**
      * callback bouton - charger la page de visualisation
      */
     @FXML
-    public void handleVisualPageButton() {
-        StageService.Holder.loadScene("visual");
+    public void handleGraphicPageButton() {
+        StageService.Holder.loadScene("graphic");
     }
 }
