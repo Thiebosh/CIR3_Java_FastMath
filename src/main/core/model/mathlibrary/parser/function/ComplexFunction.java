@@ -1,10 +1,11 @@
-package core.model.expression.parser.function;
+package core.model.mathlibrary.parser.function;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import core.model.expression.parser.ParserManager;
-import core.model.expression.parser.exception.CalculatorException;
+import core.model.mathlibrary.parser.function.Complex;
+import core.model.mathlibrary.parser.ParserManager;
+import core.model.mathlibrary.parser.exception.CalculatorException;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -102,7 +103,7 @@ public class ComplexFunction {
 	 * @return the value
 	 * @throws CalculatorException the calculator exception
 	 */
-	public Complex getValue(final List<Complex> values, final List<String> variables) throws CalculatorException {
+	public core.model.mathlibrary.parser.function.Complex getValue(final List<core.model.mathlibrary.parser.function.Complex> values, final List<String> variables) throws CalculatorException {
 		final List<String> vars = new ArrayList<String>();
 		for (final String string : variables) {
 			vars.add(string.toLowerCase());
@@ -120,10 +121,10 @@ public class ComplexFunction {
 	 * @return the complex
 	 * @throws CalculatorException the calculator exception
 	 */
-	private Complex eval(String f, final List<Complex> values, final List<String> variables)
+	private core.model.mathlibrary.parser.function.Complex eval(String f, final List<core.model.mathlibrary.parser.function.Complex> values, final List<String> variables)
 			throws CalculatorException {
 		f = f.trim().toLowerCase();
-		Complex value = new Complex(0, 0);
+		core.model.mathlibrary.parser.function.Complex value = new core.model.mathlibrary.parser.function.Complex(0, 0);
 		String number = "";
 		String function = "";
 
@@ -138,7 +139,7 @@ public class ComplexFunction {
 				if (hasNumber && !isImaginary) {
 					final Double numb = new Double(number);
 					final String new_f = nextFunction(f.substring(i + 1, f.length()));
-					value = Complex.mul(new Complex(numb, 0), eval(new_f, values, variables));
+					value = core.model.mathlibrary.parser.function.Complex.mul(new core.model.mathlibrary.parser.function.Complex(numb, 0), eval(new_f, values, variables));
 					i = i + new_f.length();
 					hasNumber = false;
 					number = "";
@@ -146,20 +147,20 @@ public class ComplexFunction {
 				} else if (hasNumber && isImaginary) {
 					final Double numb = new Double(number);
 					final String new_f = nextFunction(f.substring(i + 1, f.length()));
-					value = Complex.mul(new Complex(0, numb), eval(new_f, values, variables));
+					value = core.model.mathlibrary.parser.function.Complex.mul(new core.model.mathlibrary.parser.function.Complex(0, numb), eval(new_f, values, variables));
 					i = i + new_f.length();
 					hasNumber = false;
 					isImaginary = false;
 					number = "";
 				} else if (hasFunction) {
 					final String new_f = nextFunction(f.substring(i + 1, f.length()));
-					value = Complex.mul(eval(function, values, variables), eval(new_f, values, variables));
+					value = core.model.mathlibrary.parser.function.Complex.mul(eval(function, values, variables), eval(new_f, values, variables));
 					i = i + new_f.length();
 					hasFunction = false;
 					function = "";
 				} else {
 					final String new_f = nextFunction(f.substring(i + 1, f.length()));
-					value = Complex.mul(value, eval(new_f, values, variables));
+					value = core.model.mathlibrary.parser.function.Complex.mul(value, eval(new_f, values, variables));
 					i = i + new_f.length();
 				}
 				break;
@@ -168,28 +169,28 @@ public class ComplexFunction {
 				if (hasNumber && !isImaginary) {
 					final Double numb = new Double(number);
 					final String new_f = f.substring(i + 1, f.length());
-					value = Complex.add(new Complex(numb, 0), eval(new_f, values, variables));
+					value = core.model.mathlibrary.parser.function.Complex.add(new core.model.mathlibrary.parser.function.Complex(numb, 0), eval(new_f, values, variables));
 					i = i + new_f.length();
 					hasNumber = false;
 					number = "";
 				} else if (hasNumber && isImaginary) {
 					final Double numb = new Double(number);
 					final String new_f = f.substring(i + 1, f.length());
-					value = Complex.add(new Complex(0, numb), eval(new_f, values, variables));
+					value = core.model.mathlibrary.parser.function.Complex.add(new core.model.mathlibrary.parser.function.Complex(0, numb), eval(new_f, values, variables));
 					i = i + new_f.length();
 					hasNumber = false;
 					isImaginary = false;
 					number = "";
 				} else if (hasFunction) {
 					final String new_f = f.substring(i + 1, f.length());
-					value = Complex.add(eval(function, values, variables), eval(new_f, values, variables));
+					value = core.model.mathlibrary.parser.function.Complex.add(eval(function, values, variables), eval(new_f, values, variables));
 					i = i + new_f.length();
 					hasFunction = false;
 					function = "";
 
 				} else {
 					final String new_f = f.substring(i + 1, f.length());
-					value = Complex.add(value, eval(new_f, values, variables));
+					value = core.model.mathlibrary.parser.function.Complex.add(value, eval(new_f, values, variables));
 					i = i + new_f.length();
 				}
 				break;
@@ -199,14 +200,14 @@ public class ComplexFunction {
 				if (hasNumber && !isImaginary) {
 					final Double numb = new Double(number);
 					final String new_f = nextMinusFunction(f.substring(i + 1, f.length()));
-					value = Complex.sub(new Complex(numb, 0), eval(new_f, values, variables));
+					value = core.model.mathlibrary.parser.function.Complex.sub(new core.model.mathlibrary.parser.function.Complex(numb, 0), eval(new_f, values, variables));
 					i = i + new_f.length();
 					hasNumber = false;
 					number = "";
 				} else if (hasNumber && isImaginary) {
 					final Double numb = new Double(number);
 					final String new_f = nextMinusFunction(f.substring(i + 1, f.length()));
-					value = Complex.sub(new Complex(0, numb), eval(new_f, values, variables));
+					value = core.model.mathlibrary.parser.function.Complex.sub(new core.model.mathlibrary.parser.function.Complex(0, numb), eval(new_f, values, variables));
 					i = i + new_f.length();
 					hasNumber = false;
 					isImaginary = false;
@@ -214,14 +215,14 @@ public class ComplexFunction {
 
 				} else if (hasFunction) {
 					final String new_f = nextMinusFunction(f.substring(i + 1, f.length()));
-					value = Complex.sub(eval(function, values, variables), eval(new_f, values, variables));
+					value = core.model.mathlibrary.parser.function.Complex.sub(eval(function, values, variables), eval(new_f, values, variables));
 					i = i + new_f.length();
 					hasFunction = false;
 					function = "";
 
 				} else {
 					final String new_f = nextMinusFunction(f.substring(i + 1, f.length()));
-					value = Complex.sub(value, eval(new_f, values, variables));
+					value = core.model.mathlibrary.parser.function.Complex.sub(value, eval(new_f, values, variables));
 					i = i + new_f.length();
 				}
 				break;
@@ -230,14 +231,14 @@ public class ComplexFunction {
 				if (hasNumber && !isImaginary) {
 					final Double numb = new Double(number);
 					final String new_f = nextFunction(f.substring(i + 1, f.length()));
-					value = Complex.div(new Complex(numb, 0), eval(new_f, values, variables));
+					value = core.model.mathlibrary.parser.function.Complex.div(new core.model.mathlibrary.parser.function.Complex(numb, 0), eval(new_f, values, variables));
 					i = i + new_f.length();
 					hasNumber = false;
 					number = "";
 				} else if (hasNumber && isImaginary) {
 					final Double numb = new Double(number);
 					final String new_f = nextFunction(f.substring(i + 1, f.length()));
-					value = Complex.div(new Complex(0, numb), eval(new_f, values, variables));
+					value = core.model.mathlibrary.parser.function.Complex.div(new core.model.mathlibrary.parser.function.Complex(0, numb), eval(new_f, values, variables));
 					i = i + new_f.length();
 					hasNumber = false;
 					isImaginary = false;
@@ -245,14 +246,14 @@ public class ComplexFunction {
 
 				} else if (hasFunction) {
 					final String new_f = nextFunction(f.substring(i + 1, f.length()));
-					value = Complex.div(eval(function, values, variables), eval(new_f, values, variables));
+					value = core.model.mathlibrary.parser.function.Complex.div(eval(function, values, variables), eval(new_f, values, variables));
 					i = i + new_f.length();
 					hasFunction = false;
 					function = "";
 
 				} else {
 					final String new_f = nextFunction(f.substring(i + 1, f.length()));
-					value = Complex.div(value, eval(new_f, values, variables));
+					value = core.model.mathlibrary.parser.function.Complex.div(value, eval(new_f, values, variables));
 					i = i + new_f.length();
 				}
 				break;
@@ -261,14 +262,14 @@ public class ComplexFunction {
 				if (hasNumber && !isImaginary) {
 					final Double numb = new Double(number);
 					final String new_f = nextFunction(f.substring(i + 1, f.length()));
-					value = Complex.pow(eval(new_f, values, variables), numb);
+					value = core.model.mathlibrary.parser.function.Complex.pow(eval(new_f, values, variables), numb);
 					i = i + new_f.length();
 					hasNumber = false;
 					number = "";
 				} else if (hasNumber && isImaginary) {
 					final Double numb = new Double(number);
 					final String new_f = nextFunction(f.substring(i + 1, f.length()));
-					value = Complex.pow(eval(new_f, values, variables), new Complex(0, numb));
+					value = core.model.mathlibrary.parser.function.Complex.pow(eval(new_f, values, variables), new core.model.mathlibrary.parser.function.Complex(0, numb));
 					i = i + new_f.length();
 					hasNumber = false;
 					isImaginary = false;
@@ -276,14 +277,14 @@ public class ComplexFunction {
 
 				} else if (hasFunction) {
 					final String new_f = nextFunction(f.substring(i + 1, f.length()));
-					value = Complex.pow(eval(function, values, variables), eval(new_f, values, variables));
+					value = core.model.mathlibrary.parser.function.Complex.pow(eval(function, values, variables), eval(new_f, values, variables));
 					i = i + new_f.length();
 					hasFunction = false;
 					function = "";
 
 				} else {
 					final String new_f = nextFunction(f.substring(i + 1, f.length()));
-					value = Complex.pow(value, eval(new_f, values, variables));
+					value = core.model.mathlibrary.parser.function.Complex.pow(value, eval(new_f, values, variables));
 					i = i + new_f.length();
 				}
 
@@ -292,7 +293,7 @@ public class ComplexFunction {
 				hasNumber = true;
 				number = number + character;
 				if (i == (f.length() - 1)) {
-					value = new Complex(new Double(number), 0);
+					value = new core.model.mathlibrary.parser.function.Complex(new Double(number), 0);
 					number = "";
 					hasNumber = false;
 				}
@@ -302,7 +303,7 @@ public class ComplexFunction {
 				hasNumber = true;
 				number = number + character;
 				if (i == (f.length() - 1)) {
-					value = new Complex(new Double(number), 0);
+					value = new core.model.mathlibrary.parser.function.Complex(new Double(number), 0);
 					number = "";
 					hasNumber = false;
 				}
@@ -311,7 +312,7 @@ public class ComplexFunction {
 				hasNumber = true;
 				number = number + character;
 				if (i == (f.length() - 1)) {
-					value = new Complex(new Double(number), 0);
+					value = new core.model.mathlibrary.parser.function.Complex(new Double(number), 0);
 					number = "";
 					hasNumber = false;
 				}
@@ -320,7 +321,7 @@ public class ComplexFunction {
 				hasNumber = true;
 				number = number + character;
 				if (i == (f.length() - 1)) {
-					value = new Complex(new Double(number), 0);
+					value = new core.model.mathlibrary.parser.function.Complex(new Double(number), 0);
 					number = "";
 					hasNumber = false;
 				}
@@ -330,7 +331,7 @@ public class ComplexFunction {
 				hasNumber = true;
 				number = number + character;
 				if (i == (f.length() - 1)) {
-					value = new Complex(new Double(number), 0);
+					value = new core.model.mathlibrary.parser.function.Complex(new Double(number), 0);
 					number = "";
 					hasNumber = false;
 				}
@@ -339,7 +340,7 @@ public class ComplexFunction {
 				hasNumber = true;
 				number = number + character;
 				if (i == (f.length() - 1)) {
-					value = new Complex(new Double(number), 0);
+					value = new core.model.mathlibrary.parser.function.Complex(new Double(number), 0);
 					number = "";
 					hasNumber = false;
 				}
@@ -348,7 +349,7 @@ public class ComplexFunction {
 				hasNumber = true;
 				number = number + character;
 				if (i == (f.length() - 1)) {
-					value = new Complex(new Double(number), 0);
+					value = new core.model.mathlibrary.parser.function.Complex(new Double(number), 0);
 					number = "";
 					hasNumber = false;
 				}
@@ -357,7 +358,7 @@ public class ComplexFunction {
 				hasNumber = true;
 				number = number + character;
 				if (i == (f.length() - 1)) {
-					value = new Complex(new Double(number), 0);
+					value = new core.model.mathlibrary.parser.function.Complex(new Double(number), 0);
 					number = "";
 					hasNumber = false;
 				}
@@ -367,7 +368,7 @@ public class ComplexFunction {
 				hasNumber = true;
 				number = number + character;
 				if (i == (f.length() - 1)) {
-					value = new Complex(new Double(number), 0);
+					value = new core.model.mathlibrary.parser.function.Complex(new Double(number), 0);
 					number = "";
 					hasNumber = false;
 				}
@@ -376,7 +377,7 @@ public class ComplexFunction {
 				hasNumber = true;
 				number = number + character;
 				if (i == (f.length() - 1)) {
-					value = new Complex(new Double(number), 0);
+					value = new core.model.mathlibrary.parser.function.Complex(new Double(number), 0);
 					number = "";
 					hasNumber = false;
 				}
@@ -430,7 +431,7 @@ public class ComplexFunction {
 					} else if (function.equals(SQRT)) {
 						value = eval(new_f, values, variables).sqrt();
 					} else if (function.equals(CBRT)) {
-						value = Complex.cbrt(eval(new_f, values, variables));
+						value = core.model.mathlibrary.parser.function.Complex.cbrt(eval(new_f, values, variables));
 					} else {
 						throw new CalculatorException("The function is not well-formed");
 					}
@@ -454,11 +455,11 @@ public class ComplexFunction {
 				if (!hasFunction) {
 					if (hasNumber) {
 
-						value = new Complex(0, new Double(number));
+						value = new core.model.mathlibrary.parser.function.Complex(0, new Double(number));
 						number = "";
 						isImaginary = true;
 					} else {
-						value = new Complex(0, 1);
+						value = new core.model.mathlibrary.parser.function.Complex(0, 1);
 						isImaginary = true;
 					}
 				} else {
@@ -469,10 +470,10 @@ public class ComplexFunction {
 					if (i == (f.length() - 1)) {
 
 						if (function.equals(E)) {
-							value = new Complex(Math.E, 0);
+							value = new core.model.mathlibrary.parser.function.Complex(Math.E, 0);
 
 						} else if (function.equals(PI)) {
-							value = new Complex(Math.PI, 0);
+							value = new core.model.mathlibrary.parser.function.Complex(Math.PI, 0);
 						} else {
 							if (function.length() == 1) {
 								final int n = variables.indexOf(function);
@@ -496,10 +497,10 @@ public class ComplexFunction {
 			case 'j':
 				if (!hasFunction) {
 					if (hasNumber) {
-						value = new Complex(0, new Double(number));
+						value = new core.model.mathlibrary.parser.function.Complex(0, new Double(number));
 						isImaginary = true;
 					} else {
-						value = new Complex(0, 1);
+						value = new core.model.mathlibrary.parser.function.Complex(0, 1);
 						isImaginary = true;
 					}
 				} else {
@@ -509,10 +510,10 @@ public class ComplexFunction {
 					if (i == (f.length() - 1)) {
 
 						if (function.equals(E)) {
-							value = new Complex(Math.E, 0);
+							value = new core.model.mathlibrary.parser.function.Complex(Math.E, 0);
 
 						} else if (function.equals(PI)) {
-							value = new Complex(Math.PI, 0);
+							value = new core.model.mathlibrary.parser.function.Complex(Math.PI, 0);
 						} else {
 							if (function.length() == 1) {
 								final int n = variables.indexOf(function);
@@ -540,7 +541,7 @@ public class ComplexFunction {
 					if (i == (f.length() - 1)) {
 
 						if (function.equals(E)) {
-							value = new Complex(Math.E, 0);
+							value = new core.model.mathlibrary.parser.function.Complex(Math.E, 0);
 
 						} else if (function.equals(PI)) {
 							value = new Complex(Math.PI, 0);

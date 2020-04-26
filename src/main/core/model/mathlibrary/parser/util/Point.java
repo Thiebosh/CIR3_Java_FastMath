@@ -1,6 +1,6 @@
-package core.model.expression.parser.util;
+package core.model.mathlibrary.parser.util;
 
-import core.model.expression.parser.function.Complex;
+import core.model.mathlibrary.parser.function.Complex;
 
 /**
  * The Class Point.

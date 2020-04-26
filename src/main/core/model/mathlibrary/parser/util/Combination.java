@@ -1,6 +1,6 @@
-package core.model.expression.parser.util;
+package core.model.mathlibrary.parser.util;
 
-import core.model.expression.parser.exception.CalculatorException;
+import core.model.mathlibrary.parser.exception.CalculatorException;
 
 /**
  * The Class Combination.

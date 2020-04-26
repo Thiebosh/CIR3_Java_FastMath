@@ -1,7 +1,7 @@
-package core.model.expression.parser.function;
+package core.model.mathlibrary.parser.function;
 
-import core.model.expression.parser.ParserManager;
-import core.model.expression.parser.exception.CalculatorException;
+import core.model.mathlibrary.parser.ParserManager;
+import core.model.mathlibrary.parser.exception.CalculatorException;
 
 /**
  * The Class FunctionX.

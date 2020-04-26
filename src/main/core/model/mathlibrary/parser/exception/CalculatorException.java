@@ -1,4 +1,4 @@
-package core.model.expression.parser.exception;
+package core.model.mathlibrary.parser.exception;
 
 /**
  * The Class CalculatorException.

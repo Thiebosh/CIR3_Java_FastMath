@@ -1,16 +1,16 @@
-package core.model.expression.parser;
+package core.model.mathlibrary.parser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import core.model.expression.parser.exception.CalculatorException;
-import core.model.expression.parser.function.Complex;
-import core.model.expression.parser.function.ComplexFunction;
-import core.model.expression.parser.function.FunctionX;
-import core.model.expression.parser.function.FunctionXs;
-import core.model.expression.parser.util.ParserResult;
-import core.model.expression.parser.util.Point;
+import core.model.mathlibrary.parser.exception.CalculatorException;
+import core.model.mathlibrary.parser.function.Complex;
+import core.model.mathlibrary.parser.function.ComplexFunction;
+import core.model.mathlibrary.parser.function.FunctionX;
+import core.model.mathlibrary.parser.function.FunctionXs;
+import core.model.mathlibrary.parser.util.ParserResult;
+import core.model.mathlibrary.parser.util.Point;
 
 /**
  * The Class Parser.

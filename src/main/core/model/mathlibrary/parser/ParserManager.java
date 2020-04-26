@@ -1,4 +1,4 @@
-package core.model.expression.parser;
+package core.model.mathlibrary.parser;
 
 /**
  * The Class ParserManager.
