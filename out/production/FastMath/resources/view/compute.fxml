@@ -4,8 +4,6 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -24,13 +22,12 @@
                      </font>
                   </Text>
                   <Text layoutX="68.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cliquez sur un champ&#10;pour le modifier !" textAlignment="CENTER" />
-                  <TableView editable="true" layoutX="7.0" layoutY="88.0" prefHeight="218.0" prefWidth="236.0">
-                    <columns>
-                      <TableColumn prefWidth="81.60000324249268" text="Nom" />
-                      <TableColumn prefWidth="152.8000030517578" text="Expression" />
-                    </columns>
-                  </TableView>
                   <Button layoutX="71.0" layoutY="324.0" mnemonicParsing="false" text="Ajouter une ligne" />
+                  <AnchorPane layoutX="9.0" layoutY="87.0" prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <fx:include source="components/functionTableView.fxml" />
+                     </children>
+                  </AnchorPane>
                </children>
           </AnchorPane>
             <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="374.0" prefWidth="401.0">
@@ -54,12 +51,12 @@
                         </Tab>
                         <Tab text="Dérivée">
                             <content>
-                                <fx:include source="components/prim_deriv.fxml" />
+                                <fx:include source="components/transform.fxml" />
                             </content>
                         </Tab>
                         <Tab text="Primitive">
                             <content>
-                                <fx:include source="components/prim_deriv.fxml" />
+                                <fx:include source="components/transform.fxml" />
                             </content>
                         </Tab>
                     </tabs>
