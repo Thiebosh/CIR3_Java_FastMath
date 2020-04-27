@@ -1,6 +1,7 @@
 package core.view.components;
 
 import core.app.FastMath;
+import core.model.db.ExpressManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
@@ -19,7 +20,7 @@ public class FunctionChoiceBoxController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        functionChoiceBox.getItems().addAll(FastMath.getExpressNames());
+        functionChoiceBox.getItems().addAll(ExpressManager.getExpressNames());
         functionChoiceBox.setValue("f");
         //tester ça pour un rafraichissement automatique : https://stackoverflow.com/questions/21854146/javafx-2-0-choice-box-issue-how-to-update-a-choicebox-which-represents-a-list
     }

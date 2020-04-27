@@ -1,55 +1,16 @@
 package core.app;
 
-import core.model.db.Express;
+import core.model.db.ExpressManager;
 import core.model.services.StageService;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
 
 
 /**
  * Main class of the application
  */
 public class FastMath extends Application {//NOPMD
-    //debut temporaire - créer gestionnaire
-    private static LinkedHashSet<String> expressNames = new LinkedHashSet<String>();
-
-    private static ArrayList<Express> expressList = new ArrayList<Express>();//map convertible en arrayList? accès immédiat à fonction
-
-    public static ArrayList<Express> getExpressList() {
-        return expressList;
-    }
-
-    public static ArrayList<String> getExpressNames() {
-        return new ArrayList<String>(expressNames);
-    }
-
-    public static void update(Express expression, String oldName, String newName) {
-        if (!newName.equals(oldName)) {
-            if (expressNames.contains(newName) || newName.equals("fonction")) {//nom réservé pour ajout ligne
-                System.out.println("créer une exception \"already used name\" et faire pop une fenêtre d'erreur?");
-            } else {
-                expressNames.add(newName);
-                expressNames.remove(oldName);
-                expression.setName(newName);
-            }
-        }
-    }
-
-    public static void addExpress(String name, String function) {
-        if (expressNames.contains(name)) {
-            System.out.println("créer une exception \"already used name\" et faire pop une fenêtre d'erreur?");
-        }
-        else {
-            expressNames.add(name);
-            expressList.add(new Express(name, function));
-        }
-    }
-    //fin temporaire - créer gestionnaire
-
     /**
      * lanceur de l'application
      * @param args arguments
@@ -70,11 +31,11 @@ public class FastMath extends Application {//NOPMD
 */
 
         //remplissage temporaire
-        addExpress("f","2.35*x");
-        addExpress("sinus","sin(x)");
-        addExpress("cosinus","cos(x)");
+        ExpressManager.addExpress("f","2.35*x");
+        ExpressManager.addExpress("sinus","sin(x)");
+        ExpressManager.addExpress("cosinus","cos(x)");
 
-        expressNames.add("f");
+        ExpressManager.addExpressNames("f");
 
         launch(args);
     }

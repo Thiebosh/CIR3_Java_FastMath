@@ -2,6 +2,7 @@ package core.view;
 
 import core.app.FastMath;
 import core.model.db.Express;
+import core.model.db.ExpressManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -57,7 +58,7 @@ public class ComputeController implements Initializable {
      * Applique la liste d'étudiants au TableView
      */
     private void refreshTableView() {
-        ObservableList<Express> list = FXCollections.observableArrayList(FastMath.getExpressList());
+        ObservableList<Express> list = FXCollections.observableArrayList(ExpressManager.getExpressList());
         functionTableView.setItems(list);
     }
 
@@ -67,7 +68,7 @@ public class ComputeController implements Initializable {
 
         switch (attribute) {
             case "name":
-                FastMath.update(expression, expression.getName(), event.getNewValue());
+                ExpressManager.update(expression, expression.getName(), event.getNewValue());
                 break;
             case "function":
                 expression.setFunction(event.getNewValue());
@@ -81,8 +82,8 @@ public class ComputeController implements Initializable {
     }
 
     @FXML
-    public void addFunctionLine() {
-        FastMath.addExpress("fonction","0");//creation
+    private void addFunctionLine() {
+        ExpressManager.addExpress("fonction","0");//creation
         refreshTableView();//visibilité
     }
 }

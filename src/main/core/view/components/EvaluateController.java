@@ -2,6 +2,7 @@ package core.view.components;
 
 import core.app.FastMath;
 import core.model.db.Express;
+import core.model.db.ExpressManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
@@ -28,7 +29,7 @@ public class EvaluateController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        functionChoiceBox.getItems().addAll(FastMath.getExpressNames());
+        functionChoiceBox.getItems().addAll(ExpressManager.getExpressNames());
         functionChoiceBox.setValue("f");
         //tester ça pour un rafraichissement automatique : https://stackoverflow.com/questions/21854146/javafx-2-0-choice-box-issue-how-to-update-a-choicebox-which-represents-a-list
     }
@@ -37,9 +38,9 @@ public class EvaluateController implements Initializable {
     private void executeEvaluation() {
         String choice = (String) functionChoiceBox.getValue();
 
-        if (FastMath.getExpressNames().contains(choice)) {
+        if (ExpressManager.getExpressNames().contains(choice)) {
             String function = "";
-            for (Express expression : FastMath.getExpressList()) {
+            for (Express expression : ExpressManager.getExpressList()) {
                 if (expression.getName().equals(choice)) {
                     function = expression.getFunction();
                     break;
@@ -54,7 +55,7 @@ public class EvaluateController implements Initializable {
         }
 
         //tmp
-        functionChoiceBox.getItems().setAll(FastMath.getExpressNames());//vieux refresh a l'arrache
+        functionChoiceBox.getItems().setAll(ExpressManager.getExpressNames());//vieux refresh a l'arrache
         functionChoiceBox.setValue(choice);//visualiser choix précédent, si fonction pas modifiée
     }
 }
