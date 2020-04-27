@@ -60,8 +60,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="FxmlFile" />
         <option value="Class" />
+        <option value="FxmlFile" />
       </list>
     </option>
   </component>
@@ -105,21 +105,21 @@
     <property name="settings.editor.selected.configurable" value="PMD" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="E:\Thibaut Juzeau\Documents\études\Ingénieur\Informatique\Java\Projets\3e année\FastMath\src\main\resources\view\scene" />
-      <recent name="E:\Thibaut Juzeau\Documents\études\Ingénieur\Informatique\Java\Projets\3e année\FastMath\src\main\resources\view" />
-      <recent name="E:\Thibaut Juzeau\Documents\études\Ingénieur\Informatique\Java\Projets\3e année\FastMath\src\code\view" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="core.model.services" />
-      <recent name="code.view" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\Thibaut Juzeau\Documents\études\Ingénieur\Informatique\Java\Projets\3e année\FastMath\src\main\resources\view\components" />
       <recent name="E:\Thibaut Juzeau\Documents\études\Ingénieur\Informatique\Java\Projets\3e année\FastMath\src\main\resources\view" />
       <recent name="E:\Thibaut Juzeau\Documents\études\Ingénieur\Informatique\Java\Projets\3e année\FastMath\src\main\resources\view\scene" />
       <recent name="E:\Thibaut Juzeau\Documents\études\Ingénieur\Informatique\Java\Projets\3e année\FastMath\src\code\view" />
       <recent name="E:\Thibaut Juzeau\Documents\études\Ingénieur\Informatique\Java\Projets\3e année\FastMath\src\code" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="core.model.services" />
+      <recent name="code.view" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\Thibaut Juzeau\Documents\études\Ingénieur\Informatique\Java\Projets\3e année\FastMath\src\main\resources\view\scene" />
+      <recent name="E:\Thibaut Juzeau\Documents\études\Ingénieur\Informatique\Java\Projets\3e année\FastMath\src\main\resources\view" />
+      <recent name="E:\Thibaut Juzeau\Documents\études\Ingénieur\Informatique\Java\Projets\3e année\FastMath\src\code\view" />
     </key>
   </component>
   <component name="RunManager" selected="Application.FastMathThib">
@@ -233,6 +233,8 @@
       <workItem from="1585641554412" duration="523000" />
       <workItem from="1585743298024" duration="6560000" />
       <workItem from="1587396198189" duration="1689000" />
+      <workItem from="1587907436551" duration="12886000" />
+      <workItem from="1587970846765" duration="9552000" />
     </task>
     <servers />
   </component>
@@ -260,10 +262,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1587393392630" />
-    <state x="922" y="116" key="#com.intellij.ide.util.MemberChooser" timestamp="1585558481616">
+    <state x="922" y="116" key="#com.intellij.ide.util.MemberChooser" timestamp="1587914214880">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="922" y="116" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1585558481616" />
+    <state x="922" y="116" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1587914214880" />
     <state x="498" y="195" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1585390611564">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -280,22 +282,26 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="505" y="199" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1587392826415" />
-    <state width="1493" height="211" key="GridCell.Tab.0.bottom" timestamp="1587395803853">
+    <state width="1493" height="274" key="GridCell.Tab.0.bottom" timestamp="1587981588543">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="211" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1587395803853" />
-    <state width="1493" height="211" key="GridCell.Tab.0.center" timestamp="1587395803852">
+    <state width="1493" height="274" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1587981588543" />
+    <state width="1493" height="274" key="GridCell.Tab.0.center" timestamp="1587981588543">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="211" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1587395803852" />
-    <state width="1493" height="211" key="GridCell.Tab.0.left" timestamp="1587395803851">
+    <state width="1493" height="274" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1587981588543" />
+    <state width="1493" height="274" key="GridCell.Tab.0.left" timestamp="1587981588543">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="211" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1587395803851" />
-    <state width="1493" height="211" key="GridCell.Tab.0.right" timestamp="1587395803852">
+    <state width="1493" height="274" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1587981588543" />
+    <state width="1493" height="274" key="GridCell.Tab.0.right" timestamp="1587981588543">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="211" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1587395803852" />
+    <state width="1493" height="274" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1587981588543" />
+    <state x="440" y="145" key="RollbackChangesDialog" timestamp="1587979438234">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="440" y="145" key="RollbackChangesDialog/0.0.1536.824@0.0.1536.824" timestamp="1587979438234" />
     <state x="277" y="0" key="SettingsEditor" timestamp="1587393575873">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
