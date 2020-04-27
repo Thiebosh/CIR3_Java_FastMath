@@ -29,7 +29,7 @@ public class FastMath extends Application {//NOPMD
 
     public static void update(Express expression, String oldName, String newName) {
         if (!newName.equals(oldName)) {
-            if (expressNames.contains(newName)) {
+            if (expressNames.contains(newName) || newName.equals("fonction")) {//nom réservé pour ajout ligne
                 System.out.println("créer une exception \"already used name\" et faire pop une fenêtre d'erreur?");
             } else {
                 expressNames.add(newName);

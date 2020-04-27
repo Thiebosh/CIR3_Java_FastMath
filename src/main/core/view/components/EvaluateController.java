@@ -53,7 +53,6 @@ public class EvaluateController implements Initializable {
             resultFunction.setText(/*result.getValue().toString()*/"résultat");
         }
 
-        System.out.println("partie 2");
         //tmp
         functionChoiceBox.getItems().setAll(FastMath.getExpressNames());//vieux refresh a l'arrache
         functionChoiceBox.setValue(choice);//visualiser choix précédent, si fonction pas modifiée
