@@ -3,11 +3,17 @@ package core.view.components;
 import core.app.FastMath;
 import core.model.db.Express;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-public class EvaluateController {
-    FunctionChoiceBoxController functionChoiceBox = new FunctionChoiceBoxController();
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class EvaluateController implements Initializable {
+    @FXML
+    private ChoiceBox functionChoiceBox;
 
     @FXML
     private TextField valueFunction;
@@ -15,9 +21,21 @@ public class EvaluateController {
     @FXML
     private Label resultFunction;
 
+    /**
+     * Chargement initial des fonctions
+     * @param location
+     * @param resources
+     */
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        functionChoiceBox.getItems().addAll(FastMath.getExpressNames());
+        functionChoiceBox.setValue("f");
+        //tester ça pour un rafraichissement automatique : https://stackoverflow.com/questions/21854146/javafx-2-0-choice-box-issue-how-to-update-a-choicebox-which-represents-a-list
+    }
+
     @FXML
     private void executeEvaluation() {
-        String choice = functionChoiceBox.getFunctionChoice();
+        String choice = (String) functionChoiceBox.getValue();
 
         if (FastMath.getExpressNames().contains(choice)) {
             String function = "";
@@ -32,12 +50,12 @@ public class EvaluateController {
             //old library
             //ParserResult result = Parser.eval(function, new Point("x", value));
 
-            resultFunction.setText(/*result.getValue().toString()*/"résultat du calcul");
+            resultFunction.setText(/*result.getValue().toString()*/"résultat");
         }
 
         System.out.println("partie 2");
         //tmp
-        //functionChoiceBox.getFunctionChoiceBox().getItems().setAll(FastMath.getExpressNames());//vieux refresh a l'arrache
-        //functionChoiceBox.getFunctionChoiceBox().setValue(choice);//visualiser choix précédent, si fonction pas modifiée
+        functionChoiceBox.getItems().setAll(FastMath.getExpressNames());//vieux refresh a l'arrache
+        functionChoiceBox.setValue(choice);//visualiser choix précédent, si fonction pas modifiée
     }
 }
