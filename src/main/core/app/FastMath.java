@@ -1,6 +1,9 @@
 package core.app;
 
 import core.model.db.ExpressManager;
+import core.model.mathlibrary.parser.Parser;
+import core.model.mathlibrary.parser.util.ParserResult;
+import core.model.mathlibrary.parser.util.Point;
 import core.model.services.StageService;
 import javafx.application.Application;
 import javafx.scene.image.Image;
@@ -16,8 +19,7 @@ public class FastMath extends Application {//NOPMD
      * @param args arguments
      */
     public static final void main(final String[] args) {
-        //exemple temporaire - ancienne librairie
-        /*
+        //exemple temporaire
         String f_x = "e^(2/3*i)";
         ParserResult result = Parser.eval(f_x);
         System.out.println(result.getComplexValue().getR() + " + " + result.getComplexValue().getI() + "i");
@@ -28,7 +30,7 @@ public class FastMath extends Application {//NOPMD
 
         result = Parser.eval(f_x, x, y);
         System.out.println(result.getValue());
-*/
+
 
         //remplissage temporaire
         ExpressManager.addExpress("f","2.35*x");

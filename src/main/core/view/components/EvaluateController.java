@@ -3,6 +3,9 @@ package core.view.components;
 import core.app.FastMath;
 import core.model.db.Express;
 import core.model.db.ExpressManager;
+import core.model.mathlibrary.parser.Parser;
+import core.model.mathlibrary.parser.util.ParserResult;
+import core.model.mathlibrary.parser.util.Point;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
@@ -48,10 +51,9 @@ public class EvaluateController implements Initializable {
             }
             double value = Double.parseDouble(valueFunction.getCharacters().toString());
 
-            //old library
-            //ParserResult result = Parser.eval(function, new Point("x", value));
+            ParserResult result = Parser.eval(function, new Point("x", value));
 
-            resultFunction.setText(/*result.getValue().toString()*/"résultat");
+            resultFunction.setText(result.getValue().toString());
         }
 
         //tmp

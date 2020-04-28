@@ -25,11 +25,13 @@ public class Express {
     }
 
     public void setName(String name) {
-        this.name.set(name);
+        if (name.length() != 0) this.name.set(name);
+        else System.out.println("afficher une erreur nom de fonction vide");
     }
 
     public void setFunction(String function) {
-        this.function.set(function);
+        if (function.length() != 0) this.function.set(function);
+        else System.out.println("afficher une erreur expression de fonction vide");
     }
 
     public String getName() {
