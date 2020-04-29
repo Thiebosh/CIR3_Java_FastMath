@@ -21,7 +21,7 @@
             <Font size="18.0" />
           </font>
         </Label>
-        <LineChart fx:id="grapheDisplay" layoutX="14.0" layoutY="52.0" prefHeight="250.0" prefWidth="314.0">
+        <LineChart fx:id="grapheDisplay" createSymbols="false" layoutX="14.0" layoutY="52.0" prefHeight="250.0" prefWidth="314.0">
           <xAxis>
             <NumberAxis side="RIGHT" />
           </xAxis>

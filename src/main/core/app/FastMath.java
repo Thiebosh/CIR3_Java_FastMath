@@ -50,5 +50,4 @@ public class FastMath extends Application {//NOPMD
         StageService.Holder.getInstance().setStage(primaryStage);
         StageService.Holder.loadScene("home");
     }
-
 }

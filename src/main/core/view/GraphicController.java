@@ -5,6 +5,9 @@ import core.model.db.ExpressManager;
 import core.model.mathlibrary.parser.Parser;
 import core.model.mathlibrary.parser.util.ParserResult;
 import core.model.mathlibrary.parser.util.Point;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -20,6 +23,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.Callback;
+import javafx.util.converter.BooleanStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 
 import java.net.URL;
@@ -39,7 +44,7 @@ public class GraphicController implements Initializable {
     private double yAxisUpperBound = 10;
     private double yAxisTickUnit = 10;
 
-    
+
     @FXML
     private ChoiceBox functionChoiceBox;
 
@@ -87,15 +92,29 @@ public class GraphicController implements Initializable {
         samplingCol.setCellValueFactory(new PropertyValueFactory<>("sampling"));
 
         //edition
-        stateCol.setCellFactory(tc -> new CheckBoxTableCell<>());
-        stateCol.setOnEditCommit((TableColumn.CellEditEvent<Express, Boolean> event) -> {
+        stateCol.setCellFactory(CheckBoxTableCell.forTableColumn(stateCol));
+
+        //https://stackoverflow.com/questions/28671132/javafx-checkboxtablecell-get-actionevent-when-user-check-a-checkbox
+        /*stateCol.setCellValueFactory((TableColumn.CellDataFeatures<Express, Boolean> p) -> {
+
+            final Express t = p.getValue();
+            final BooleanProperty result = new SimpleBooleanProperty(t.isActive());
+            result.addListener((ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) -> {
+                t.setIsActive(newValue);
+            });
+
+            updateGraphDisplay();//conséquence
+            return result;
+        });*/
+
+        //stateCol.setCellFactory(tc -> new CheckBoxTableCell<>());
+        /*stateCol.setOnEditCommit((TableColumn.CellEditEvent<Express, Boolean> event) -> {
             TablePosition<Express, Boolean> pos = event.getTablePosition();
             Express express = event.getTableView().getItems().get(pos.getRow());
             express.setIsActive(event.getNewValue());
 
             updateGraphDisplay();//conséquence
-            System.out.println("mis à jour");
-        });
+        });*/
 
         samplingCol.setCellFactory(TextFieldTableCell.<Express, Integer>forTableColumn(new IntegerStringConverter()));
         samplingCol.setOnEditCommit((TableColumn.CellEditEvent<Express, Integer> event) -> {
@@ -131,6 +150,7 @@ public class GraphicController implements Initializable {
         ((NumberAxis) grapheDisplay.getYAxis()).setLowerBound(yAxisLowerBound);
         ((NumberAxis) grapheDisplay.getYAxis()).setUpperBound(yAxisUpperBound);
         ((NumberAxis) grapheDisplay.getYAxis()).setTickUnit(yAxisTickUnit);//distance between two graduation
+
     }
 
     private void updateGraphDisplay() {
