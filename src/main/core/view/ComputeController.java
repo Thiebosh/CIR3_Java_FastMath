@@ -41,8 +41,6 @@ public class ComputeController implements Initializable {
         refreshTableView();
 
         //set data edition
-        //functionList.setEditable(true);
-
         nameCol.setCellFactory(TextFieldTableCell.<Express> forTableColumn());
         nameCol.setOnEditCommit((TableColumn.CellEditEvent<Express, String> event) -> {
             tableViewEditCallback(event, "name");
@@ -55,7 +53,7 @@ public class ComputeController implements Initializable {
     }
 
     /**
-     * Applique la liste d'étudiants au TableView
+     * Applique la liste de fonctions au TableView
      */
     private void refreshTableView() {
         ObservableList<Express> list = FXCollections.observableArrayList(ExpressManager.getExpressList());

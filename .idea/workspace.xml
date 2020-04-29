@@ -237,6 +237,7 @@
       <workItem from="1587970846765" duration="10357000" />
       <workItem from="1587996868743" duration="9804000" />
       <workItem from="1588054748321" duration="667000" />
+      <workItem from="1588166045595" duration="4731000" />
     </task>
     <servers />
   </component>
@@ -284,22 +285,22 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="505" y="199" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1587392826415" />
-    <state width="1493" height="274" key="GridCell.Tab.0.bottom" timestamp="1588055415817">
+    <state width="1493" height="114" key="GridCell.Tab.0.bottom" timestamp="1588170997093">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="274" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1588055415817" />
-    <state width="1493" height="274" key="GridCell.Tab.0.center" timestamp="1588055415817">
+    <state width="1493" height="114" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1588170997093" />
+    <state width="1493" height="114" key="GridCell.Tab.0.center" timestamp="1588170997093">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="274" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1588055415817" />
-    <state width="1493" height="274" key="GridCell.Tab.0.left" timestamp="1588055415817">
+    <state width="1493" height="114" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1588170997093" />
+    <state width="1493" height="114" key="GridCell.Tab.0.left" timestamp="1588170997093">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="274" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1588055415817" />
-    <state width="1493" height="274" key="GridCell.Tab.0.right" timestamp="1588055415817">
+    <state width="1493" height="114" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1588170997093" />
+    <state width="1493" height="114" key="GridCell.Tab.0.right" timestamp="1588170997093">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="274" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1588055415817" />
+    <state width="1493" height="114" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1588170997093" />
     <state x="440" y="145" key="RollbackChangesDialog" timestamp="1587979438234">
       <screen x="0" y="0" width="1536" height="824" />
     </state>

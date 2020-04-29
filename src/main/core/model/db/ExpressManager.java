@@ -47,9 +47,9 @@ public class ExpressManager {
     public static void addGraph(String name) {
         if (expressNames.contains(name)) {
             Express expression = new Express();
-            for (Express express : expressList) {
-                if (expression.getName().equals(name)) {
-                    expression = express;
+            for (Express element : expressList) {
+                if (element.getName().equals(name)) {
+                    expression = element;
                     break;
                 }
             }

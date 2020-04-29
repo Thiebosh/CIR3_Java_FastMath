@@ -29,8 +29,11 @@
                            <TableColumn fx:id="nameCol" prefWidth="82" text="Nom" />
                            <TableColumn fx:id="functionCol" prefWidth="152" sortable="false" text="Expression" />
                        </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
                    </TableView>
-                  <Button onAction="#addFunctionLine" layoutX="71.0" layoutY="324.0" mnemonicParsing="false" text="Ajouter une ligne" />
+                  <Button layoutX="71.0" layoutY="324.0" mnemonicParsing="false" onAction="#addFunctionLine" text="Ajouter une ligne" />
                </children>
           </AnchorPane>
             <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="374.0" prefWidth="401.0">

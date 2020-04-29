@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
@@ -22,9 +21,9 @@
             <Font size="18.0" />
           </font>
         </Label>
-        <LineChart layoutX="14.0" layoutY="75.0" prefHeight="224.0" prefWidth="314.0">
+        <LineChart fx:id="grapheDisplay" layoutX="14.0" layoutY="52.0" prefHeight="250.0" prefWidth="314.0">
           <xAxis>
-            <CategoryAxis side="BOTTOM" />
+            <NumberAxis side="RIGHT" />
           </xAxis>
           <yAxis>
             <NumberAxis side="LEFT" />
@@ -32,20 +31,17 @@
         </LineChart>
         <Button layoutX="87.0" layoutY="303.0" mnemonicParsing="false" text="Style du&#10;graphique" textAlignment="CENTER" />
         <Button layoutX="203.0" layoutY="303.0" mnemonicParsing="false" text="Liste des&#10;fonctions" textAlignment="CENTER" />
-        <TableView fx:id="functionTableViewGraphic" layoutX="328.0" layoutY="52.0" prefHeight="250.0" prefWidth="293">
+        <TableView fx:id="functionTableViewGraphic" editable="true" layoutX="328.0" layoutY="52.0" prefHeight="250.0" prefWidth="293">
           <columns>
-            <TableColumn fx:id="stateCol" prefWidth="40" resizable="false" text="Actif" />
-            <TableColumn resizable="false" text="Fonction">
-                     <columns>
-                        <TableColumn fx:id="nameCol" prefWidth="20" resizable="false" />
-                        <TableColumn fx:id="expressCol" prefWidth="90" resizable="false" text="Expression" />
-                     </columns></TableColumn>
+            <TableColumn fx:id="nameCol" editable="false" prefWidth="55" text="Nom" />
+            <TableColumn fx:id="expressCol" editable="false" prefWidth="90" text="Expression" />
+            <TableColumn fx:id="stateCol" prefWidth="36" resizable="false" text="Actif" />
             <TableColumn fx:id="samplingCol" prefWidth="50" resizable="false" text="Points" />
-            <TableColumn fx:id="styleCol" prefWidth="90" resizable="false" sortable="false" text="Style" />
+            <TableColumn fx:id="styleCol" editable="false" prefWidth="60" resizable="false" sortable="false" text="Style" />
           </columns>
-          <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-          </columnResizePolicy>
+           <columnResizePolicy>
+              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+           </columnResizePolicy>
         </TableView>
         <ChoiceBox fx:id="functionChoiceBox" layoutX="371.0" layoutY="324.0" prefWidth="150.0" />
         <Button layoutX="533.0" layoutY="324.0" mnemonicParsing="false" onAction="#addFunctionToTable" text="ajouter" />

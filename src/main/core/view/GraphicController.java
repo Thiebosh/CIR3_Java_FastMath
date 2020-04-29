@@ -2,14 +2,25 @@ package core.view;
 
 import core.model.db.Express;
 import core.model.db.ExpressManager;
+import core.model.mathlibrary.parser.Parser;
+import core.model.mathlibrary.parser.util.ParserResult;
+import core.model.mathlibrary.parser.util.Point;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.AreaChart;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.converter.IntegerStringConverter;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -18,6 +29,17 @@ import java.util.ResourceBundle;
  * Contrôleur du fichier graphic.fxml
  */
 public class GraphicController implements Initializable {
+    @FXML
+    private LineChart grapheDisplay;
+
+    private double xAxisLowerBound = -10;
+    private double xAxisUpperBound = 10;
+    private double xAxisTickUnit = 10;
+    private double yAxisLowerBound = -10;
+    private double yAxisUpperBound = 10;
+    private double yAxisTickUnit = 10;
+
+    
     @FXML
     private ChoiceBox functionChoiceBox;
 
@@ -47,51 +69,96 @@ public class GraphicController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initializeFunctionChoiceBox();
+        initializeGraphTableView();
+        initializeGraphDisplay();
+    }
+
+    private void initializeFunctionChoiceBox() {
         functionChoiceBox.getItems().addAll(ExpressManager.getExpressNames());
         //tester ça pour un rafraichissement automatique : https://stackoverflow.com/questions/21854146/javafx-2-0-choice-box-issue-how-to-update-a-choicebox-which-represents-a-list
+    }
 
-
+    private void initializeGraphTableView() {
+        //link to data
         stateCol.setCellValueFactory(new PropertyValueFactory<>("isActive"));
-        stateCol.setCellFactory(tc -> new CheckBoxTableCell<>());
-
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-
         expressCol.setCellValueFactory(new PropertyValueFactory<>("function"));
-
         samplingCol.setCellValueFactory(new PropertyValueFactory<>("sampling"));
 
+        //edition
+        stateCol.setCellFactory(tc -> new CheckBoxTableCell<>());
+        stateCol.setOnEditCommit((TableColumn.CellEditEvent<Express, Boolean> event) -> {
+            TablePosition<Express, Boolean> pos = event.getTablePosition();
+            Express express = event.getTableView().getItems().get(pos.getRow());
+            express.setIsActive(event.getNewValue());
 
-        final var items = FXCollections.observableArrayList(
-                new Express("f", "2*x", 15, true),
-                new Express("g", "2.25*x", 30, false));
-        functionTableViewGraphic.setItems(items);
-
-/*
-        stateCol.setCellValueFactory( f -> f.getValue().getCompleted());
-        stateCol.setCellFactory( tc -> new CheckBoxTableCell< RSSReader, Boolean >());
-
-
-
-        stateCol.setCellValueFactory(new Callback<CellDataFeatures<RSSReader,Boolean>, ObservableValue<Boolean>>() {
-                    @Override public
-                    ObservableValue<Boolean> call( CellDataFeatures<RSSReader,Boolean> p ){
-                        return p.getValue().getCompleted();
-                    }
+            updateGraphDisplay();//conséquence
+            System.out.println("mis à jour");
         });
-        stateCol.setCellFactory(
-                new Callback<TableColumn<RSSReader,Boolean>,TableCell<RSSReader,Boolean>>(){
-                    @Override public
-                    TableCell<RSSReader,Boolean> call( TableColumn<RSSReader,Boolean> p ){
-                        return new CheckBoxTableCell<>(); }});
 
+        samplingCol.setCellFactory(TextFieldTableCell.<Express, Integer>forTableColumn(new IntegerStringConverter()));
+        samplingCol.setOnEditCommit((TableColumn.CellEditEvent<Express, Integer> event) -> {
+            TablePosition<Express, Integer> pos = event.getTablePosition();
+            Express express = event.getTableView().getItems().get(pos.getRow());
+            express.setSampling(event.getNewValue());
 
-        stateCol.setCellValueFactory(new PersonUnemployedValueFactory());
+            refreshTableViewGraphic();//reset si valeur invalide
+            updateGraphDisplay();//conséquence
+        });
 
- */
+        //injection des données
+        refreshTableViewGraphic();
+    }
+
+    /**
+     * Applique la liste de fonctions au TableView
+     */
+    private void refreshTableViewGraphic() {
+        ObservableList<Express> list = FXCollections.observableArrayList(ExpressManager.getExpressGraph());
+        functionTableViewGraphic.setItems(list);
+    }
+
+    private void initializeGraphDisplay() {
+        //axis settings
+        grapheDisplay.getXAxis().setAutoRanging(false);
+        ((NumberAxis) grapheDisplay.getXAxis()).setLowerBound(xAxisLowerBound);
+        ((NumberAxis) grapheDisplay.getXAxis()).setUpperBound(xAxisUpperBound);
+        //double range = ((NumberAxis) grapheDisplay.getXAxis()).getUpperBound() - ((NumberAxis) grapheDisplay.getXAxis()).getLowerBound();
+        ((NumberAxis) grapheDisplay.getXAxis()).setTickUnit(xAxisTickUnit);//distance between two graduation
+
+        grapheDisplay.getYAxis().setAutoRanging(false);
+        ((NumberAxis) grapheDisplay.getYAxis()).setLowerBound(yAxisLowerBound);
+        ((NumberAxis) grapheDisplay.getYAxis()).setUpperBound(yAxisUpperBound);
+        ((NumberAxis) grapheDisplay.getYAxis()).setTickUnit(yAxisTickUnit);//distance between two graduation
+    }
+
+    private void updateGraphDisplay() {
+        ObservableList<XYChart.Series<Number,Number>> graphMatrix = FXCollections.observableArrayList();
+
+        for (Express element : ExpressManager.getExpressGraph()) {
+            if (element.isActive()) graphMatrix.add(functionPlotCoords(element));
+        }
+
+        grapheDisplay.setData(graphMatrix);
+    }
+
+    private XYChart.Series<Number, Number> functionPlotCoords(Express expression) {
+        XYChart.Series<Number, Number> coords = new XYChart.Series<Number, Number>();
+        coords.setName(expression.getName());
+
+        double range = (xAxisUpperBound - xAxisLowerBound)/expression.getSampling();
+        for (double i = xAxisLowerBound; i <= xAxisUpperBound; i+=range) {
+            coords.getData().add(new XYChart.Data<>(i, Parser.eval(expression.getFunction(), new Point("x", i)).getValue()));
+        }
+
+        return coords;
     }
 
     @FXML
     private void addFunctionToTable() {
-        //ExpressManager.addGraph((String) functionChoiceBox.getValue());
+        ExpressManager.addGraph((String) functionChoiceBox.getValue());//creation
+        refreshTableViewGraphic();//visibilité
+        updateGraphDisplay();
     }
 }
