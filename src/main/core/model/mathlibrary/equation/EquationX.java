@@ -5,6 +5,8 @@ import core.model.mathlibrary.exception.CalculatorException;
 import core.model.mathlibrary.function.FunctionX;
 import core.model.mathlibrary.util.Interval;
 
+import java.util.ArrayList;
+
 /**
  * 
  * 
@@ -31,8 +33,8 @@ public class EquationX {
      * @param f_x
      */
     public EquationX(final String f_x) {
-        this.f_x = new FunctionX(f_x);
-        this.der_x = new DerivativeX(f_x);
+        this.f_x = new FunctionX(simplify(f_x));
+        this.der_x = new DerivativeX(simplify(f_x));
     }
 
     /**
@@ -41,8 +43,18 @@ public class EquationX {
      * @param degree
      */
     public EquationX(final String f_x, final boolean degree) {
-        this.f_x = new FunctionX(f_x,degree);
-        this.der_x = new DerivativeX(f_x);
+        this.f_x = new FunctionX(simplify(f_x),degree);
+        this.der_x = new DerivativeX(simplify(f_x));
+    }
+
+    /**
+     *
+     * @param f_x
+     * @return
+     */
+    public static String simplify(String f_x)
+    {
+        return f_x.replace('=', '-');
     }
 
     /**
