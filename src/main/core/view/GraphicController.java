@@ -5,10 +5,14 @@ import core.model.db.ExpressManager;
 import core.model.mathlibrary.parser.Parser;
 import core.model.mathlibrary.parser.util.ParserResult;
 import core.model.mathlibrary.parser.util.Point;
+import javafx.beans.Observable;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -92,29 +96,31 @@ public class GraphicController implements Initializable {
         samplingCol.setCellValueFactory(new PropertyValueFactory<>("sampling"));
 
         //edition
+        //cas 1 : intialisation mais update ponctuelle (met pas à jour toutes les cases de la même fonction)
         stateCol.setCellFactory(CheckBoxTableCell.forTableColumn(stateCol));
-
-        //https://stackoverflow.com/questions/28671132/javafx-checkboxtablecell-get-actionevent-when-user-check-a-checkbox
-        /*stateCol.setCellValueFactory((TableColumn.CellDataFeatures<Express, Boolean> p) -> {
-
+        stateCol.setCellValueFactory((TableColumn.CellDataFeatures<Express, Boolean> p) -> {
             final Express t = p.getValue();
             final BooleanProperty result = new SimpleBooleanProperty(t.isActive());
             result.addListener((ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) -> {
                 t.setIsActive(newValue);
+                updateGraphDisplay();//conséquence
             });
-
-            updateGraphDisplay();//conséquence
             return result;
-        });*/
+        });
 
-        //stateCol.setCellFactory(tc -> new CheckBoxTableCell<>());
-        /*stateCol.setOnEditCommit((TableColumn.CellEditEvent<Express, Boolean> event) -> {
-            TablePosition<Express, Boolean> pos = event.getTablePosition();
-            Express express = event.getTableView().getItems().get(pos.getRow());
-            express.setIsActive(event.getNewValue());
+        /*
+        //cas 2 : intialisation et update globale mais bcp d'appels (donc bcp de rafraichissement)
+        stateCol.setCellFactory(CheckBoxTableCell.forTableColumn((Callback<Integer, ObservableValue<Boolean>>) param -> {
+            System.out.println("appel");
+            final Express input = functionTableViewGraphic.getItems().get(param);
+            input.isActiveProperty().addListener(l -> {
+                updateGraphDisplay();//conséquence
+                System.out.println(input.isActive());
+            });
+            return input.isActiveProperty();
+        }));
+        */
 
-            updateGraphDisplay();//conséquence
-        });*/
 
         samplingCol.setCellFactory(TextFieldTableCell.<Express, Integer>forTableColumn(new IntegerStringConverter()));
         samplingCol.setOnEditCommit((TableColumn.CellEditEvent<Express, Integer> event) -> {
@@ -134,6 +140,28 @@ public class GraphicController implements Initializable {
      * Applique la liste de fonctions au TableView
      */
     private void refreshTableViewGraphic() {
+        /*
+        //cas 3 : update globale avec 1 seul appel mais pas initialisation (alourdit ajout)
+        //create link to the instance (1 time)
+        ObservableList<Express> list = FXCollections.observableArrayList(new Callback<Express, Observable[]>() {
+            @Override
+            public Observable[] call(Express param) { return new Observable[] {param.isActiveProperty()}; }
+        });
+
+        //create listener triggered by checkbox update (x times)
+        list.addListener((ListChangeListener<Express>) expression -> {
+            while (expression.next()) {
+                if (expression.wasUpdated()) {
+                    updateGraphDisplay();//consequence
+                    //ExpressManager.getExpressGraph().get(expression.getFrom()).isActive();
+                }
+            }
+        });
+
+        //fill list
+        list.addAll(ExpressManager.getExpressGraph());
+*/
+
         ObservableList<Express> list = FXCollections.observableArrayList(ExpressManager.getExpressGraph());
         functionTableViewGraphic.setItems(list);
     }
