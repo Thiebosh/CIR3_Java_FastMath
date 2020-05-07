@@ -3,20 +3,15 @@ package core.view;
 import core.model.db.Express;
 import core.model.db.ExpressManager;
 import core.model.mathlibrary.parser.Parser;
-import core.model.mathlibrary.parser.util.ParserResult;
 import core.model.mathlibrary.parser.util.Point;
-import javafx.beans.Observable;
+import core.view.javafxCustom.ColorTableCell;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -27,8 +22,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.util.Callback;
-import javafx.util.converter.BooleanStringConverter;
+import javafx.scene.paint.Color;
 import javafx.util.converter.IntegerStringConverter;
 
 import java.net.URL;
@@ -68,7 +62,7 @@ public class GraphicController implements Initializable {
     private TableColumn<Express, Integer> samplingCol;
 
     @FXML
-    private TableColumn styleCol;
+    private TableColumn<Express, Color> colorCol;
 
 
     /**
@@ -94,6 +88,7 @@ public class GraphicController implements Initializable {
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         expressCol.setCellValueFactory(new PropertyValueFactory<>("function"));
         samplingCol.setCellValueFactory(new PropertyValueFactory<>("sampling"));
+        colorCol.setCellValueFactory(new PropertyValueFactory<>("color"));
 
         //edition
         //cas 1 : intialisation mais update ponctuelle (met pas à jour toutes les cases de la même fonction)
@@ -107,7 +102,6 @@ public class GraphicController implements Initializable {
             });
             return result;
         });
-
         /*
         //cas 2 : intialisation et update globale mais bcp d'appels (donc bcp de rafraichissement)
         stateCol.setCellFactory(CheckBoxTableCell.forTableColumn((Callback<Integer, ObservableValue<Boolean>>) param -> {
@@ -121,7 +115,6 @@ public class GraphicController implements Initializable {
         }));
         */
 
-
         samplingCol.setCellFactory(TextFieldTableCell.<Express, Integer>forTableColumn(new IntegerStringConverter()));
         samplingCol.setOnEditCommit((TableColumn.CellEditEvent<Express, Integer> event) -> {
             TablePosition<Express, Integer> pos = event.getTablePosition();
@@ -131,6 +124,17 @@ public class GraphicController implements Initializable {
             refreshTableViewGraphic();//reset si valeur invalide
             updateGraphDisplay();//conséquence
         });
+
+        colorCol.setCellFactory(ColorTableCell::new);
+        colorCol.setOnEditCommit((TableColumn.CellEditEvent<Express, Color> event) -> {
+            TablePosition<Express, Color> pos = event.getTablePosition();
+            Express express = event.getTableView().getItems().get(pos.getRow());
+            express.setColor(event.getNewValue());
+
+            refreshTableViewGraphic();//reset si valeur invalide
+            updateGraphDisplay();//conséquence
+        });
+
 
         //injection des données
         refreshTableViewGraphic();
@@ -182,16 +186,13 @@ public class GraphicController implements Initializable {
     }
 
     private void updateGraphDisplay() {
-        ObservableList<XYChart.Series<Number,Number>> graphMatrix = FXCollections.observableArrayList();
-
+        grapheDisplay.getData().clear();
         for (Express element : ExpressManager.getExpressGraph()) {
-            if (element.isActive()) graphMatrix.add(functionPlotCoords(element));
+            if (element.isActive()) plotFunction(element);
         }
-
-        grapheDisplay.setData(graphMatrix);
     }
 
-    private XYChart.Series<Number, Number> functionPlotCoords(Express expression) {
+    private void plotFunction(Express expression) {
         XYChart.Series<Number, Number> coords = new XYChart.Series<Number, Number>();
         coords.setName(expression.getName());
 
@@ -200,7 +201,14 @@ public class GraphicController implements Initializable {
             coords.getData().add(new XYChart.Data<>(i, Parser.eval(expression.getFunction(), new Point("x", i)).getValue()));
         }
 
-        return coords;
+        grapheDisplay.getData().add(coords);
+
+        // convert line color to CSS format and set line color on Series node
+        String lineStyle = "-fx-stroke: rgba("
+                +(int) (expression.getColor().getRed()*255)+", "
+                +(int) (expression.getColor().getGreen()*255)+", "
+                +(int) (expression.getColor().getBlue()*255)+", 1.0);";
+        coords.getNode().lookup(".chart-series-line").setStyle(lineStyle);
     }
 
     @FXML

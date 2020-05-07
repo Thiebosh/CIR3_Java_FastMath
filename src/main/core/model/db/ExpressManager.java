@@ -1,5 +1,7 @@
 package core.model.db;
 
+import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
@@ -56,6 +58,7 @@ public class ExpressManager {
 
             expression.setIsActive(false);//activation automatique en paramètre généraux...
             expression.setSampling(10);//valeur par défaut
+            expression.setColor(Color.RED);//valeur par défaut
 
             expressGraph.add(expression);
         }

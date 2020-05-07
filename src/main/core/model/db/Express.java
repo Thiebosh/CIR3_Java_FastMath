@@ -1,6 +1,7 @@
 package core.model.db;
 
 import javafx.beans.property.*;
+import javafx.scene.paint.Color;
 
 public class Express {
     private final StringProperty name = new SimpleStringProperty();
@@ -8,6 +9,7 @@ public class Express {
 
     private final BooleanProperty isActive = new SimpleBooleanProperty();
     private final IntegerProperty sampling = new SimpleIntegerProperty();//nbPoints
+    private Color color = new Color(0,0,0,1);
 
     public Express() {
     }
@@ -17,10 +19,11 @@ public class Express {
         this.function.set(function);
     }
 
-    public Express(String name, String function, int sampling, boolean isActive) {
+    public Express(String name, String function, int sampling, Color color, boolean isActive) {
         this.name.set(name);
         this.function.set(function);
         this.sampling.set(sampling);
+        this.color = color;
         this.isActive.set(isActive);
     }
 
@@ -75,5 +78,18 @@ public class Express {
 
     public void setSampling(int sampling) {
         this.sampling.set(sampling);
+    }
+
+
+    public Color getColor() {
+        return color;//Color.web(color.get());
+    }
+/*
+    public StringProperty colorProperty() {
+        return color;
+    }
+*/
+    public void setColor(Color color) {
+        this.color = color;
     }
 }
