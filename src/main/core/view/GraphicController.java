@@ -7,6 +7,7 @@ import core.model.mathlibrary.parser.util.Point;
 import core.view.javafxCustom.ColorTableCell;
 import core.view.javafxCustom.SliderTableCell;
 import javafx.beans.Observable;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
@@ -27,6 +28,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import static java.lang.Math.abs;
@@ -37,7 +39,6 @@ import static java.lang.Math.abs;
 public class GraphicController implements Initializable {
     @FXML
     private LineChart grapheDisplay;
-
     private double xAxisLowerBound = -10;
     private double xAxisUpperBound = 10;
     private double xAxisTickUnit = 10;
@@ -45,28 +46,20 @@ public class GraphicController implements Initializable {
     private double yAxisUpperBound = 10;
     private double yAxisTickUnit = 10;
 
-
     @FXML
     private ChoiceBox functionChoiceBox;
+    private static final String SEPARATOR = " : ";
 
     @FXML
     private TableView<Express> functionTableViewGraphic;
-
     @FXML
     private TableColumn<Express, Boolean> stateCol;
-
-    @FXML
-    private TableColumn<Express, String> nameCol;
-
     @FXML
     private TableColumn<Express, String> expressCol;
-
     @FXML
     private TableColumn<Express, Integer> samplingCol;
-
     @FXML
     private TableColumn<Express, Color> colorCol;
-
 
     /**
      * Chargement initial des fonctions
@@ -80,16 +73,43 @@ public class GraphicController implements Initializable {
         initializeGraphDisplay();
     }
 
+    /**
+     * Remplissage du ChoiceBox
+     */
     private void initializeFunctionChoiceBox() {
-        functionChoiceBox.getItems().addAll(ExpressManager.getExpressNames());
-        //tester ça pour un rafraichissement automatique : https://stackoverflow.com/questions/21854146/javafx-2-0-choice-box-issue-how-to-update-a-choicebox-which-represents-a-list
+        ArrayList<String> list = new ArrayList<String>();
+        for (Express current : ExpressManager.getExpressList()) list.add(current.getName() + SEPARATOR + current.getFunction());
+        functionChoiceBox.getItems().addAll(list);
     }
 
+    /**
+     * Préparation des axes du graphe
+     */
+    private void initializeGraphDisplay() {
+        //axis settings
+        grapheDisplay.getXAxis().setAutoRanging(false);
+        ((NumberAxis) grapheDisplay.getXAxis()).setLowerBound(xAxisLowerBound);
+        ((NumberAxis) grapheDisplay.getXAxis()).setUpperBound(xAxisUpperBound);
+        //double range = ((NumberAxis) grapheDisplay.getXAxis()).getUpperBound() - ((NumberAxis) grapheDisplay.getXAxis()).getLowerBound();
+        ((NumberAxis) grapheDisplay.getXAxis()).setTickUnit(xAxisTickUnit);//distance between two graduation
+
+        grapheDisplay.getYAxis().setAutoRanging(false);
+        ((NumberAxis) grapheDisplay.getYAxis()).setLowerBound(yAxisLowerBound);
+        ((NumberAxis) grapheDisplay.getYAxis()).setUpperBound(yAxisUpperBound);
+        ((NumberAxis) grapheDisplay.getYAxis()).setTickUnit(yAxisTickUnit);//distance between two graduation
+    }
+
+    /**
+     * Mise en place des liens entre instance de Express et colonnes de TableViews + injection de données
+     */
     private void initializeGraphTableView() {
         //link to data
         stateCol.setCellValueFactory(new PropertyValueFactory<>("isActive"));
-        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        expressCol.setCellValueFactory(new PropertyValueFactory<>("function"));
+        expressCol.setCellValueFactory(cellData -> Bindings.createStringBinding(
+                () -> cellData.getValue().getName() + " : " + cellData.getValue().getFunction(),
+                cellData.getValue().nameProperty(),
+                cellData.getValue().functionProperty()
+            ));
         samplingCol.setCellValueFactory(new PropertyValueFactory<>("sampling"));
         colorCol.setCellValueFactory(new PropertyValueFactory<>("color"));
 
@@ -132,7 +152,18 @@ public class GraphicController implements Initializable {
     }
 
     /**
-     * Applique la liste de fonctions au TableView
+     * Ajoute fonction choisie au TableView et l'affiche dans le graphe
+     */
+    @FXML
+    private void addFunctionToTable() {
+        String express = (String) functionChoiceBox.getValue();
+        ExpressManager.addGraph(express.substring(0, express.indexOf(SEPARATOR)));//creation
+        refreshTableViewGraphic();//visibilité
+        updateGraphDisplay();
+    }
+
+    /**
+     * Applique la liste de fonctions au TableView + mise en place derniers liens instance - colonne
      */
     private void refreshTableViewGraphic() {
         double samplingMax = (abs(xAxisLowerBound)+abs(xAxisUpperBound))*2;//cas ou cadre > 1 ?
@@ -163,21 +194,9 @@ public class GraphicController implements Initializable {
         functionTableViewGraphic.setItems(list);
     }
 
-    private void initializeGraphDisplay() {
-        //axis settings
-        grapheDisplay.getXAxis().setAutoRanging(false);
-        ((NumberAxis) grapheDisplay.getXAxis()).setLowerBound(xAxisLowerBound);
-        ((NumberAxis) grapheDisplay.getXAxis()).setUpperBound(xAxisUpperBound);
-        //double range = ((NumberAxis) grapheDisplay.getXAxis()).getUpperBound() - ((NumberAxis) grapheDisplay.getXAxis()).getLowerBound();
-        ((NumberAxis) grapheDisplay.getXAxis()).setTickUnit(xAxisTickUnit);//distance between two graduation
-
-        grapheDisplay.getYAxis().setAutoRanging(false);
-        ((NumberAxis) grapheDisplay.getYAxis()).setLowerBound(yAxisLowerBound);
-        ((NumberAxis) grapheDisplay.getYAxis()).setUpperBound(yAxisUpperBound);
-        ((NumberAxis) grapheDisplay.getYAxis()).setTickUnit(yAxisTickUnit);//distance between two graduation
-
-    }
-
+    /**
+     * Génère les points des fonctions à afficher
+     */
     public void updateGraphDisplay() {
         grapheDisplay.getData().clear();
         for (Express element : ExpressManager.getExpressGraph()) {
@@ -185,6 +204,10 @@ public class GraphicController implements Initializable {
         }
     }
 
+    /**
+     * Calcule les points de la fonction à afficher et lui applique sa couleur
+     * @param expression La fonction dont il faut calculer les points
+     */
     private void plotFunction(Express expression) {
         XYChart.Series<Number, Number> coords = new XYChart.Series<Number, Number>();
         coords.setName(expression.getName());
@@ -202,12 +225,5 @@ public class GraphicController implements Initializable {
                 +(int) (expression.getColor().getGreen()*255)+", "
                 +(int) (expression.getColor().getBlue()*255)+", 1.0);";
         coords.getNode().lookup(".chart-series-line").setStyle(lineStyle);
-    }
-
-    @FXML
-    private void addFunctionToTable() {
-        ExpressManager.addGraph((String) functionChoiceBox.getValue());//creation
-        refreshTableViewGraphic();//visibilité
-        updateGraphDisplay();
     }
 }

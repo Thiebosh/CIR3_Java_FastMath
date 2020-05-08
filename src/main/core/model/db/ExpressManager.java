@@ -56,11 +56,13 @@ public class ExpressManager {
                 }
             }
 
-            expression.setIsActive(false);//activation automatique en paramètre généraux...
-            expression.setSampling(10);//valeur par défaut
-            expression.setColor(Color.RED);//valeur par défaut
+            if (!expressGraph.contains(expression)) {
+                expression.setIsActive(true);//activation automatique en paramètre généraux...
+                expression.setSampling(10);//valeur par défaut
+                expression.setColor(Color.BLACK);//valeur par défaut
 
-            expressGraph.add(expression);
+                expressGraph.add(expression);
+            }
         }
         else {
             //wut
