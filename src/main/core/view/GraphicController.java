@@ -5,10 +5,13 @@ import core.model.db.ExpressManager;
 import core.model.mathlibrary.parser.Parser;
 import core.model.mathlibrary.parser.util.Point;
 import core.view.javafxCustom.ColorTableCell;
+import core.view.javafxCustom.SliderTableCell;
+import javafx.beans.Observable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,12 +24,12 @@ import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.paint.Color;
-import javafx.util.converter.IntegerStringConverter;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import static java.lang.Math.abs;
 
 /**
  * Contrôleur du fichier graphic.fxml
@@ -115,23 +118,11 @@ public class GraphicController implements Initializable {
         }));
         */
 
-        samplingCol.setCellFactory(TextFieldTableCell.<Express, Integer>forTableColumn(new IntegerStringConverter()));
-        samplingCol.setOnEditCommit((TableColumn.CellEditEvent<Express, Integer> event) -> {
-            TablePosition<Express, Integer> pos = event.getTablePosition();
-            Express express = event.getTableView().getItems().get(pos.getRow());
-            express.setSampling(event.getNewValue());
-
-            refreshTableViewGraphic();//reset si valeur invalide
-            updateGraphDisplay();//conséquence
-        });
-
         colorCol.setCellFactory(ColorTableCell::new);
         colorCol.setOnEditCommit((TableColumn.CellEditEvent<Express, Color> event) -> {
             TablePosition<Express, Color> pos = event.getTablePosition();
             Express express = event.getTableView().getItems().get(pos.getRow());
             express.setColor(event.getNewValue());
-
-            refreshTableViewGraphic();//reset si valeur invalide
             updateGraphDisplay();//conséquence
         });
 
@@ -144,29 +135,31 @@ public class GraphicController implements Initializable {
      * Applique la liste de fonctions au TableView
      */
     private void refreshTableViewGraphic() {
-        /*
+        double samplingMax = (abs(xAxisLowerBound)+abs(xAxisUpperBound))*2;//cas ou cadre > 1 ?
+        samplingCol.setCellFactory(SliderTableCell.forTableColumn(2,(int)samplingMax));
+
         //cas 3 : update globale avec 1 seul appel mais pas initialisation (alourdit ajout)
         //create link to the instance (1 time)
-        ObservableList<Express> list = FXCollections.observableArrayList(new Callback<Express, Observable[]>() {
-            @Override
-            public Observable[] call(Express param) { return new Observable[] {param.isActiveProperty()}; }
-        });
+        ObservableList<Express> list = FXCollections.observableArrayList(param -> new Observable[] {param.samplingProperty()});
 
         //create listener triggered by checkbox update (x times)
         list.addListener((ListChangeListener<Express>) expression -> {
             while (expression.next()) {
                 if (expression.wasUpdated()) {
-                    updateGraphDisplay();//consequence
-                    //ExpressManager.getExpressGraph().get(expression.getFrom()).isActive();
+                    Express current = ExpressManager.getExpressGraph().get(expression.getFrom());
+                    if (current.getSampling() % 2 != 0) { current.setSampling(current.getSampling()-1); }
+
+                    if (current.getSampling() != current.getSamplingBefore()) {
+                        current.setSamplingBefore(current.getSampling());//limiter les rafraichissements
+                        updateGraphDisplay();//consequence
+                    }
                 }
             }
         });
 
         //fill list
         list.addAll(ExpressManager.getExpressGraph());
-*/
 
-        ObservableList<Express> list = FXCollections.observableArrayList(ExpressManager.getExpressGraph());
         functionTableViewGraphic.setItems(list);
     }
 
@@ -185,7 +178,7 @@ public class GraphicController implements Initializable {
 
     }
 
-    private void updateGraphDisplay() {
+    public void updateGraphDisplay() {
         grapheDisplay.getData().clear();
         for (Express element : ExpressManager.getExpressGraph()) {
             if (element.isActive()) plotFunction(element);
@@ -197,7 +190,7 @@ public class GraphicController implements Initializable {
         coords.setName(expression.getName());
 
         double range = (xAxisUpperBound - xAxisLowerBound)/expression.getSampling();
-        for (double i = xAxisLowerBound; i <= xAxisUpperBound; i+=range) {
+        for (double i = xAxisLowerBound; i < xAxisUpperBound+range; i+=range) {
             coords.getData().add(new XYChart.Data<>(i, Parser.eval(expression.getFunction(), new Point("x", i)).getValue()));
         }
 

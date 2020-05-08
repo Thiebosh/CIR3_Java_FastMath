@@ -9,6 +9,7 @@ public class Express {
 
     private final BooleanProperty isActive = new SimpleBooleanProperty();
     private final IntegerProperty sampling = new SimpleIntegerProperty();//nbPoints
+    private int samplingBefore;
     private Color color = new Color(0,0,0,1);
 
     public Express() {
@@ -23,6 +24,7 @@ public class Express {
         this.name.set(name);
         this.function.set(function);
         this.sampling.set(sampling);
+        this.samplingBefore = sampling;
         this.color = color;
         this.isActive.set(isActive);
     }
@@ -45,16 +47,13 @@ public class Express {
         return function.get();
     }
 
-
     public StringProperty nameProperty() {
         return name;
     }
 
-
     public StringProperty functionProperty() {
         return function;
     }
-
 
     public boolean isActive() {
         return isActive.get();
@@ -76,19 +75,16 @@ public class Express {
         return sampling;
     }
 
-    public void setSampling(int sampling) {
-        this.sampling.set(sampling);
-    }
+    public void setSampling(Integer sampling) { this.sampling.set(sampling); }
 
+    public int getSamplingBefore() { return samplingBefore; }
+
+    public void setSamplingBefore(int sampling) { this.samplingBefore = sampling; }
 
     public Color getColor() {
         return color;//Color.web(color.get());
     }
-/*
-    public StringProperty colorProperty() {
-        return color;
-    }
-*/
+
     public void setColor(Color color) {
         this.color = color;
     }
