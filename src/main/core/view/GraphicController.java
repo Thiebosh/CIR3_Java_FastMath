@@ -5,43 +5,33 @@ import core.model.db.ExpressManager;
 import core.model.mathlibrary.parser.Parser;
 import core.model.mathlibrary.parser.util.Point;
 import core.model.services.StageService;
-import core.view.contextual.GraphicContextController;
+import core.view.contextual.GraphicContextControllerFactory;
 import core.view.javafxCustom.ColorTableCell;
 import core.view.javafxCustom.SliderTableCell;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import static java.lang.Math.abs;
-import static java.util.Map.entry;
 
 /**
  * Contrôleur du fichier graphic.fxml
@@ -51,12 +41,14 @@ public class GraphicController implements Initializable {
     private LineChart grapheDisplay;
 
     private static BooleanProperty graphUpdate = new SimpleBooleanProperty(false);
+
     private static double xAxisLowerBound = -10;
     private static double xAxisUpperBound = 10;
-    private static double xAxisTickUnit = 10;
     private static double yAxisLowerBound = -10;
     private static double yAxisUpperBound = 10;
-    private static double yAxisTickUnit = 10;
+
+    private static double xAxisTickUnit = 5;
+    private static double yAxisTickUnit = 5;
 
     @FXML
     private ChoiceBox functionChoiceBox;
@@ -286,7 +278,7 @@ public class GraphicController implements Initializable {
             put("scaleX", xAxisTickUnit);
             put("scaleY", yAxisTickUnit);
         }};
-        StageService.Holder.openContextWindows("graphicContext", new GraphicContextController(), arguments);
+        StageService.Holder.openContextWindows("Propriétés","graphicContext", new GraphicContextControllerFactory(), arguments);
 
 
         //listener sur booleen contextopened -> quand passe a false, update des champs et du graphe

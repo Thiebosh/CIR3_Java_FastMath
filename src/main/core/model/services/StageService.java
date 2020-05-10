@@ -20,7 +20,6 @@ public class StageService {//NOPMD
      */
     private static Stage mainStage;
 
-
     /**
      * getter : récupérer l'instance de fenêtre contrôlée
      * @return
@@ -57,6 +56,11 @@ public class StageService {//NOPMD
         private final static String RESOURCE_FOLDER_PATH = "/view/";
 
         /**
+         * chemin d'accès aux fichiers fxml de fenêtre contextuel
+         */
+        private final static String CONTEXTUAL_FOLDER_PATH = "/view/contextual/";
+
+        /**
          * getter : accès à l'unique instance de scène
          *
          * @return unique instance de la classe
@@ -72,7 +76,7 @@ public class StageService {//NOPMD
          */
         public static void loadMainWindowsScene(final String pageName) {
             final FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(StageService.class.getResource(RESOURCE_FOLDER_PATH + pageName + ".fxml"));
+            loader.setLocation(StageService.class.getResource(RESOURCE_FOLDER_PATH+pageName+".fxml"));
 
             try {
                 final VBox sceneRoot = loader.load();//VBox : rootNodeScene type
@@ -83,9 +87,9 @@ public class StageService {//NOPMD
             }
         }
 
-        public static <T extends ContextController> void openContextWindows(final String pageName, T controller, HashMap<String, ?> args) {
+        public static <T extends ContextControllerFactory> void openContextWindows(final String title, final String pageName, T controller, final HashMap<String, ?> args) {
             final FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(StageService.class.getResource("/view/contextual/"+pageName+".fxml"));
+            loader.setLocation(StageService.class.getResource(CONTEXTUAL_FOLDER_PATH+pageName+".fxml"));
 
             try {
                 Stage stage = new Stage();
@@ -93,8 +97,8 @@ public class StageService {//NOPMD
                 stage.setScene(new Scene(sceneRoot));
 
                 stage.initModality(Modality.APPLICATION_MODAL);//pas d'accès aux autres fenêtres
-                stage.setTitle("Propriétés");
-                stage.getIcons().add(new Image("file:src/main/resources/images/icon.png"));
+                stage.setTitle(title);
+                if (mainStage.getIcons().size() > 0) stage.getIcons().add(mainStage.getIcons().get(0));//share icon img
 
                 controller = loader.getController();//Returns the controller associated with the root object.
                 controller.setStage(stage);

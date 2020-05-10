@@ -1,6 +1,6 @@
 package core.view.contextual;
 
-import core.model.services.ContextController;
+import core.model.services.ContextControllerFactory;
 import core.view.GraphicController;
 import javafx.fxml.FXML;
 
@@ -9,7 +9,7 @@ import javafx.scene.control.TextField;
 
 import java.util.HashMap;
 
-public class GraphicContextController extends ContextController {
+public class GraphicContextControllerFactory extends ContextControllerFactory {
     @FXML
     private TextField textfieldXMin;
 
@@ -49,10 +49,9 @@ public class GraphicContextController extends ContextController {
         GraphicController.setxAxisUpperBound(Double.parseDouble(textfieldXMax.getCharacters().toString()));
         GraphicController.setyAxisLowerBound(Double.parseDouble(textfieldYMin.getCharacters().toString()));
         GraphicController.setyAxisUpperBound(Double.parseDouble(textfieldYMax.getCharacters().toString()));
-
-
-        GraphicController.setxAxisTickUnit(Double.parseDouble(spinnerScaleX.getPromptText()));
-        GraphicController.setyAxisTickUnit(Double.parseDouble(spinnerScaleY.getPromptText()));
+        
+        //GraphicController.setxAxisTickUnit(Double.parseDouble(spinnerScaleX.getPromptText()));
+        //GraphicController.setyAxisTickUnit(Double.parseDouble(spinnerScaleY.getPromptText()));
 
         GraphicController.requireGraphUpdate();
 

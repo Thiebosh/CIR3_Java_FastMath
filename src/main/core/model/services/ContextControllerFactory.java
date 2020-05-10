@@ -4,7 +4,7 @@ import javafx.stage.Stage;
 
 import java.util.HashMap;
 
-public abstract class ContextController<T> {
+public abstract class ContextControllerFactory<T> {
     private Stage stage;
 
     public void setStage(Stage stage) {
