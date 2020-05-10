@@ -1,22 +1,10 @@
 package core.app;
 
 import core.model.db.ExpressManager;
-import core.model.mathlibrary.equation.EquationX;
-import core.model.mathlibrary.equation.NonLinearSys;
-import core.model.mathlibrary.exception.CalculatorException;
-import core.model.mathlibrary.function.FunctionXs;
-import core.model.mathlibrary.parser.Parser;
-import core.model.mathlibrary.parser.util.ParserResult;
-import core.model.mathlibrary.parser.util.Point;
-import core.model.mathlibrary.polynomial.Polynomial;
-import core.model.mathlibrary.util.Round;
 import core.model.services.StageService;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -70,11 +58,8 @@ public class FastMath extends Application {//NOPMD
     }
 
     @Override
-    public final void start(final Stage primaryStage) throws Exception{
-        primaryStage.getIcons().add(new Image("file:src/main/resources/images/icon.png"));
-        primaryStage.setTitle("FastMath");
-
-        StageService.Holder.getInstance().setStage(primaryStage);
-        StageService.Holder.loadScene("home");
+    public final void start(final Stage primaryStage) throws Exception {
+        StageService.Holder.getInstance().setMainStage(primaryStage, "FastMath", new Image("file:src/main/resources/images/icon.png"));
+        StageService.Holder.loadMainWindowsScene("home");
     }
 }

@@ -29,7 +29,7 @@
             <NumberAxis side="LEFT" />
           </yAxis>
         </LineChart>
-        <Button layoutX="248.0" layoutY="316.0" mnemonicParsing="false" text="Style du&#10;graphique" textAlignment="CENTER" />
+        <Button layoutX="248.0" layoutY="316.0" mnemonicParsing="false" onAction="#editGraphParam" text="Propriétés&#10;du graphe" textAlignment="CENTER" />
         <TableView fx:id="functionTableViewGraphic" editable="true" layoutX="24.0" layoutY="56.0" prefHeight="250.0" prefWidth="293">
           <columns>
             <TableColumn fx:id="expressCol" editable="false" prefWidth="145" sortable="false" text="Expression" />
@@ -42,7 +42,7 @@
            </columnResizePolicy>
         </TableView>
         <ChoiceBox fx:id="functionChoiceBox" layoutX="24.0" layoutY="324.0" prefHeight="25.0" prefWidth="142.0" />
-        <Button layoutX="171.0" layoutY="324.0" mnemonicParsing="false" onAction="#addFunctionToTable" text="ajouter" />
+        <Button layoutX="171.0" layoutY="324.0" mnemonicParsing="false" onAction="#addFunctionToTable" text="Ajouter" />
       </children>
     </AnchorPane>
   </children>

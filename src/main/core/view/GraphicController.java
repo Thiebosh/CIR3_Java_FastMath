@@ -4,34 +4,44 @@ import core.model.db.Express;
 import core.model.db.ExpressManager;
 import core.model.mathlibrary.parser.Parser;
 import core.model.mathlibrary.parser.util.Point;
+import core.model.services.StageService;
+import core.view.contextual.GraphicContextController;
 import core.view.javafxCustom.ColorTableCell;
 import core.view.javafxCustom.SliderTableCell;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TablePosition;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import static java.lang.Math.abs;
+import static java.util.Map.entry;
 
 /**
  * Contrôleur du fichier graphic.fxml
@@ -39,12 +49,14 @@ import static java.lang.Math.abs;
 public class GraphicController implements Initializable {
     @FXML
     private LineChart grapheDisplay;
-    private double xAxisLowerBound = -10;
-    private double xAxisUpperBound = 10;
-    private double xAxisTickUnit = 10;
-    private double yAxisLowerBound = -10;
-    private double yAxisUpperBound = 10;
-    private double yAxisTickUnit = 10;
+
+    private static BooleanProperty graphUpdate = new SimpleBooleanProperty(false);
+    private static double xAxisLowerBound = -10;
+    private static double xAxisUpperBound = 10;
+    private static double xAxisTickUnit = 10;
+    private static double yAxisLowerBound = -10;
+    private static double yAxisUpperBound = 10;
+    private static double yAxisTickUnit = 10;
 
     @FXML
     private ChoiceBox functionChoiceBox;
@@ -60,6 +72,34 @@ public class GraphicController implements Initializable {
     private TableColumn<Express, Integer> samplingCol;
     @FXML
     private TableColumn<Express, Color> colorCol;
+
+    public static void requireGraphUpdate() {
+        graphUpdate.setValue(true);
+    }
+
+    public static void setxAxisLowerBound(double xAxisLowerBound) {
+        GraphicController.xAxisLowerBound = xAxisLowerBound;
+    }
+
+    public static void setxAxisUpperBound(double xAxisUpperBound) {
+        GraphicController.xAxisUpperBound = xAxisUpperBound;
+    }
+
+    public static void setyAxisLowerBound(double yAxisLowerBound) {
+        GraphicController.yAxisLowerBound = yAxisLowerBound;
+    }
+
+    public static void setyAxisUpperBound(double yAxisUpperBound) {
+        GraphicController.yAxisUpperBound = yAxisUpperBound;
+    }
+
+    public static void setxAxisTickUnit(double xAxisTickUnit) {
+        GraphicController.xAxisTickUnit = xAxisTickUnit;
+    }
+
+    public static void setyAxisTickUnit(double yAxisTickUnit) {
+        GraphicController.yAxisTickUnit = yAxisTickUnit;
+    }
 
     /**
      * Chargement initial des fonctions
@@ -88,15 +128,24 @@ public class GraphicController implements Initializable {
     private void initializeGraphDisplay() {
         //axis settings
         grapheDisplay.getXAxis().setAutoRanging(false);
-        ((NumberAxis) grapheDisplay.getXAxis()).setLowerBound(xAxisLowerBound);
-        ((NumberAxis) grapheDisplay.getXAxis()).setUpperBound(xAxisUpperBound);
-        //double range = ((NumberAxis) grapheDisplay.getXAxis()).getUpperBound() - ((NumberAxis) grapheDisplay.getXAxis()).getLowerBound();
-        ((NumberAxis) grapheDisplay.getXAxis()).setTickUnit(xAxisTickUnit);//distance between two graduation
-
         grapheDisplay.getYAxis().setAutoRanging(false);
-        ((NumberAxis) grapheDisplay.getYAxis()).setLowerBound(yAxisLowerBound);
-        ((NumberAxis) grapheDisplay.getYAxis()).setUpperBound(yAxisUpperBound);
-        ((NumberAxis) grapheDisplay.getYAxis()).setTickUnit(yAxisTickUnit);//distance between two graduation
+
+        //update settings : add change listener
+        graphUpdate.addListener((observable, oldValue, newValue) -> {
+            if (newValue==true) {
+                graphUpdate.setValue(false);
+
+                ((NumberAxis) grapheDisplay.getXAxis()).setLowerBound(xAxisLowerBound);
+                ((NumberAxis) grapheDisplay.getXAxis()).setUpperBound(xAxisUpperBound);
+                ((NumberAxis) grapheDisplay.getXAxis()).setTickUnit(xAxisTickUnit);//distance between two graduation
+
+                ((NumberAxis) grapheDisplay.getYAxis()).setLowerBound(yAxisLowerBound);
+                ((NumberAxis) grapheDisplay.getYAxis()).setUpperBound(yAxisUpperBound);
+                ((NumberAxis) grapheDisplay.getYAxis()).setTickUnit(yAxisTickUnit);//distance between two graduation
+            }
+        });
+
+        graphUpdate.setValue(true);//set intial values
     }
 
     /**
@@ -225,5 +274,21 @@ public class GraphicController implements Initializable {
                 +(int) (expression.getColor().getGreen()*255)+", "
                 +(int) (expression.getColor().getBlue()*255)+", 1.0);";
         coords.getNode().lookup(".chart-series-line").setStyle(lineStyle);
+    }
+
+    @FXML
+    private void editGraphParam() {
+        HashMap<String,Double> arguments = new HashMap<>() {{
+            put("xMin", xAxisLowerBound);
+            put("xMax", xAxisUpperBound);
+            put("yMin", yAxisLowerBound);
+            put("yMax", yAxisUpperBound);
+            put("scaleX", xAxisTickUnit);
+            put("scaleY", yAxisTickUnit);
+        }};
+        StageService.Holder.openContextWindows("graphicContext", new GraphicContextController(), arguments);
+
+
+        //listener sur booleen contextopened -> quand passe a false, update des champs et du graphe
     }
 }

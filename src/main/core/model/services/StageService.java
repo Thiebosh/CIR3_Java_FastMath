@@ -2,10 +2,14 @@ package core.model.services;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * Gestionnaire auto-hébergé de contenu de fenêtre
@@ -14,38 +18,43 @@ public class StageService {//NOPMD
     /**
      * unique instance auto hébergée de la fenêtre
      */
-    private Stage stage;
+    private static Stage mainStage;
+
 
     /**
      * getter : récupérer l'instance de fenêtre contrôlée
      * @return
      */
-    protected Stage getStage() {
-        return stage;
+    private Stage getMainStage() {
+        return mainStage;
     }
 
     /**
      * setter : modifier la fenêtre affichée/contrôlée
      * @param newStage fenêtre à contrôler
+     * @param title titre de la fenêtre
+     * @param icon icone de la fenêtre
      */
-    public void setStage(final Stage newStage) {
-        this.stage = newStage;
+    public void setMainStage(final Stage newStage, final String title, Image icon) {
+        this.mainStage = newStage;
+        if (title != null) this.mainStage.setTitle(title);
+        if (icon != null) this.mainStage.getIcons().add(icon);
     }
 
 
     /**
-     * partie statique : accès à l'instance
+     * partie statique (nécessairement dans classe non statique) : accès et pilotage de l'instance
      */
     public static class Holder {//NOPMD
-        /**
-         * chemin d'accès aux fichiers fxml
-         */
-        private final static String RESSOURCE_FOLDER_PATH = "/view/";
-
         /**
          * unique instance de la classe, accès à la scène
          */
         protected static final StageService INSTANCE = new StageService();
+
+        /**
+         * chemin d'accès aux fichiers fxml
+         */
+        private final static String RESOURCE_FOLDER_PATH = "/view/";
 
         /**
          * getter : accès à l'unique instance de scène
@@ -61,16 +70,39 @@ public class StageService {//NOPMD
          *
          * @param pageName nom du fichier fxml à afficher
          */
-        public static void loadScene(final String pageName) {
+        public static void loadMainWindowsScene(final String pageName) {
             final FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(StageService.class.getResource(RESSOURCE_FOLDER_PATH + pageName + ".fxml"));
+            loader.setLocation(StageService.class.getResource(RESOURCE_FOLDER_PATH + pageName + ".fxml"));
 
             try {
                 final VBox sceneRoot = loader.load();//VBox : rootNodeScene type
-                INSTANCE.getStage().setScene(new Scene(sceneRoot));
-                INSTANCE.getStage().show();
+                INSTANCE.getMainStage().setScene(new Scene(sceneRoot));
+                INSTANCE.getMainStage().show();
             } catch (IOException e) {
                 e.printStackTrace();//passer en projet maven puis suivre https://www.baeldung.com/logback
+            }
+        }
+
+        public static <T extends ContextController> void openContextWindows(final String pageName, T controller, HashMap<String, ?> args) {
+            final FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(StageService.class.getResource("/view/contextual/"+pageName+".fxml"));
+
+            try {
+                Stage stage = new Stage();
+                final AnchorPane sceneRoot = loader.load();
+                stage.setScene(new Scene(sceneRoot));
+
+                stage.initModality(Modality.APPLICATION_MODAL);//pas d'accès aux autres fenêtres
+                stage.setTitle("Propriétés");
+                stage.getIcons().add(new Image("file:src/main/resources/images/icon.png"));
+
+                controller = loader.getController();//Returns the controller associated with the root object.
+                controller.setStage(stage);
+                controller.setInitialValues(args);
+
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

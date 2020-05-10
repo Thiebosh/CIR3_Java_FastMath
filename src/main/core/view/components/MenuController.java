@@ -12,7 +12,7 @@ public class MenuController {
      */
     @FXML
     public void handleHomePageButton() {
-        StageService.Holder.loadScene("home");
+        StageService.Holder.loadMainWindowsScene("home");
     }
 
     /**
@@ -20,7 +20,7 @@ public class MenuController {
      */
     @FXML
     public void handleComputePageButton() {
-        StageService.Holder.loadScene("compute");
+        StageService.Holder.loadMainWindowsScene("compute");
     }
 
     /**
@@ -28,6 +28,6 @@ public class MenuController {
      */
     @FXML
     public void handleGraphicPageButton() {
-        StageService.Holder.loadScene("graphic");
+        StageService.Holder.loadMainWindowsScene("graphic");
     }
 }
