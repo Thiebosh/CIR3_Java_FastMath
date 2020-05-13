@@ -1,12 +1,9 @@
 package core.view.components;
 
-import core.model.db.Express;
-import core.model.db.ExpressManager;
+import core.model.data.Express;
+import core.model.data.ExpressManager;
 import core.model.mathlibrary.equation.EquationX;
 import core.model.mathlibrary.exception.CalculatorException;
-import core.model.mathlibrary.parser.Parser;
-import core.model.mathlibrary.parser.util.ParserResult;
-import core.model.mathlibrary.parser.util.Point;
 import core.model.mathlibrary.util.Round;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

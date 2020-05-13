@@ -1,4 +1,4 @@
-package core.model.db;
+package core.model.data;
 
 import javafx.scene.paint.Color;
 
@@ -63,6 +63,7 @@ public class ExpressManager {
 
                 expressGraph.add(expression);
             }
+            else if (!expression.isActive()) expression.setIsActive(true);
         }
         else {
             //wut

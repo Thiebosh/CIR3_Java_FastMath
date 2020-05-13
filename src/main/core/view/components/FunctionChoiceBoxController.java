@@ -1,7 +1,6 @@
 package core.view.components;
 
-import core.app.FastMath;
-import core.model.db.ExpressManager;
+import core.model.data.ExpressManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;

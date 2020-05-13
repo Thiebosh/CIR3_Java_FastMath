@@ -1,7 +1,7 @@
 package core.view;
 
-import core.model.db.Express;
-import core.model.db.ExpressManager;
+import core.model.data.Express;
+import core.model.data.ExpressManager;
 import core.model.mathlibrary.parser.Parser;
 import core.model.mathlibrary.parser.util.Point;
 import core.model.services.StageService;
@@ -38,7 +38,7 @@ import static java.lang.Math.abs;
  */
 public class GraphicController implements Initializable {
     @FXML
-    private LineChart grapheDisplay;
+    private LineChart graphDisplay;
 
     private static BooleanProperty graphUpdate = new SimpleBooleanProperty(false);
 
@@ -56,12 +56,17 @@ public class GraphicController implements Initializable {
 
     @FXML
     private TableView<Express> functionTableViewGraphic;
+
     @FXML
     private TableColumn<Express, Boolean> stateCol;
+
     @FXML
     private TableColumn<Express, String> expressCol;
+
     @FXML
     private TableColumn<Express, Integer> samplingCol;
+    private static double samplingMax = 100;
+
     @FXML
     private TableColumn<Express, Color> colorCol;
 
@@ -69,27 +74,19 @@ public class GraphicController implements Initializable {
         graphUpdate.setValue(true);
     }
 
-    public static void setxAxisLowerBound(double xAxisLowerBound) {
-        GraphicController.xAxisLowerBound = xAxisLowerBound;
-    }
+    public static void setXAxisLowerBound(double xAxisLowerBound) { GraphicController.xAxisLowerBound = xAxisLowerBound; }
 
-    public static void setxAxisUpperBound(double xAxisUpperBound) {
-        GraphicController.xAxisUpperBound = xAxisUpperBound;
-    }
+    public static void setXAxisUpperBound(double xAxisUpperBound) { GraphicController.xAxisUpperBound = xAxisUpperBound; }
 
-    public static void setyAxisLowerBound(double yAxisLowerBound) {
-        GraphicController.yAxisLowerBound = yAxisLowerBound;
-    }
+    public static void setYAxisLowerBound(double yAxisLowerBound) { GraphicController.yAxisLowerBound = yAxisLowerBound; }
 
-    public static void setyAxisUpperBound(double yAxisUpperBound) {
-        GraphicController.yAxisUpperBound = yAxisUpperBound;
-    }
+    public static void setYAxisUpperBound(double yAxisUpperBound) { GraphicController.yAxisUpperBound = yAxisUpperBound; }
 
-    public static void setxAxisTickUnit(double xAxisTickUnit) {
+    public static void setXAxisTickUnit(double xAxisTickUnit) {
         GraphicController.xAxisTickUnit = xAxisTickUnit;
     }
 
-    public static void setyAxisTickUnit(double yAxisTickUnit) {
+    public static void setYAxisTickUnit(double yAxisTickUnit) {
         GraphicController.yAxisTickUnit = yAxisTickUnit;
     }
 
@@ -119,25 +116,27 @@ public class GraphicController implements Initializable {
      */
     private void initializeGraphDisplay() {
         //axis settings
-        grapheDisplay.getXAxis().setAutoRanging(false);
-        grapheDisplay.getYAxis().setAutoRanging(false);
+        graphDisplay.getXAxis().setAutoRanging(false);
+        graphDisplay.getYAxis().setAutoRanging(false);
 
         //update settings : add change listener
         graphUpdate.addListener((observable, oldValue, newValue) -> {
             if (newValue==true) {
                 graphUpdate.setValue(false);
 
-                ((NumberAxis) grapheDisplay.getXAxis()).setLowerBound(xAxisLowerBound);
-                ((NumberAxis) grapheDisplay.getXAxis()).setUpperBound(xAxisUpperBound);
-                ((NumberAxis) grapheDisplay.getXAxis()).setTickUnit(xAxisTickUnit);//distance between two graduation
+                ((NumberAxis) graphDisplay.getXAxis()).setLowerBound(xAxisLowerBound);
+                ((NumberAxis) graphDisplay.getXAxis()).setUpperBound(xAxisUpperBound);
+                ((NumberAxis) graphDisplay.getXAxis()).setTickUnit(xAxisTickUnit);//distance between two graduation
 
-                ((NumberAxis) grapheDisplay.getYAxis()).setLowerBound(yAxisLowerBound);
-                ((NumberAxis) grapheDisplay.getYAxis()).setUpperBound(yAxisUpperBound);
-                ((NumberAxis) grapheDisplay.getYAxis()).setTickUnit(yAxisTickUnit);//distance between two graduation
+                ((NumberAxis) graphDisplay.getYAxis()).setLowerBound(yAxisLowerBound);
+                ((NumberAxis) graphDisplay.getYAxis()).setUpperBound(yAxisUpperBound);
+                ((NumberAxis) graphDisplay.getYAxis()).setTickUnit(yAxisTickUnit);//distance between two graduation
+
+                updateGraphDisplay();//recalculate function points
             }
         });
 
-        graphUpdate.setValue(true);//set intial values
+        graphUpdate.setValue(true);//call listener : set intial values
     }
 
     /**
@@ -207,7 +206,6 @@ public class GraphicController implements Initializable {
      * Applique la liste de fonctions au TableView + mise en place derniers liens instance - colonne
      */
     private void refreshTableViewGraphic() {
-        double samplingMax = (abs(xAxisLowerBound)+abs(xAxisUpperBound))*2;//cas ou cadre > 1 ?
         samplingCol.setCellFactory(SliderTableCell.forTableColumn(2,(int)samplingMax));
 
         //cas 3 : update globale avec 1 seul appel mais pas initialisation (alourdit ajout)
@@ -239,9 +237,11 @@ public class GraphicController implements Initializable {
      * Génère les points des fonctions à afficher
      */
     public void updateGraphDisplay() {
-        grapheDisplay.getData().clear();
+        graphDisplay.getData().clear();
         for (Express element : ExpressManager.getExpressGraph()) {
-            if (element.isActive()) plotFunction(element);
+            if (element.isActive()) {
+                plotFunction(element);
+            }
         }
     }
 
@@ -258,7 +258,7 @@ public class GraphicController implements Initializable {
             coords.getData().add(new XYChart.Data<>(i, Parser.eval(expression.getFunction(), new Point("x", i)).getValue()));
         }
 
-        grapheDisplay.getData().add(coords);
+        graphDisplay.getData().add(coords);
 
         // convert line color to CSS format and set line color on Series node
         String lineStyle = "-fx-stroke: rgba("
@@ -279,8 +279,5 @@ public class GraphicController implements Initializable {
             put("scaleY", yAxisTickUnit);
         }};
         StageService.Holder.openContextWindows("Propriétés","graphicContext", new GraphicContextControllerFactory(), arguments);
-
-
-        //listener sur booleen contextopened -> quand passe a false, update des champs et du graphe
     }
 }

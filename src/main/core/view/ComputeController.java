@@ -1,8 +1,7 @@
 package core.view;
 
-import core.app.FastMath;
-import core.model.db.Express;
-import core.model.db.ExpressManager;
+import core.model.data.Express;
+import core.model.data.ExpressManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

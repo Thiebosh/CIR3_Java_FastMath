@@ -1,6 +1,6 @@
 package core.app;
 
-import core.model.db.ExpressManager;
+import core.model.data.ExpressManager;
 import core.model.services.StageService;
 import javafx.application.Application;
 import javafx.scene.image.Image;

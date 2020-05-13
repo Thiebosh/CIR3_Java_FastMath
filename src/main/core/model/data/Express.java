@@ -1,4 +1,4 @@
-package core.model.db;
+package core.model.data;
 
 import javafx.beans.property.*;
 import javafx.scene.paint.Color;
