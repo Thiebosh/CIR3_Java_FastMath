@@ -8,6 +8,7 @@ import core.model.services.StageService;
 import core.view.contextual.GraphicContextControllerFactory;
 import core.view.javafxCustom.ColorTableCell;
 import core.view.javafxCustom.SliderTableCell;
+import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
@@ -42,13 +43,15 @@ public class GraphicController implements Initializable {
 
     private static BooleanProperty graphUpdate = new SimpleBooleanProperty(false);
 
-    private static double xAxisLowerBound = -10;
-    private static double xAxisUpperBound = 10;
-    private static double yAxisLowerBound = -10;
-    private static double yAxisUpperBound = 10;
+    private static Double xAxisLowerBound = -10.0;
+    private static Double xAxisUpperBound = 10.0;
+    private static Double yAxisLowerBound = -10.0;
+    private static Double yAxisUpperBound = 10.0;
 
-    private static double xAxisTickUnit = 5;
-    private static double yAxisTickUnit = 5;
+    private static Double xAxisTickUnit = 5.0;
+    private static Double yAxisTickUnit = 5.0;
+
+    private Object lock = new Object();//synchronisation sur cet element uniquement
 
     @FXML
     private ChoiceBox functionChoiceBox;
@@ -132,7 +135,7 @@ public class GraphicController implements Initializable {
                 ((NumberAxis) graphDisplay.getYAxis()).setUpperBound(yAxisUpperBound);
                 ((NumberAxis) graphDisplay.getYAxis()).setTickUnit(yAxisTickUnit);//distance between two graduation
 
-                updateGraphDisplay();//recalculate function points
+                updateGraphDisplay(null);//recalculate all function points
             }
         });
 
@@ -157,11 +160,11 @@ public class GraphicController implements Initializable {
         //cas 1 : intialisation mais update ponctuelle (met pas à jour toutes les cases de la même fonction)
         stateCol.setCellFactory(CheckBoxTableCell.forTableColumn(stateCol));
         stateCol.setCellValueFactory((TableColumn.CellDataFeatures<Express, Boolean> p) -> {
-            final Express t = p.getValue();
-            final BooleanProperty result = new SimpleBooleanProperty(t.isActive());
+            final Express express = p.getValue();
+            final BooleanProperty result = new SimpleBooleanProperty(express.isActive());
             result.addListener((ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) -> {
-                t.setIsActive(newValue);
-                updateGraphDisplay();//conséquence
+                express.setIsActive(newValue);
+                updateGraphDisplay(express.getName());//conséquence
             });
             return result;
         });
@@ -183,7 +186,7 @@ public class GraphicController implements Initializable {
             TablePosition<Express, Color> pos = event.getTablePosition();
             Express express = event.getTableView().getItems().get(pos.getRow());
             express.setColor(event.getNewValue());
-            updateGraphDisplay();//conséquence
+            updateGraphDisplay(express.getName());//conséquence
         });
 
 
@@ -199,7 +202,7 @@ public class GraphicController implements Initializable {
         String express = (String) functionChoiceBox.getValue();
         ExpressManager.addGraph(express.substring(0, express.indexOf(SEPARATOR)));//creation
         refreshTableViewGraphic();//visibilité
-        updateGraphDisplay();
+        updateGraphDisplay(express.substring(0, express.indexOf(SEPARATOR)));
     }
 
     /**
@@ -221,7 +224,7 @@ public class GraphicController implements Initializable {
 
                     if (current.getSampling() != current.getSamplingBefore()) {
                         current.setSamplingBefore(current.getSampling());//limiter les rafraichissements
-                        updateGraphDisplay();//consequence
+                        updateGraphDisplay(current.getName());//consequence
                     }
                 }
             }
@@ -234,38 +237,64 @@ public class GraphicController implements Initializable {
     }
 
     /**
-     * Génère les points des fonctions à afficher
+     * Génère en parallèle les points des fonctions à afficher et leur applique une couleur
      */
-    public void updateGraphDisplay() {
-        graphDisplay.getData().clear();
-        for (Express element : ExpressManager.getExpressGraph()) {
-            if (element.isActive()) {
-                plotFunction(element);
+    public void updateGraphDisplay(String functionUpdate) {
+        /*
+        if (functionUpdate == null) {//initialisation ou modification axes
+            ObservableList series = graphDisplay.getData();
+            for (int i = 0; i < series.size(); i++) {
+                XYChart.Series serie = (XYChart.Series) series.get(i);
+                System.out.println(serie.getName());//récupère expression associée au nom et recalcule
             }
         }
-    }
-
-    /**
-     * Calcule les points de la fonction à afficher et lui applique sa couleur
-     * @param expression La fonction dont il faut calculer les points
-     */
-    private void plotFunction(Express expression) {
-        XYChart.Series<Number, Number> coords = new XYChart.Series<Number, Number>();
-        coords.setName(expression.getName());
-
-        double range = (xAxisUpperBound - xAxisLowerBound)/expression.getSampling();
-        for (double i = xAxisLowerBound; i < xAxisUpperBound+range; i+=range) {
-            coords.getData().add(new XYChart.Data<>(i, Parser.eval(expression.getFunction(), new Point("x", i)).getValue()));
+        else {//modification spécifique
+            //retire élément de la liste
+            Express element = new Express();//récupère expression associée au nom
+            if (element.isActive()) {
+                //remet avec nouveaux points
+            }
         }
+        */
 
-        graphDisplay.getData().add(coords);
+        
+        graphDisplay.getData().clear();
 
-        // convert line color to CSS format and set line color on Series node
-        String lineStyle = "-fx-stroke: rgba("
-                +(int) (expression.getColor().getRed()*255)+", "
-                +(int) (expression.getColor().getGreen()*255)+", "
-                +(int) (expression.getColor().getBlue()*255)+", 1.0);";
-        coords.getNode().lookup(".chart-series-line").setStyle(lineStyle);
+        for (Express element : ExpressManager.getExpressGraph()) {
+            if (element.isActive()) {//pas de création de thread juste pour vérif
+                new Thread(() -> {
+                    double xMin = 0, xMax = 0;
+                    synchronized (lock) {//un seul accès
+                        xMin = xAxisLowerBound;
+                        xMax = xAxisUpperBound;
+                    }
+
+                    double range = (xMax - xMin) / element.getSampling();
+                    XYChart.Series<Number, Number> coords = new XYChart.Series<>();
+                    coords.setName(element.getName());
+                    for (double i = xMin; i < xMax + range; i += range) {
+                        coords.getData().add(new XYChart.Data<>(i, Parser.eval(element.getFunction(), new Point("x", i)).getValue()));
+                        //creating anonymous threads here will cause java.util.ConcurrentModificationException but it's really funny to break
+                        /*double finalI = i;
+                        new Thread(() -> {
+                            XYChart.Data<Number, Number> result = new XYChart.Data<>(finalI, Parser.eval(element.getFunction(), new Point("x", finalI)).getValue());
+                            synchronized (coords) { coords.getData().add(result); }
+                        }).start();*/
+                    }
+
+                    Platform.runLater(() -> {
+                        graphDisplay.getData().add(coords);
+
+                        // convert line color to CSS format and set line color on Series node
+                        String lineStyle = "-fx-stroke: rgba("
+                                + (int) (element.getColor().getRed() * 255) + ", "
+                                + (int) (element.getColor().getGreen() * 255) + ", "
+                                + (int) (element.getColor().getBlue() * 255) + ", 1.0);";
+                        coords.getNode().lookup(".chart-series-line").setStyle(lineStyle);
+                    });
+                }).start();
+            }
+        }
     }
 
     @FXML
