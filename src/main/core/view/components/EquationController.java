@@ -33,33 +33,19 @@ public class EquationController  implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         functionChoiceBox.getItems().addAll(ExpressManager.getExpressNames());
-        functionChoiceBox.setValue("f");
+        functionChoiceBox.setValue(functionChoiceBox.getItems().get(0));
+        //tester ça pour un rafraichissement automatique : https://stackoverflow.com/questions/21854146/javafx-2-0-choice-box-issue-how-to-update-a-choicebox-which-represents-a-list
 
         functionComboBox.getItems().addAll(ExpressManager.getExpressNames());
-        //tester ça pour un rafraichissement automatique : https://stackoverflow.com/questions/21854146/javafx-2-0-choice-box-issue-how-to-update-a-choicebox-which-represents-a-list
     }
 
     public void executeEquation(ActionEvent actionEvent) {
         String choiceA = (String) functionChoiceBox.getValue();
         String choiceB = (String) functionComboBox.getValue();
 
-        if (ExpressManager.getExpressNames().contains(choiceA)) {
-            for (Express expression : ExpressManager.getExpressList()) {
-                if (expression.getName().equals(choiceA)) {
-                    choiceA = expression.getFunction();
-                    break;
-                }
-            }
-        }
-        if(ExpressManager.getExpressNames().contains(choiceB))
-        {
-            for (Express expression : ExpressManager.getExpressList()) {
-                if (expression.getName().equals(choiceB)) {
-                    choiceB = expression.getFunction();
-                    break;
-                }
-            }
-        }
+        if (ExpressManager.containsExpress(choiceA)) choiceA = ExpressManager.getExpress(choiceA).getFunction();
+        if (ExpressManager.containsExpress(choiceB)) choiceB = ExpressManager.getExpress(choiceB).getFunction();
+
         EquationX eq = new EquationX((choiceA + "=" + choiceB));
 
         try {

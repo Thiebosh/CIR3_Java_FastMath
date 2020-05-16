@@ -109,7 +109,7 @@ public class GraphicController implements Initializable {
      * Remplissage du ChoiceBox
      */
     private void initializeFunctionChoiceBox() {
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         for (Express current : ExpressManager.getExpressList()) list.add(current.getName() + SEPARATOR + current.getFunction());
         functionChoiceBox.getItems().addAll(list);
     }
@@ -135,7 +135,7 @@ public class GraphicController implements Initializable {
                 ((NumberAxis) graphDisplay.getYAxis()).setUpperBound(yAxisUpperBound);
                 ((NumberAxis) graphDisplay.getYAxis()).setTickUnit(yAxisTickUnit);//distance between two graduation
 
-                updateGraphDisplay(null);//recalculate all function points
+                updateGraphDisplay(null, false);//recalculate all function points
             }
         });
 
@@ -164,7 +164,7 @@ public class GraphicController implements Initializable {
             final BooleanProperty result = new SimpleBooleanProperty(express.isActive());
             result.addListener((ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) -> {
                 express.setIsActive(newValue);
-                updateGraphDisplay(express.getName());//conséquence
+                updateGraphDisplay(express.getName(), newValue);//conséquence
             });
             return result;
         });
@@ -186,7 +186,7 @@ public class GraphicController implements Initializable {
             TablePosition<Express, Color> pos = event.getTablePosition();
             Express express = event.getTableView().getItems().get(pos.getRow());
             express.setColor(event.getNewValue());
-            updateGraphDisplay(express.getName());//conséquence
+            updateGraphDisplay(express.getName(), false);//conséquence
         });
 
 
@@ -200,9 +200,9 @@ public class GraphicController implements Initializable {
     @FXML
     private void addFunctionToTable() {
         String express = (String) functionChoiceBox.getValue();
-        ExpressManager.addGraph(express.substring(0, express.indexOf(SEPARATOR)));//creation
+        ExpressManager.addToGraphList(express.substring(0, express.indexOf(SEPARATOR)));//creation
         refreshTableViewGraphic();//visibilité
-        updateGraphDisplay(express.substring(0, express.indexOf(SEPARATOR)));
+        updateGraphDisplay(express.substring(0, express.indexOf(SEPARATOR)), false);
     }
 
     /**
@@ -219,19 +219,19 @@ public class GraphicController implements Initializable {
         list.addListener((ListChangeListener<Express>) expression -> {
             while (expression.next()) {
                 if (expression.wasUpdated()) {
-                    Express current = ExpressManager.getExpressGraph().get(expression.getFrom());
-                    if (current.getSampling() % 2 != 0) { current.setSampling(current.getSampling()-1); }
+                    Express current = ExpressManager.getExpressGraphList().get(expression.getFrom());
+                    if (current.getSampling() % 2 != 0) current.setSampling(current.getSampling()-1);
 
                     if (current.getSampling() != current.getSamplingBefore()) {
                         current.setSamplingBefore(current.getSampling());//limiter les rafraichissements
-                        updateGraphDisplay(current.getName());//consequence
+                        updateGraphDisplay(current.getName(), false);//consequence
                     }
                 }
             }
         });
 
         //fill list
-        list.addAll(ExpressManager.getExpressGraph());
+        list.addAll(ExpressManager.getExpressGraphList());
 
         functionTableViewGraphic.setItems(list);
     }
@@ -239,28 +239,10 @@ public class GraphicController implements Initializable {
     /**
      * Génère en parallèle les points des fonctions à afficher et leur applique une couleur
      */
-    public void updateGraphDisplay(String functionUpdate) {
-        /*
-        if (functionUpdate == null) {//initialisation ou modification axes
-            ObservableList series = graphDisplay.getData();
-            for (int i = 0; i < series.size(); i++) {
-                XYChart.Series serie = (XYChart.Series) series.get(i);
-                System.out.println(serie.getName());//récupère expression associée au nom et recalcule
-            }
-        }
-        else {//modification spécifique
-            //retire élément de la liste
-            Express element = new Express();//récupère expression associée au nom
-            if (element.isActive()) {
-                //remet avec nouveaux points
-            }
-        }
-        */
-
-        
+    public void updateGraphDisplay(String functionUpdate, boolean delete) {
         graphDisplay.getData().clear();
 
-        for (Express element : ExpressManager.getExpressGraph()) {
+        for (Express element : ExpressManager.getExpressGraphList()) {
             if (element.isActive()) {//pas de création de thread juste pour vérif
                 new Thread(() -> {
                     double xMin = 0, xMax = 0;
@@ -277,7 +259,7 @@ public class GraphicController implements Initializable {
                         //creating anonymous threads here will cause java.util.ConcurrentModificationException but it's really funny to break
                         /*double finalI = i;
                         new Thread(() -> {
-                            XYChart.Data<Number, Number> result = new XYChart.Data<>(finalI, Parser.eval(element.getFunction(), new Point("x", finalI)).getValue());
+                            XYChart.Data<Number, Number> result = new XYChart.Data<>(finalI, Parser.eval(expression.getFunction(), new Point("x", finalI)).getValue());
                             synchronized (coords) { coords.getData().add(result); }
                         }).start();*/
                     }

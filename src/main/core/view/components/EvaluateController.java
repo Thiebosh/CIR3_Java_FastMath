@@ -32,7 +32,7 @@ public class EvaluateController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         functionChoiceBox.getItems().addAll(ExpressManager.getExpressNames());
-        functionChoiceBox.setValue("f");
+        functionChoiceBox.setValue(functionChoiceBox.getItems().get(0));
         //tester ça pour un rafraichissement automatique : https://stackoverflow.com/questions/21854146/javafx-2-0-choice-box-issue-how-to-update-a-choicebox-which-represents-a-list
     }
 
@@ -40,19 +40,11 @@ public class EvaluateController implements Initializable {
     private void executeEvaluation() {
         String choice = (String) functionChoiceBox.getValue();
 
-        if (ExpressManager.getExpressNames().contains(choice)) {
-            String function = "";
-            for (Express expression : ExpressManager.getExpressList()) {
-                if (expression.getName().equals(choice)) {
-                    function = expression.getFunction();
-                    break;
-                }
-            }
-            double value = Double.parseDouble(valueFunction.getCharacters().toString());
+        if (ExpressManager.containsExpress(choice)) {
+            String function = ExpressManager.getExpress(choice).getFunction();
+            Point value = new Point("x", Double.parseDouble((String) valueFunction.getCharacters()));
 
-            ParserResult result = Parser.eval(function, new Point("x", value));
-
-            resultFunction.setText(result.getValue().toString());
+            resultFunction.setText(Double.toString(Parser.eval(function, value).getValue()));
         }
 
         //tmp

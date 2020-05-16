@@ -9,24 +9,17 @@ public class Express {
 
     private final BooleanProperty isActive = new SimpleBooleanProperty();
     private final IntegerProperty sampling = new SimpleIntegerProperty();//nbPoints
-    private int samplingBefore;
-    private Color color = new Color(0,0,0,1);
-
-    public Express() {
-    }
+    private int samplingBefore;//limiter nombre de rafraichissement
+    private Color color;
 
     public Express(String name, String function) {
         this.name.set(name);
         this.function.set(function);
-    }
 
-    public Express(String name, String function, int sampling, Color color, boolean isActive) {
-        this.name.set(name);
-        this.function.set(function);
-        this.sampling.set(sampling);
-        this.samplingBefore = sampling;
-        this.color = color;
-        this.isActive.set(isActive);
+        this.isActive.set(true);
+        this.sampling.set(10);
+        this.samplingBefore = 10;
+        this.color = Color.BLACK;//==new Color(0,0,0,1);
     }
 
     public void setName(String name) {
@@ -57,10 +50,6 @@ public class Express {
 
     public boolean isActive() {
         return isActive.get();
-    }
-
-    public BooleanProperty isActiveProperty() {
-        return isActive;
     }
 
     public void setIsActive(boolean isActive) {

@@ -1,76 +1,70 @@
 package core.model.data;
 
-import javafx.scene.paint.Color;
-
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ExpressManager {
-    private static LinkedHashSet<String> expressNames = new LinkedHashSet<String>();
+    private static HashMap<String, Express> allExpress = new HashMap<>();
 
-    private static ArrayList<Express> expressList = new ArrayList<Express>();//map convertible en arrayList? accès immédiat à fonction
+    private static LinkedHashSet<String> graphExpress = new LinkedHashSet<>();
 
-    private static ArrayList<Express> expressGraph = new ArrayList<Express>();//map convertible en arrayList? accès immédiat à fonction
+    public static boolean containsExpress(String name) { return allExpress.containsKey(name); }
 
-    public static ArrayList<Express> getExpressList() {
-        return expressList;
+    public static Express getExpress(String name) { return allExpress.get(name); }
+
+    public static ArrayList<Express> getExpressList() { return new ArrayList<>(allExpress.values()); }
+
+    public static ArrayList<String> getExpressNames() { return new ArrayList<>(allExpress.keySet()); }
+
+    public static ArrayList<Express> getExpressGraphList() {
+        return new ArrayList<>(graphExpress.stream().map(allExpress::get).filter(Objects::nonNull).collect(Collectors.toList()));
     }
 
-    public static ArrayList<Express> getExpressGraph() {
-        return expressGraph;
-    }
-
-    public static ArrayList<String> getExpressNames() {
-        return new ArrayList<String>(expressNames);
-    }
-
-    public static void update(Express expression, String oldName, String newName) {
-        if (!newName.equals(oldName)) {
-            if (expressNames.contains(newName) || newName.equals("fonction")) {//nom réservé pour ajout ligne
-                System.out.println("créer une exception \"already used name\" et faire pop une fenêtre d'erreur?");
-            } else {
-                expressNames.add(newName);
-                expressNames.remove(oldName);
-                expression.setName(newName);
-            }
-        }
-    }
-
-    public static void addExpress(String name, String function) {
-        if (expressNames.contains(name)) {
+    public static void addToExpressList(String name, String function) {
+        if (allExpress.containsKey(name)) {
             System.out.println("créer une exception \"already used name\" et faire pop une fenêtre d'erreur?");
+            return;
         }
-        else {
-            expressNames.add(name);
-            expressList.add(new Express(name, function));
-        }
+
+        allExpress.put(name, new Express(name, function));
     }
 
-    public static void addGraph(String name) {
-        if (expressNames.contains(name)) {
-            Express expression = new Express();
-            for (Express element : expressList) {
-                if (element.getName().equals(name)) {
-                    expression = element;
-                    break;
-                }
-            }
-
-            if (!expressGraph.contains(expression)) {
-                expression.setIsActive(true);//activation automatique en paramètre généraux...
-                expression.setSampling(10);//valeur par défaut
-                expression.setColor(Color.BLACK);//valeur par défaut
-
-                expressGraph.add(expression);
-            }
-            else if (!expression.isActive()) expression.setIsActive(true);
+    public static void addToGraphList(String name) {
+        if (!allExpress.containsKey(name)) {
+            System.out.println("créer une exception \"unknown function name\" et faire pop une fenêtre d'erreur?");
+            return;
         }
-        else {
-            //wut
-        }
+
+        allExpress.get(name).setIsActive(true);//if added but disabled, enable
+        graphExpress.add(name);//set so no verification needed
     }
 
-    public static void addExpressNames(String name) {
-        expressNames.add(name);
+    public static void updateName(String oldName, String newName) {
+        if (newName.equals(oldName)) return;//no modification
+
+        if (newName.equals("fonction") /* || sin || cos || ...*/) {//nom réservé pour ajout ligne
+            System.out.println("créer une exception \"reserved name\" et faire pop une fenêtre d'erreur?");
+            return;
+        }
+
+        if (allExpress.containsKey(newName)) {
+            System.out.println("créer une exception \"already used name\" et faire pop une fenêtre d'erreur?");
+            return;
+        }
+
+        allExpress.get(oldName).setName(newName);
+        allExpress.put(newName, allExpress.get(oldName));
+        allExpress.remove(oldName);
+
+        for (String key : allExpress.keySet()) {
+            //verifier verif que oldName entouré de signes (ne remplace pas qu'une partie, ex i dans sin) : regex?
+            String newFunction = allExpress.get(key).getFunction().replace(oldName, newName);
+            allExpress.get(key).setFunction(newFunction);
+        }
+
+        if (graphExpress.contains(oldName)) {
+            graphExpress.remove(oldName);
+            graphExpress.add(newName);
+        }
     }
 }

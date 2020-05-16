@@ -36,7 +36,7 @@ public class GraphicContextControllerFactory extends ContextControllerFactory {
     @Override
     public void setInitialValues(HashMap args) {
         try {
-            textfieldXMin.appendText("" + ((double) args.get("xMin")));
+            textfieldXMin.appendText(Double.toString((double) args.get("xMin")));
             textfieldXMax.appendText("" + ((double) args.get("xMax")));
             textfieldYMin.appendText("" + ((double) args.get("yMin")));
             textfieldYMax.appendText("" + ((double) args.get("yMax")));

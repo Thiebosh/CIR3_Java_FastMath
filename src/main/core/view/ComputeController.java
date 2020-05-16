@@ -41,14 +41,10 @@ public class ComputeController implements Initializable {
 
         //set data edition
         nameCol.setCellFactory(TextFieldTableCell.<Express> forTableColumn());
-        nameCol.setOnEditCommit((TableColumn.CellEditEvent<Express, String> event) -> {
-            tableViewEditCallback(event, "name");
-        });
+        nameCol.setOnEditCommit((TableColumn.CellEditEvent<Express, String> event) -> tableViewEditCallback(event, "name"));
 
         functionCol.setCellFactory(TextFieldTableCell.<Express>forTableColumn());
-        functionCol.setOnEditCommit((TableColumn.CellEditEvent<Express, String> event) -> {
-            tableViewEditCallback(event, "function");
-        });
+        functionCol.setOnEditCommit((TableColumn.CellEditEvent<Express, String> event) -> tableViewEditCallback(event, "function"));
     }
 
     /**
@@ -65,7 +61,7 @@ public class ComputeController implements Initializable {
 
         switch (attribute) {
             case "name":
-                ExpressManager.update(expression, expression.getName(), event.getNewValue());
+                ExpressManager.updateName(expression.getName(), event.getNewValue());
                 break;
             case "function":
                 expression.setFunction(event.getNewValue());
@@ -80,7 +76,7 @@ public class ComputeController implements Initializable {
 
     @FXML
     private void addFunctionLine() {
-        ExpressManager.addExpress("fonction","0");//creation
+        ExpressManager.addToExpressList("fonction","0");//creation
         refreshTableView();//visibilité
     }
 }
