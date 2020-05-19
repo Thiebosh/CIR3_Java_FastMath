@@ -2,8 +2,7 @@ package core.app.view.scene;
 
 import core.app.data.Express;
 import core.app.data.ExpressManager;
-import core.app.view.scene_components.FunctionChoiceBoxEvalController;
-import core.app.view.scene_components.FunctionChoiceBoxEqLeftController;
+import core.app.view.scene_components.FunctionChoiceBoxController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -56,8 +55,7 @@ public class ComputeController implements Initializable {
         ObservableList<Express> list = FXCollections.observableArrayList(ExpressManager.getExpressList());
         functionTableView.setItems(list);
 
-        FunctionChoiceBoxEvalController.requireFunctionChoiceBoxUpdate();
-        FunctionChoiceBoxEqLeftController.requireFunctionChoiceBoxUpdate();
+        FunctionChoiceBoxController.requireFunctionChoiceBoxUpdate();
     }
 
     private void tableViewEditCallback(TableColumn.CellEditEvent<Express, String> event, String attribute) {
