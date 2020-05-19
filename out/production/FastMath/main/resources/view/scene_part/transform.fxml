@@ -12,7 +12,7 @@
    <children>
       <AnchorPane layoutX="141.0" layoutY="78.0">
          <children>
-            <fx:include source="../scene_components/functionChoiceBox.fxml" />
+            <!--<fx:include source="../scene_components/functionChoiceBox.fxml" />-->
          </children>
       </AnchorPane>
       <Label layoutX="102.0" layoutY="126.0" prefHeight="26.0" prefWidth="75.0" text="Nb degrés :">

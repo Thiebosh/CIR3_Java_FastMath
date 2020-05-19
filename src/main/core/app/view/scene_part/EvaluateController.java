@@ -1,7 +1,7 @@
 package core.app.view.scene_part;
 
 import core.app.data.ExpressManager;
-import core.app.view.scene_components.FunctionChoiceBoxController;
+import core.app.view.scene_components.FunctionChoiceBoxEvalController;
 import core.services.mathLibrary.parser.Parser;
 import core.services.mathLibrary.parser.util.Point;
 import javafx.fxml.FXML;
@@ -21,7 +21,7 @@ public class EvaluateController {
 
     @FXML
     private void executeEvaluation() {
-        FunctionChoiceBoxController.requireFunctionChoiceUpdate();
+        FunctionChoiceBoxEvalController.requireFunctionChoiceUpdate();
 
         if (ExpressManager.containsExpress(functionChoice)) {
             String function = ExpressManager.getExpress(functionChoice).getFunction();

@@ -12,7 +12,7 @@
    <children>
       <AnchorPane layoutX="40.0" layoutY="130.0">
          <children>
-            <fx:include source="../scene_components/functionChoiceBox.fxml" />
+            <fx:include source="../scene_components/functionChoiceBoxEval.fxml" />
          </children>
       </AnchorPane>
       <Text layoutX="150.0" layoutY="149.0" strokeType="OUTSIDE" strokeWidth="0.0" text="(">

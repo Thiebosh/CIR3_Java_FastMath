@@ -12,7 +12,7 @@
    <children>
       <AnchorPane layoutX="45.0" layoutY="98.0">
          <children>
-            <fx:include source="../scene_components/functionChoiceBox.fxml" />
+            <fx:include source="../scene_components/functionChoiceBoxEqLeft.fxml" />
          </children>
       </AnchorPane>
       <Text layoutX="155.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="=">

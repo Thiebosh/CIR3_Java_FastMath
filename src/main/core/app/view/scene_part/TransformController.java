@@ -1,6 +1,5 @@
 package core.app.view.scene_part;
 
-import core.app.view.scene_components.FunctionChoiceBoxController;
 import javafx.fxml.FXML;
 
 public class TransformController {
@@ -10,7 +9,7 @@ public class TransformController {
 
     @FXML
     private void action() {
-        FunctionChoiceBoxController.requireFunctionChoiceUpdate();
+        //FunctionChoiceBoxController.requireFunctionChoiceUpdate();
 
     }
 }

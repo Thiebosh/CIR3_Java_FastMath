@@ -26,6 +26,7 @@ public class EquationController implements Initializable {
     public static void setFunctionChoice(final String choice) { functionChoice = choice; }
 
     public void executeEquation(ActionEvent actionEvent) {
+        System.out.println(functionChoice);
         String choiceA = functionChoice;
         String choiceB = (String) functionComboBox.getValue();
 
