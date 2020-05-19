@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<MenuBar fx:controller="core.app.view.scene_components.MenuController" VBox.vgrow="NEVER" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <menus>
+        <Menu>
+            <graphic>
+                <Label onMouseClicked="#handleHomePageButton" text="Accueil"/>
+            </graphic>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Outils">
+            <items>
+                <MenuItem onAction="#handleComputePageButton" mnemonicParsing="false" text="Calcul algébrique" />
+                <MenuItem onAction="#handleGraphicPageButton" mnemonicParsing="false" text="Visualisation graphique" />
+            </items>
+        </Menu>
+    </menus>
+</MenuBar>

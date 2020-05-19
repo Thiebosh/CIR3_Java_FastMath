@@ -1,7 +1,7 @@
 package core.app;
 
-import core.model.data.ExpressManager;
-import core.model.services.StageService;
+import core.app.data.ExpressManager;
+import core.services.windowHolder.StageService;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -24,9 +24,24 @@ public class FastMath extends Application {//NOPMD
         launch(args);
     }
 
+    /**
+     *
+     * @param primaryStage
+     * @throws Exception
+     */
     @Override
     public final void start(final Stage primaryStage) throws Exception {
         StageService.Holder.getInstance().setMainStage(primaryStage, "FastMath", new Image("file:src/main/resources/images/icon.png"));
         StageService.Holder.loadMainWindowsScene("home");
+    }
+
+    /**
+     *
+     * @throws Exception
+     */
+    @Override
+    public void stop() throws Exception {
+        ExpressManager.clearAll();
+        super.stop();
     }
 }
