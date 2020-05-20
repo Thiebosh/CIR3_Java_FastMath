@@ -30,7 +30,7 @@
          </font>
       </Text>
       <Button onAction="#executeEquation" layoutX="159.0" layoutY="167.0" mnemonicParsing="false" text="=" />
-      <Label fx:id="resultEquation" layoutX="200.0" layoutY="167.0" prefHeight="26.0" prefWidth="52.0" text="Résultat">
+      <Label fx:id="resultEquation" layoutX="200.0" layoutY="167.0" prefHeight="26.0" prefWidth="200.0" text="Résultat">
          <font>
             <Font size="14.0" />
          </font>

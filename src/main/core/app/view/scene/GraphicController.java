@@ -65,7 +65,7 @@ public class GraphicController implements Initializable {
 
     @FXML
     private TableColumn<Express, Integer> samplingCol;
-    private static double samplingMax = 100;
+    private static double samplingMax = 1000;
 
     @FXML
     private TableColumn<Express, Color> colorCol;
