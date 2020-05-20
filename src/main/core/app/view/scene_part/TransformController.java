@@ -4,13 +4,11 @@ import core.app.view.scene_components.FunctionChoiceBoxController;
 import javafx.fxml.FXML;
 
 public class TransformController {
-    private static String functionChoice;
-
-    public static void setFunctionChoice(final String choice) { functionChoice = choice; }
+    @FXML
+    private FunctionChoiceBoxController functionChoiceTransformController;
 
     @FXML
     private void action() {
-        FunctionChoiceBoxController.requireFunctionChoiceUpdate();
-
+        String functionChoice = (String) functionChoiceTransformController.getValue();
     }
 }

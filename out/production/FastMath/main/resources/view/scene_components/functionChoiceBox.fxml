@@ -2,4 +2,4 @@
 
 <?import javafx.scene.control.*?>
 
-<ChoiceBox fx:id="functionChoiceBox" fx:controller="core.app.view.scene_components.FunctionChoiceBoxController" prefHeight="26.0" prefWidth="99.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"/>
+<ChoiceBox fx:controller="core.app.view.scene_components.FunctionChoiceBoxController" fx:id="choiceBox" prefHeight="26.0" prefWidth="99.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"/>

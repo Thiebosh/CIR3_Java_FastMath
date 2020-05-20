@@ -10,18 +10,17 @@ import javafx.scene.control.TextField;
 
 public class EvaluateController {
     @FXML
+    private FunctionChoiceBoxController functionChoiceEvaluateController;
+
+    @FXML
     private TextField valueFunction;
 
     @FXML
     private Label resultFunction;
 
-    private static String functionChoice;
-
-    public static void setFunctionChoice(final String choice) { functionChoice = choice; }
-
     @FXML
     private void executeEvaluation() {
-        FunctionChoiceBoxController.requireFunctionChoiceUpdate();
+        String functionChoice = (String) functionChoiceEvaluateController.getValue();
 
         if (ExpressManager.containsExpress(functionChoice)) {
             String function = ExpressManager.getExpress(functionChoice).getFunction();

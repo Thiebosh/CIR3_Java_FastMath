@@ -1,10 +1,10 @@
 package core.app.view.scene_part;
 
 import core.app.data.ExpressManager;
+import core.app.view.scene_components.FunctionChoiceBoxController;
 import core.services.mathLibrary.equation.EquationX;
 import core.services.mathLibrary.exception.CalculatorException;
 import core.services.mathLibrary.util.Round;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,17 +16,21 @@ import java.util.ResourceBundle;
 
 public class EquationController implements Initializable {
     @FXML
+    private FunctionChoiceBoxController functionChoiceEquationController;
+
+    @FXML
     private ComboBox functionComboBox;
 
     @FXML
     private Label resultEquation;
 
-    private static String functionChoice;
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        functionComboBox.getItems().addAll(ExpressManager.getExpressNames());
+    }
 
-    public static void setFunctionChoice(final String choice) { functionChoice = choice; }
-
-    public void executeEquation(ActionEvent actionEvent) {
-        String choiceA = functionChoice;
+    public void executeEquation() {
+        String choiceA = (String) functionChoiceEquationController.getValue();
         String choiceB = (String) functionComboBox.getValue();
 
         if (ExpressManager.containsExpress(choiceA)) choiceA = ExpressManager.getExpress(choiceA).getFunction();
@@ -40,10 +44,5 @@ public class EquationController implements Initializable {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        functionComboBox.getItems().addAll(ExpressManager.getExpressNames());
     }
 }

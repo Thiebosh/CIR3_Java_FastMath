@@ -55,7 +55,7 @@ public class ComputeController implements Initializable {
         ObservableList<Express> list = FXCollections.observableArrayList(ExpressManager.getExpressList());
         functionTableView.setItems(list);
 
-        FunctionChoiceBoxController.requireFunctionChoiceBoxUpdate();
+        FunctionChoiceBoxController.Holder.updateList();
     }
 
     private void tableViewEditCallback(TableColumn.CellEditEvent<Express, String> event, String attribute) {
