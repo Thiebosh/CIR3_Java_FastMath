@@ -69,7 +69,7 @@ public class GraphicContextControllerFactory extends ContextControllerFactory {
         GraphicController.setXAxisTickUnit(Double.parseDouble(spinnerScaleX.getEditor().getText().replace(',','.')));
         GraphicController.setYAxisTickUnit(Double.parseDouble(spinnerScaleY.getEditor().getText().replace(',','.')));
 
-        GraphicController.requireGraphUpdate();
+        GraphicController.Holder.updateGraphAxis();
 
         closeStage();
     }

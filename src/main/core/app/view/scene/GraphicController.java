@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-import static java.lang.Math.abs;
 
 /**
  * Contrôleur du fichier graphic.fxml
@@ -40,8 +39,6 @@ import static java.lang.Math.abs;
 public class GraphicController implements Initializable {
     @FXML
     private LineChart graphDisplay;
-
-    private static BooleanProperty graphUpdate = new SimpleBooleanProperty(false);
 
     private static Double xAxisLowerBound = -10.0;
     private static Double xAxisUpperBound = 10.0;
@@ -73,9 +70,10 @@ public class GraphicController implements Initializable {
     @FXML
     private TableColumn<Express, Color> colorCol;
 
-    public static void requireGraphUpdate() {
-        graphUpdate.setValue(true);
+    public GraphicController() {
+        GraphicController.Holder.setInstance(this);
     }
+
 
     public static void setXAxisLowerBound(double xAxisLowerBound) { GraphicController.xAxisLowerBound = xAxisLowerBound; }
 
@@ -100,97 +98,76 @@ public class GraphicController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        initializeFunctionChoiceBox();
+        //Remplissage du ChoiceBox
+        {
+            ArrayList<String> list = new ArrayList<>();
+            for (Express current : ExpressManager.getExpressList())
+                list.add(current.getName() + SEPARATOR + current.getFunction());
+            functionChoiceBox.getItems().addAll(list);
+        }
+
+        //Préparation des axes du graphe
+        {
+            graphDisplay.getXAxis().setAutoRanging(false);
+            graphDisplay.getYAxis().setAutoRanging(false);
+            GraphicController.Holder.updateGraphAxis();
+        }
+
         initializeGraphTableView();
-        initializeGraphDisplay();
-    }
-
-    /**
-     * Remplissage du ChoiceBox
-     */
-    private void initializeFunctionChoiceBox() {
-        ArrayList<String> list = new ArrayList<>();
-        for (Express current : ExpressManager.getExpressList()) list.add(current.getName() + SEPARATOR + current.getFunction());
-        functionChoiceBox.getItems().addAll(list);
-    }
-
-    /**
-     * Préparation des axes du graphe
-     */
-    private void initializeGraphDisplay() {
-        //axis settings
-        graphDisplay.getXAxis().setAutoRanging(false);
-        graphDisplay.getYAxis().setAutoRanging(false);
-
-        //update settings : add change listener
-        graphUpdate.addListener((observable, oldValue, newValue) -> {
-            if (newValue==true) {
-                graphUpdate.setValue(false);
-
-                ((NumberAxis) graphDisplay.getXAxis()).setLowerBound(xAxisLowerBound);
-                ((NumberAxis) graphDisplay.getXAxis()).setUpperBound(xAxisUpperBound);
-                ((NumberAxis) graphDisplay.getXAxis()).setTickUnit(xAxisTickUnit);//distance between two graduation
-
-                ((NumberAxis) graphDisplay.getYAxis()).setLowerBound(yAxisLowerBound);
-                ((NumberAxis) graphDisplay.getYAxis()).setUpperBound(yAxisUpperBound);
-                ((NumberAxis) graphDisplay.getYAxis()).setTickUnit(yAxisTickUnit);//distance between two graduation
-
-                updateGraphDisplay(null, false);//recalculate all function points
-            }
-        });
-
-        graphUpdate.setValue(true);//call listener : set intial values
     }
 
     /**
      * Mise en place des liens entre instance de Express et colonnes de TableViews + injection de données
      */
     private void initializeGraphTableView() {
-        //link to data
-        stateCol.setCellValueFactory(new PropertyValueFactory<>("isActive"));
-        expressCol.setCellValueFactory(cellData -> Bindings.createStringBinding(
-                () -> cellData.getValue().getName() + " : " + cellData.getValue().getFunction(),
-                cellData.getValue().nameProperty(),
-                cellData.getValue().functionProperty()
+        //part 1 : link to data
+        {
+            expressCol.setCellValueFactory(cellData -> Bindings.createStringBinding(
+                    () -> cellData.getValue().getName() + " : " + cellData.getValue().getFunction(),
+                    cellData.getValue().nameProperty(),
+                    cellData.getValue().functionProperty()
             ));
-        samplingCol.setCellValueFactory(new PropertyValueFactory<>("sampling"));
-        colorCol.setCellValueFactory(new PropertyValueFactory<>("color"));
+            stateCol.setCellValueFactory(new PropertyValueFactory<>("isActive"));
+            samplingCol.setCellValueFactory(new PropertyValueFactory<>("sampling"));
+            colorCol.setCellValueFactory(new PropertyValueFactory<>("color"));
+        }
 
-        //edition
-        //cas 1 : intialisation mais update ponctuelle (met pas à jour toutes les cases de la même fonction)
-        stateCol.setCellFactory(CheckBoxTableCell.forTableColumn(stateCol));
-        stateCol.setCellValueFactory((TableColumn.CellDataFeatures<Express, Boolean> p) -> {
-            final Express express = p.getValue();
-            final BooleanProperty result = new SimpleBooleanProperty(express.isActive());
-            result.addListener((ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) -> {
-                express.setIsActive(newValue);
-                updateGraphDisplay(express.getName(), newValue);//conséquence
+        //part 2 : update data
+        {
+            //cas 1 : intialisation mais update ponctuelle (met pas à jour toutes les cases de la même fonction)
+            stateCol.setCellFactory(CheckBoxTableCell.forTableColumn(stateCol));
+            stateCol.setCellValueFactory((TableColumn.CellDataFeatures<Express, Boolean> p) -> {
+                final Express express = p.getValue();
+                final BooleanProperty result = new SimpleBooleanProperty(express.isActive());
+                result.addListener((ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) -> {
+                    express.setIsActive(newValue);
+                    updateGraphDisplay();//conséquence
+                });
+                return result;
             });
-            return result;
-        });
-        /*
-        //cas 2 : intialisation et update globale mais bcp d'appels (donc bcp de rafraichissement)
-        stateCol.setCellFactory(CheckBoxTableCell.forTableColumn((Callback<Integer, ObservableValue<Boolean>>) param -> {
-            System.out.println("appel");
-            final Express input = functionTableViewGraphic.getItems().get(param);
-            input.isActiveProperty().addListener(l -> {
+            /*
+            //cas 2 : intialisation et update globale mais bcp d'appels (donc bcp de rafraichissement)
+            stateCol.setCellFactory(CheckBoxTableCell.forTableColumn((Callback<Integer, ObservableValue<Boolean>>) param -> {
+                System.out.println("appel");
+                final Express input = functionTableViewGraphic.getItems().get(param);
+                input.isActiveProperty().addListener(l -> {
+                    updateGraphDisplay();//conséquence
+                    System.out.println(input.isActive());
+                });
+                return input.isActiveProperty();
+            }));
+            */
+
+            colorCol.setCellFactory(ColorTableCell::new);
+            colorCol.setOnEditCommit((TableColumn.CellEditEvent<Express, Color> event) -> {
+                TablePosition<Express, Color> pos = event.getTablePosition();
+                Express express = event.getTableView().getItems().get(pos.getRow());
+                express.setColor(event.getNewValue());
                 updateGraphDisplay();//conséquence
-                System.out.println(input.isActive());
             });
-            return input.isActiveProperty();
-        }));
-        */
+        }
 
-        colorCol.setCellFactory(ColorTableCell::new);
-        colorCol.setOnEditCommit((TableColumn.CellEditEvent<Express, Color> event) -> {
-            TablePosition<Express, Color> pos = event.getTablePosition();
-            Express express = event.getTableView().getItems().get(pos.getRow());
-            express.setColor(event.getNewValue());
-            updateGraphDisplay(express.getName(), false);//conséquence
-        });
-
-
-        //injection des données
+        //Part 3 : injection des données
         refreshTableViewGraphic();
     }
 
@@ -202,7 +179,7 @@ public class GraphicController implements Initializable {
         String express = (String) functionChoiceBox.getValue();
         ExpressManager.addToGraphList(express.substring(0, express.indexOf(SEPARATOR)));//creation
         refreshTableViewGraphic();//visibilité
-        updateGraphDisplay(express.substring(0, express.indexOf(SEPARATOR)), false);
+        updateGraphDisplay();
     }
 
     /**
@@ -224,7 +201,7 @@ public class GraphicController implements Initializable {
 
                     if (current.getSampling() != current.getSamplingBefore()) {
                         current.setSamplingBefore(current.getSampling());//limiter les rafraichissements
-                        updateGraphDisplay(current.getName(), false);//consequence
+                        updateGraphDisplay();//consequence
                     }
                 }
             }
@@ -239,7 +216,7 @@ public class GraphicController implements Initializable {
     /**
      * Génère en parallèle les points des fonctions à afficher et leur applique une couleur
      */
-    public void updateGraphDisplay(String functionUpdate, boolean delete) {
+    public void updateGraphDisplay() {
         graphDisplay.getData().clear();
 
         for (Express element : ExpressManager.getExpressGraphList()) {
@@ -290,5 +267,26 @@ public class GraphicController implements Initializable {
             put("scaleY", yAxisTickUnit);
         }};
         StageService.Holder.openContextWindows("Propriétés","graphicContext", new GraphicContextControllerFactory(), arguments);
+    }
+
+
+    public static class Holder {
+        private static GraphicController instance;
+
+        public static void setInstance(GraphicController currentInstance) {
+            Holder.instance = currentInstance;
+        }
+
+        public static void updateGraphAxis() {
+            ((NumberAxis) instance.graphDisplay.getXAxis()).setLowerBound(xAxisLowerBound);
+            ((NumberAxis) instance.graphDisplay.getXAxis()).setUpperBound(xAxisUpperBound);
+            ((NumberAxis) instance.graphDisplay.getXAxis()).setTickUnit(xAxisTickUnit);//distance between two graduation
+
+            ((NumberAxis) instance.graphDisplay.getYAxis()).setLowerBound(yAxisLowerBound);
+            ((NumberAxis) instance.graphDisplay.getYAxis()).setUpperBound(yAxisUpperBound);
+            ((NumberAxis) instance.graphDisplay.getYAxis()).setTickUnit(yAxisTickUnit);//distance between two graduation
+
+            instance.updateGraphDisplay();//recalculate all function points
+        }
     }
 }
