@@ -1,14 +1,14 @@
 package core.app.view.scene_part;
 
-import core.app.view.scene_components.FunctionChoiceBoxController;
+import core.app.view.scene_components.FunctionComboBoxController;
 import javafx.fxml.FXML;
 
 public class TransformController {
     @FXML
-    private FunctionChoiceBoxController functionChoiceTransformController;
+    private FunctionComboBoxController functionComboTransformController;
 
     @FXML
     private void action() {
-        String functionChoice = (String) functionChoiceTransformController.getValue();
+        String functionChoice = functionComboTransformController.getFunction();
     }
 }

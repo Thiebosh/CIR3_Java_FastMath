@@ -23,9 +23,11 @@ public class ExpressManager {
     public static void save() throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter("./src/main/resources/save.csv"));
         writer.write("");
-        for(int i = 0; i < allExpress.size(); i++)
+
+        ArrayList<String> nameList = getExpressNames();
+        Collections.sort(nameList);
+        for (String key : nameList)
         {
-            String key = String.valueOf(allExpress.keySet().toArray()[i]);
             writer.append(key).append(";").append(allExpress.get(key).getFunction()).append("\n");
         }
         writer.close();

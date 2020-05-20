@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+
+<ComboBox fx:controller="core.app.view.scene_components.FunctionComboBoxController" fx:id="comboBox" promptText="Ponctuel" editable="true" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"/>
