@@ -6,6 +6,9 @@ import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 
 /**
  * Main class of the application
@@ -17,9 +20,11 @@ public class FastMath extends Application {//NOPMD
      */
     public static final void main(final String[] args) {
         //charger expressions
-        ExpressManager.addToExpressList("f","2.35*x");
-        ExpressManager.addToExpressList("sinus","sin(x)");
-        ExpressManager.addToExpressList("cosinus","cos(x)");
+        try {
+            ExpressManager.load();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         launch(args);
     }
@@ -41,6 +46,11 @@ public class FastMath extends Application {//NOPMD
      */
     @Override
     public void stop() throws Exception {
+        try {
+            ExpressManager.save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         ExpressManager.clearAll();
         super.stop();
     }
