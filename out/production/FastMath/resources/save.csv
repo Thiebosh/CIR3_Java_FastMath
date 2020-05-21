@@ -1,6 +1,5 @@
 cosinus;cos(x)
-fix;2.35*x
+fixit;2.35*x
 sinus;sin(x)
 test;3*x^2
 testy;3.14159265
-tmp;e^x

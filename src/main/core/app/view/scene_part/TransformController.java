@@ -2,6 +2,8 @@ package core.app.view.scene_part;
 
 import core.app.view.scene_components.FunctionComboBoxController;
 import core.services.mathLibrary.derivative.DerivativeX;
+import core.services.mathLibrary.function.FunctionX;
+import core.services.mathLibrary.parser.Parser;
 import core.services.mathLibrary.util.Round;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -34,7 +36,7 @@ public class TransformController {
     @FXML
     private void action() {
         String functionChoice = functionComboTransformController.getFunction();
-        Double xo = Double.parseDouble(valueFunction.getText());
+        Double xo = Parser.eval(valueFunction.getText().replaceAll(FunctionX.getPI(), String.valueOf(Math.PI))).getValue();
 
         DerivativeX der = new DerivativeX(functionChoice);
 

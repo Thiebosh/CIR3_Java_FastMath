@@ -1,7 +1,9 @@
 package core.app.view.scene_part;
 
 import core.app.view.scene_components.FunctionComboBoxController;
+import core.services.mathLibrary.function.FunctionX;
 import core.services.mathLibrary.integral.Integral;
+import core.services.mathLibrary.parser.Parser;
 import core.services.mathLibrary.util.Round;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -43,8 +45,8 @@ public class IntegralController implements Initializable {
         String functionChoice = functionComboTransformController.getFunction();
         String methodChoice = method.getValue();
 
-        Double a = Double.parseDouble(intervalA.getText());
-        Double b = Double.parseDouble(intervalB.getText());
+        Double a = Parser.eval(intervalA.getText().replaceAll(FunctionX.getPI(), String.valueOf(Math.PI))).getValue();//case of expression like 2*pi/3
+        Double b = Parser.eval(intervalB.getText().replaceAll(FunctionX.getPI(), String.valueOf(Math.PI))).getValue();
 
         Integral integral = new Integral(functionChoice);
         try {
