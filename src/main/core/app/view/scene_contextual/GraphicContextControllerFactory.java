@@ -10,33 +10,64 @@ import javafx.scene.control.TextField;
 
 import java.util.HashMap;
 
+/**
+ * Contrôleur de la fenêtre contextuelle graphicContext.fxml
+ */
 public class GraphicContextControllerFactory extends ContextControllerFactory {
+    /**
+     * Element du fxml : texte de la valeur min de l'axe x
+     */
     @FXML
     private TextField textfieldXMin;
-
+    /**
+     * Element du fxml : texte de la valeur max de l'axe x
+     */
     @FXML
     private TextField textfieldXMax;
-
+    /**
+     * Element du fxml : texte de la valeur min de l'axe y
+     */
     @FXML
     private TextField textfieldYMin;
-
+    /**
+     * Element du fxml : texte de la valeur max de l'axe y
+     */
     @FXML
     private TextField textfieldYMax;
 
+    /**
+     * Element du fxml : spinner de la graduation de l'axe x
+     */
     @FXML
     private Spinner<Double> spinnerScaleX;
-
+    /**
+     * Element du fxml : spinner de la graduation de l'axe y
+     */
     @FXML
     private Spinner<Double> spinnerScaleY;
 
+    /**
+     * Valeur min des graduations
+     */
     private final static Double SCALE_MIN = 0.01;
+    /**
+     * Valeur max des graduations
+     */
     private final static Double SCALE_MAX = 20.0;
+    /**
+     * Pas des graduations
+     */
     private final static Double SCALE_STEP = 0.5;
 
+    /**
+     * Remplissage des éléments fxml avec les valeurs initiales, passées en paramètre
+     * @param args map clé valeur contenant toutes les données initiales
+     * @see ContextControllerFactory
+     */
     @Override
-    public void setInitialValues(HashMap args) {
+    public void setInitialValues(final HashMap args) {
         try {
-            textfieldXMin.appendText(Double.toString((double) args.get("xMin")));
+            textfieldXMin.appendText("" + ((double) args.get("xMin")));
             textfieldXMax.appendText("" + ((double) args.get("xMax")));
             textfieldYMin.appendText("" + ((double) args.get("yMin")));
             textfieldYMax.appendText("" + ((double) args.get("yMax")));
@@ -50,6 +81,9 @@ public class GraphicContextControllerFactory extends ContextControllerFactory {
         }
     }
 
+    /**
+     * onAction du fxml : fermeture de la fenêtre contextuelle et répercussion des valeurs
+     */
     @FXML
     private void validateButton() {
         double xMin = Double.parseDouble(textfieldXMin.getCharacters().toString()),
@@ -69,7 +103,7 @@ public class GraphicContextControllerFactory extends ContextControllerFactory {
         GraphicController.setXAxisTickUnit(Double.parseDouble(spinnerScaleX.getEditor().getText().replace(',','.')));
         GraphicController.setYAxisTickUnit(Double.parseDouble(spinnerScaleY.getEditor().getText().replace(',','.')));
 
-        GraphicController.Holder.updateGraphAxis();
+        GraphicController.updateGraphAxis();
 
         closeStage();
     }

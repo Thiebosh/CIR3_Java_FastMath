@@ -1,6 +1,5 @@
 package core.app.view.scene_part;
 
-import core.app.data.ExpressManager;
 import core.app.view.scene_components.FunctionComboBoxController;
 import core.services.mathLibrary.equation.EquationX;
 import core.services.mathLibrary.exception.CalculatorException;
@@ -8,17 +7,34 @@ import core.services.mathLibrary.util.Round;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-
+/**
+ * Contrôleur de l'élément de fenêtre equation.fxml
+ */
 public class EquationController {
+    /**
+     * Element du fxml : comboBox listant les fonctions - subController
+     * @see FunctionComboBoxController
+     */
     @FXML
     private FunctionComboBoxController functionComboEquation1Controller;
 
+    /**
+     * Element du fxml : comboBox listant les fonctions - subController
+     * @see FunctionComboBoxController
+     */
     @FXML
     private FunctionComboBoxController functionComboEquation2Controller;
 
+    /**
+     * Element du fxml : texte affichant le résultat
+     */
     @FXML
     private Label resultEquation;
 
+    /**
+     * onAction du fxml : résoud l'équation et affiche le résultat
+     */
+    @FXML
     public void executeEquation() {
         String choiceA = functionComboEquation1Controller.getFunction();
         String choiceB = functionComboEquation2Controller.getFunction();

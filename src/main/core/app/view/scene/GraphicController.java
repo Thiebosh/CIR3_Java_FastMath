@@ -34,67 +34,149 @@ import java.util.ResourceBundle;
 
 
 /**
- * Contrôleur du fichier graphic.fxml
+ * Contrôleur de la page de visualisation graphic.fxml
  */
 public class GraphicController implements Initializable {
+    /**
+     * Element du fxml : affiche les courbes
+     */
     @FXML
     private LineChart graphDisplay;
 
+    /**
+     * axe x : valeur minimale
+     */
     private static Double xAxisLowerBound = -10.0;
+    /**
+     * axe x : valeur maximale
+     */
     private static Double xAxisUpperBound = 10.0;
+    /**
+     * axe y : valeur minimale
+     */
     private static Double yAxisLowerBound = -10.0;
+    /**
+     * axe y : valeur maximale
+     */
     private static Double yAxisUpperBound = 10.0;
 
+    /**
+     * axe x : valeur de graduation
+     */
     private static Double xAxisTickUnit = 5.0;
+    /**
+     * axe y : valeur de graduation
+     */
     private static Double yAxisTickUnit = 5.0;
 
-    private Object lock = new Object();//synchronisation sur cet element uniquement
+    /**
+     * verrou thread-safe : synchronisation sur cet element uniquement
+     */
+    private Object lock = new Object();
 
+    /**
+     * Element du fxml : liste les expressions enregistrées
+     */
     @FXML
     private ChoiceBox functionChoiceBox;
+    /**
+     * Elément d'affichage pour le functionChoiceBox
+     */
     private static final String SEPARATOR = " : ";
 
+    /**
+     * Element du fxml : affiche les expressions utilisées pour le graphe
+     * @see Express
+     */
     @FXML
     private TableView<Express> functionTableViewGraphic;
-
-    @FXML
-    private TableColumn<Express, Boolean> stateCol;
-
+    /**
+     * Element du fxml (colonne de functionTableViewGraphic) : affiche le nom, le séparateur et l'expression
+     */
     @FXML
     private TableColumn<Express, String> expressCol;
-
+    /**
+     * Element du fxml (colonne de functionTableViewGraphic) : affiche l'état (actif ou non) sous forme de checkbox
+     */
+    @FXML
+    private TableColumn<Express, Boolean> stateCol;
+    /**
+     * Element du fxml (colonne de functionTableViewGraphic) : affiche le sampling (nb de points) sous forme d'un slider
+     */
     @FXML
     private TableColumn<Express, Integer> samplingCol;
-    private static double samplingMax = 1000;
-
+    /**
+     * Nombre de points maximum par courbe
+     */
+    private static final double SAMPLING_MAX = 1000;
+    /**
+     * Element du fxml (colonne de functionTableViewGraphic) : affiche la couleur sous forme d'un colorPicker
+     */
     @FXML
     private TableColumn<Express, Color> colorCol;
 
-    public GraphicController() {
-        GraphicController.Holder.setInstance(this);
+    /**
+     * Instance courante pour garder un accès
+     */
+    private static GraphicController instance;
+
+    /**
+     * Constructeur de l'instance : enregistre un accès à l'instance courante
+     */
+    public GraphicController() { GraphicController.instance = this; }
+
+    /**
+     * Setter statique de la valeur minimale de l'axe x
+     * @param xAxisLowerBound valeur à appliquer
+     */
+    public static void setXAxisLowerBound(final double xAxisLowerBound) {
+        GraphicController.xAxisLowerBound = xAxisLowerBound;
     }
 
+    /**
+     * Setter statique de la valeur maximale de l'axe x
+     * @param xAxisUpperBound valeur à appliquer
+     */
+    public static void setXAxisUpperBound(final double xAxisUpperBound) {
+        GraphicController.xAxisUpperBound = xAxisUpperBound;
+    }
 
-    public static void setXAxisLowerBound(double xAxisLowerBound) { GraphicController.xAxisLowerBound = xAxisLowerBound; }
+    /**
+     * Setter statique de la valeur minimale de l'axe y
+     * @param yAxisLowerBound valeur à appliquer
+     */
+    public static void setYAxisLowerBound(final double yAxisLowerBound) {
+        GraphicController.yAxisLowerBound = yAxisLowerBound;
+    }
 
-    public static void setXAxisUpperBound(double xAxisUpperBound) { GraphicController.xAxisUpperBound = xAxisUpperBound; }
+    /**
+     * Setter statique de la valeur maximale de l'axe y
+     * @param yAxisUpperBound valeur à appliquer
+     */
+    public static void setYAxisUpperBound(final double yAxisUpperBound) {
+        GraphicController.yAxisUpperBound = yAxisUpperBound;
+    }
 
-    public static void setYAxisLowerBound(double yAxisLowerBound) { GraphicController.yAxisLowerBound = yAxisLowerBound; }
-
-    public static void setYAxisUpperBound(double yAxisUpperBound) { GraphicController.yAxisUpperBound = yAxisUpperBound; }
-
-    public static void setXAxisTickUnit(double xAxisTickUnit) {
+    /**
+     * Setter statique de la graduation de l'axe x
+     * @param xAxisTickUnit valeur à appliquer
+     */
+    public static void setXAxisTickUnit(final double xAxisTickUnit) {
         GraphicController.xAxisTickUnit = xAxisTickUnit;
     }
 
-    public static void setYAxisTickUnit(double yAxisTickUnit) {
+    /**
+     * Setter statique de la graduation de l'axe y
+     * @param yAxisTickUnit valeur à appliquer
+     */
+    public static void setYAxisTickUnit(final double yAxisTickUnit) {
         GraphicController.yAxisTickUnit = yAxisTickUnit;
     }
 
     /**
-     * Chargement initial des fonctions
-     * @param location
-     * @param resources
+     * Chargement initial (après le constructeur) du fxml lié au contrôleur  : prépration des éléments du fxml
+     * @param location paramètre par défaut
+     * @param resources paramètre par défaut
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -110,14 +192,15 @@ public class GraphicController implements Initializable {
         {
             graphDisplay.getXAxis().setAutoRanging(false);
             graphDisplay.getYAxis().setAutoRanging(false);
-            GraphicController.Holder.updateGraphAxis();
+            GraphicController.updateGraphAxis();
         }
 
         initializeGraphTableView();
     }
 
     /**
-     * Mise en place des liens entre instance de Express et colonnes de TableViews + injection de données
+     * Lie les instance de Express aux colonnes de TableViews + injection de données
+     * @see Express
      */
     private void initializeGraphTableView() {
         //part 1 : link to data
@@ -172,7 +255,7 @@ public class GraphicController implements Initializable {
     }
 
     /**
-     * Ajoute fonction choisie au TableView et l'affiche dans le graphe
+     * onAction du fxml : ajoute fonction sélectionnée au TableView et l'affiche dans le graphe
      */
     @FXML
     private void addFunctionToTable() {
@@ -184,9 +267,10 @@ public class GraphicController implements Initializable {
 
     /**
      * Applique la liste de fonctions au TableView + mise en place derniers liens instance - colonne
+     * @see Express
      */
     private void refreshTableViewGraphic() {
-        samplingCol.setCellFactory(SliderTableCell.forTableColumn(2,(int)samplingMax));
+        samplingCol.setCellFactory(SliderTableCell.forTableColumn(2,(int) SAMPLING_MAX));
 
         //cas 3 : update globale avec 1 seul appel mais pas initialisation (alourdit ajout)
         //create link to the instance (1 time)
@@ -214,7 +298,7 @@ public class GraphicController implements Initializable {
     }
 
     /**
-     * Génère en parallèle les points des fonctions à afficher et leur applique une couleur
+     * Génération parallèle des points des fonctions à afficher puis application de la couleur associée
      */
     public void updateGraphDisplay() {
         graphDisplay.getData().clear();
@@ -256,6 +340,9 @@ public class GraphicController implements Initializable {
         }
     }
 
+    /**
+     * onAction du fxml : ouvre une fenêtre contextuelle pour modifier les valeurs des axes du graphe
+     */
     @FXML
     private void editGraphParam() {
         HashMap<String,Double> arguments = new HashMap<>() {{
@@ -269,24 +356,18 @@ public class GraphicController implements Initializable {
         StageService.Holder.openContextWindows("Propriétés","graphicContext", new GraphicContextControllerFactory(), arguments);
     }
 
+    /**
+     * Modifie les valeurs des axes et actualise l'afichage du graphe
+     */
+    public static void updateGraphAxis() {
+        ((NumberAxis) instance.graphDisplay.getXAxis()).setLowerBound(xAxisLowerBound);
+        ((NumberAxis) instance.graphDisplay.getXAxis()).setUpperBound(xAxisUpperBound);
+        ((NumberAxis) instance.graphDisplay.getXAxis()).setTickUnit(xAxisTickUnit);//distance between two graduation
 
-    public static class Holder {
-        private static GraphicController instance;
+        ((NumberAxis) instance.graphDisplay.getYAxis()).setLowerBound(yAxisLowerBound);
+        ((NumberAxis) instance.graphDisplay.getYAxis()).setUpperBound(yAxisUpperBound);
+        ((NumberAxis) instance.graphDisplay.getYAxis()).setTickUnit(yAxisTickUnit);//distance between two graduation
 
-        public static void setInstance(GraphicController currentInstance) {
-            Holder.instance = currentInstance;
-        }
-
-        public static void updateGraphAxis() {
-            ((NumberAxis) instance.graphDisplay.getXAxis()).setLowerBound(xAxisLowerBound);
-            ((NumberAxis) instance.graphDisplay.getXAxis()).setUpperBound(xAxisUpperBound);
-            ((NumberAxis) instance.graphDisplay.getXAxis()).setTickUnit(xAxisTickUnit);//distance between two graduation
-
-            ((NumberAxis) instance.graphDisplay.getYAxis()).setLowerBound(yAxisLowerBound);
-            ((NumberAxis) instance.graphDisplay.getYAxis()).setUpperBound(yAxisUpperBound);
-            ((NumberAxis) instance.graphDisplay.getYAxis()).setTickUnit(yAxisTickUnit);//distance between two graduation
-
-            instance.updateGraphDisplay();//recalculate all function points
-        }
+        instance.updateGraphDisplay();//recalculate all function points
     }
 }

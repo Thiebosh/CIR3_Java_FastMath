@@ -4,53 +4,113 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Manager des instances de Express
+ * @see Express
+ */
 public class ExpressManager {
+    /**
+     * La liste de l'ensemble des expressions chargées en mémoire
+     * @see Express
+     */
     private static HashMap<String, Express> allExpress = new HashMap<>();
-
+    /**
+     * La liste des noms des expressions affichées graphiquement
+     * @see core.app.view.scene.GraphicController
+     */
     private static LinkedHashSet<String> graphExpress = new LinkedHashSet<>();
 
-    public static void load() throws FileNotFoundException{
-        File file = new File("./src/main/resources/save.csv");
-        Scanner sc = new Scanner(file);
-        while(sc.hasNext())
-        {
-            String[] line = sc.nextLine().split(";");
-            addToExpressList(line[0], line[1]);
+
+    public static void load() {
+        try {
+            File file = new File("./src/main/resources/save.csv");
+            Scanner sc = new Scanner(file);
+            while (sc.hasNext()) {
+                String[] line = sc.nextLine().split(";");
+                addToExpressList(line[0], line[1]);
+            }
+            sc.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
-        sc.close();
     }
 
-    public static void save() throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter("./src/main/resources/save.csv"));
-        writer.write("");
+    public static void save() {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter("./src/main/resources/save.csv"));
+            writer.write("");
 
-        ArrayList<String> nameList = getExpressNames();
-        Collections.sort(nameList);
-        for (String key : nameList)
-        {
-            writer.append(key).append(";").append(allExpress.get(key).getFunction()).append("\n");
+            ArrayList<String> nameList = getExpressNames();
+            Collections.sort(nameList);
+            for (String key : nameList) {
+                writer.append(key).append(";").append(allExpress.get(key).getFunction()).append("\n");
+            }
+            writer.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        writer.close();
     }
 
-    public static boolean containsExpress(String name) { return allExpress.containsKey(name); }
 
-    public static Express getExpress(String name) { return allExpress.get(name); }
+    /**
+     * Permet de savoir si le nom est associé à une expression
+     * @param name nom à tester
+     * @return true si le nom est utilisé, false sinon
+     */
+    public static boolean containsExpress(final String name) {
+        return allExpress.containsKey(name);
+    }
 
-    public static ArrayList<Express> getExpressList() { return new ArrayList<>(allExpress.values()); }
+    /**
+     * Getter d'une expression spécifique
+     * @param name nom de l'expresson que l'on veut récupérer
+     * @return l'expression si elle existe, sinon null
+     */
+    public static Express getExpress(final String name) {
+        return allExpress.get(name);
+    }
 
-    public static ArrayList<String> getExpressNames() { return new ArrayList<>(allExpress.keySet()); }
+    /**
+     * Getter de la liste de toutes les expression sous forme d'ArrayList itérable
+     * @return ArrayList contenant toutes les expression
+     */
+    public static ArrayList<Express> getExpressList() {
+        return new ArrayList<>(allExpress.values());
+    }
 
+    /**
+     * Getter de la liste des noms de toutes les expressions sous forme d'ArrayList itérable
+     * @return ArrayList contenant tous les noms d'expression
+     */
+    public static ArrayList<String> getExpressNames() {
+        return new ArrayList<>(allExpress.keySet());
+    }
+
+    /**
+     * Getter de la liste des expressions utilisées par le graphe sous forme d'ArrayList itérable
+     * @return ArrayList contenant les expression utilisées par le graphe
+     * @see core.app.view.scene.GraphicController
+     */
     public static ArrayList<Express> getExpressGraphList() {
         return new ArrayList<>(graphExpress.stream().map(allExpress::get).filter(Objects::nonNull).collect(Collectors.toList()));
     }
 
+    /**
+     * Supprimer toutes les instances enregistrées : libère la mémoire
+     */
     public static void clearAll() {
         allExpress.clear();
         graphExpress.clear();
     }
 
-    public static void addToExpressList(String name, String function) {
+    /**
+     * Créer une nouvelle instance d'express et l'ajouter à la liste totale
+     * @see Express
+     * @param name nom désignant l'expression
+     * @param function fonction associée au nom
+     */
+    public static void addToExpressList(final String name, final String function) {
         if (allExpress.containsKey(name)) {
             System.out.println("créer une exception \"already used name\" et faire pop une fenêtre d'erreur?");
             return;
@@ -59,7 +119,11 @@ public class ExpressManager {
         allExpress.put(name, new Express(name, function));
     }
 
-    public static void addToGraphList(String name) {
+    /**
+     * Ajouter une expression à la liste du graphe en vérifiant qu'elle existe
+     * @param name nom de l'expression à ajouter
+     */
+    public static void addToGraphList(final String name) {
         if (!allExpress.containsKey(name)) {
             System.out.println("créer une exception \"unknown function name\" et faire pop une fenêtre d'erreur?");
             return;
@@ -69,7 +133,12 @@ public class ExpressManager {
         graphExpress.add(name);//set so no verification needed
     }
 
-    public static void updateName(String oldName, String newName) {
+    /**
+     * Modifier le nom d'une expression existante dans l'instance de l'expression et dans les listes de stockage
+     * @param oldName nom de l'expression à modifier
+     * @param newName nom à appliquer à l'expression
+     */
+    public static void renameExpress(final String oldName, final String newName) {
         if (newName.equals(oldName)) return;//no modification
 
         if (newName.equals("fonction") /* || sin || cos || ...*/) {//nom réservé pour ajout ligne

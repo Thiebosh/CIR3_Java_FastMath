@@ -16,23 +16,36 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Contrôleur de la page de calculs compute.fxml
+ */
 public class ComputeController implements Initializable {
+    /**
+     * Element du fxml : affiche les expressions
+     * @see Express
+     */
     @FXML
     private TableView<Express> functionTableView;
 
+    /**
+     * Element du fxml (colonne de functionTableView) : affiche le nom de l'expression
+     */
     @FXML
     private TableColumn<Express, String> nameCol;
 
+    /**
+     * Element du fxml (colonne de functionTableView) : affiche la fonction de l'expression
+     */
     @FXML
     private TableColumn<Express, String> functionCol;
 
     /**
-     * Chargement initial des fonctions
-     * @param location
-     * @param resources
+     * Chargement initial (après le constructeur) du fxml lié au contrôleur  : prépration des éléments du fxml
+     * @param location paramètre par défaut
+     * @param resources paramètre par défaut
      */
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(final URL location, final ResourceBundle resources) {
         //set link to data (needed to get displayed)
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         functionCol.setCellValueFactory(new PropertyValueFactory<>("function"));
@@ -55,16 +68,21 @@ public class ComputeController implements Initializable {
         ObservableList<Express> list = FXCollections.observableArrayList(ExpressManager.getExpressList());
         functionTableView.setItems(list);
 
-        FunctionComboBoxController.Holder.updateList();
+        FunctionComboBoxController.updateList();
     }
 
+    /**
+     * Regroupement des callbacks de modification des colonnes du tableView
+     * @param event la modification d'une colonne
+     * @param attribute le nom de la colonne modifiée
+     */
     private void tableViewEditCallback(TableColumn.CellEditEvent<Express, String> event, String attribute) {
         TablePosition<Express, String> pos = event.getTablePosition();
         Express expression = event.getTableView().getItems().get(pos.getRow());
 
         switch (attribute) {
             case "name":
-                ExpressManager.updateName(expression.getName(), event.getNewValue());
+                ExpressManager.renameExpress(expression.getName(), event.getNewValue());
                 break;
             case "function":
                 expression.setFunction(event.getNewValue());
@@ -77,6 +95,9 @@ public class ComputeController implements Initializable {
         refreshTableView();//hide invalid value injection
     }
 
+    /**
+     * onAction du fxml : créer une expression par défaut et l'ajouter au tableView
+     */
     @FXML
     private void addFunctionLine() {
         ExpressManager.addToExpressList("fonction","0");//creation

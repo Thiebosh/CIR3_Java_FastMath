@@ -4,11 +4,12 @@ import core.services.windowHolder.StageService;
 import javafx.fxml.FXML;
 
 /**
- * Contrôleur du fichier menu.fxml
+ * Contrôleur du composant menu.fxml
  */
 public class MenuController {
     /**
-     * callback bouton - charger la page d'accueil
+     * onAction du fxml : charger la page d'accueil
+     * @see StageService
      */
     @FXML
     public void handleHomePageButton() {
@@ -16,7 +17,8 @@ public class MenuController {
     }
 
     /**
-     * callback bouton - charger la page d'édition
+     * onAction du fxml : charger la page d'édition
+     * @see StageService
      */
     @FXML
     public void handleComputePageButton() {
@@ -24,7 +26,8 @@ public class MenuController {
     }
 
     /**
-     * callback bouton - charger la page de visualisation
+     * onAction du fxml : charger la page de visualisation
+     * @see StageService
      */
     @FXML
     public void handleGraphicPageButton() {

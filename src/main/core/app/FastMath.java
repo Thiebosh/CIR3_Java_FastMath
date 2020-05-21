@@ -6,51 +6,36 @@ import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 
 /**
  * Main class of the application
  */
-public class FastMath extends Application {//NOPMD
+public class FastMath extends Application {//NO PMD
     /**
-     * lanceur de l'application
-     * @param args arguments
+     * Point de départ de l'application
+     * @param args arguments du compilateur
      */
-    public static final void main(final String[] args) {
-        //charger expressions
-        try {
-            ExpressManager.load();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        launch(args);
-    }
+    public static final void main(final String[] args) { launch(args); }
 
     /**
-     *
+     * chargement des données et Lancement de la fenêtre d'application
      * @param primaryStage
      * @throws Exception
      */
     @Override
-    public final void start(final Stage primaryStage) throws Exception {
+    public final void start(final Stage primaryStage) {
+        ExpressManager.load();
         StageService.Holder.getInstance().setMainStage(primaryStage, "FastMath", new Image("file:src/main/resources/images/icon.png"));
         StageService.Holder.loadMainWindowsScene("home");
     }
 
     /**
-     *
+     * fermeture de la fenêtre d'application et déchargement des données
      * @throws Exception
      */
     @Override
     public void stop() throws Exception {
-        try {
-            ExpressManager.save();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ExpressManager.save();
         ExpressManager.clearAll();
         super.stop();
     }
