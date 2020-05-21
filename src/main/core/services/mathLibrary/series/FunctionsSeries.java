@@ -2,6 +2,7 @@ package core.services.mathLibrary.series;
 
 import java.util.List;
 
+import core.app.data.ExpressManager;
 import core.services.mathLibrary.exception.CalculatorException;
 import core.services.mathLibrary.function.FunctionX;
 
@@ -32,6 +33,8 @@ public class FunctionsSeries {
     public FunctionsSeries(final String f_x, final String f_k) {
         this.f_x = new FunctionX(f_x);
         this.f_k = new FunctionX(f_k);
+        this.f_k.setDegree(ExpressManager.getDegree());
+        this.f_x.setDegree(ExpressManager.getDegree());
     }
 
     /**
