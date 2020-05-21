@@ -30,6 +30,9 @@ public class FunctionX {
      * degree
      */
     public boolean degree = true;
+    public void setDegree(final boolean b){ degree = b; }
+
+    public boolean getDegree(){ return degree; }
 
     /**
      * f(x)

@@ -57,7 +57,11 @@ public class FunctionXs {
 	public static final String CBRT = "cbrt";
 
 	/** setup. */
-	public boolean degree = false;
+	private boolean degree = true;
+
+	public void setDegree(final boolean b){ degree = b; }
+
+	public boolean getDegree(){ return degree; }
 
 	/**
 	 * f(x,y,z,...)
@@ -71,7 +75,7 @@ public class FunctionXs {
 	 */
 	public FunctionXs(final String f) {
 		this.f = f.trim().replaceAll(" ", "");
-		degree = ParserManager.getInstance().isDeegre();
+		//degree = ParserManager.getInstance().isDeegre();
 
 	}
 

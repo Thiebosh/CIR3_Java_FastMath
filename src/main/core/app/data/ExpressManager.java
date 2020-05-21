@@ -20,6 +20,15 @@ public class ExpressManager {
      */
     private static LinkedHashSet<String> graphExpress = new LinkedHashSet<>();
 
+    /**
+     * Le mode des expressions (degrés ou radians)
+     */
+    private static boolean isDegree = true;
+
+    public static void setDegree(final boolean b){ isDegree = b; }
+
+    public static boolean getDegree(){ return isDegree; }
+
 
     public static void load() {
         try {

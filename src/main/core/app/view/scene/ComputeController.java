@@ -3,8 +3,10 @@ package core.app.view.scene;
 import core.app.data.Express;
 import core.app.data.ExpressManager;
 import core.app.view.scene_components.FunctionComboBoxController;
+import core.app.view.scene_components.ToggleSwitch;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
@@ -12,6 +14,7 @@ import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -40,12 +43,31 @@ public class ComputeController implements Initializable {
     private TableColumn<Express, String> functionCol;
 
     /**
+     * Element du fxml (bouton toggle) : affiche le mode (degrés ou radians)
+     */
+    @FXML
+    private ToggleSwitch toggleSwitch;
+
+    /**
      * Chargement initial (après le constructeur) du fxml lié au contrôleur  : prépration des éléments du fxml
      * @param location paramètre par défaut
      * @param resources paramètre par défaut
      */
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
+        toggleSwitch.setLayoutX(280.0);
+        toggleSwitch.setLayoutY(13.0);
+
+        toggleSwitch.getButton().setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                toggleSwitch.switchedOnProperty().set(!toggleSwitch.switchedOnProperty().get());
+                ExpressManager.setDegree(toggleSwitch.switchedOnProperty().getValue());
+                //System.out.println("Degres : " + ExpressManager.getDegree());
+            }
+        });
+        toggleSwitch.getLabel().setOnMouseClicked(toggleSwitch.getButton().getOnMouseClicked());
+
         //set link to data (needed to get displayed)
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         functionCol.setCellValueFactory(new PropertyValueFactory<>("function"));

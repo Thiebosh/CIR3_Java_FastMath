@@ -54,7 +54,11 @@ public class FunctionX {
 	public static final String CBRT = "cbrt";
 
 	/** setup. */
-	private boolean degree = false;
+	private boolean degree = true;
+
+	public void setDegree(final boolean b){ degree = b; }
+
+	public boolean getDegree(){ return degree; }
 
 	/** f(x). */
 	private String f_x;

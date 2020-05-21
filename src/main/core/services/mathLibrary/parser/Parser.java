@@ -17,6 +17,12 @@ import core.services.mathLibrary.parser.util.Point;
  */
 public class Parser {
 
+	private static boolean isDegree = true;
+
+	public static void setDegree(final boolean b){ isDegree = b; }
+
+	public static boolean getDegree(){ return isDegree; }
+
 	/**
 	 * Eval
 	 *
@@ -62,6 +68,7 @@ public class Parser {
 						if (values.length == 1) {
 
 							f_x = new FunctionX(function);
+							f_x.setDegree(isDegree);
 
 							if ((values[0].getStringValue() != null && !values[0].getStringValue().isEmpty())) {
 								final ParserResult evaluatedValue = Parser.eval(values[0].getStringValue());
@@ -73,6 +80,7 @@ public class Parser {
 
 						} else if (values.length > 1) {
 							f_xs = new FunctionXs(function);
+							f_xs.setDegree(isDegree);
 							final List<Double> valuesList = pointToValue(values);
 							final List<String> varsList = pointToVar(values);
 							result.setValue(f_xs.getValue(valuesList, varsList));
@@ -80,6 +88,7 @@ public class Parser {
 
 					} else {
 						f_x = new FunctionX(function);
+						f_x.setDegree(isDegree);
 						result.setValue(f_x.getF_xo(0));
 					}
 				}
@@ -110,12 +119,15 @@ public class Parser {
 			try {
 				if ((((vars == null) || (vars.length < 1)) && (values == null)) || (values.length < 1)) {
 					f_x = new FunctionX(function);
+					f_x.setDegree(isDegree);
 					result = f_x.getF_xo(0);
 				} else if ((values != null) && (values.length == 1)) {
 					f_x = new FunctionX(function);
+					f_x.setDegree(isDegree);
 					result = f_x.getF_xo(values[0]);
 				} else if ((vars != null) && (vars.length > 1) && (values != null) && (values.length > 1)) {
 					f_xs = new FunctionXs(function);
+					f_xs.setDegree(isDegree);
 					final List<Double> valuesList = Arrays.asList(values);
 					final List<String> varsList = Arrays.asList(vars);
 					result = f_xs.getValue(valuesList, varsList);
@@ -151,6 +163,7 @@ public class Parser {
 					result = eval(function, new Point("x", new Complex(1, 0)));
 				} else if (!function.toLowerCase().contains("x")) {
 					f_x = new FunctionX(function);
+					f_x.setDegree(isDegree);
 					result.setValue(f_x.getF_xo(0));
 
 				} else {

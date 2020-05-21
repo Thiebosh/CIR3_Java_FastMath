@@ -1,8 +1,10 @@
 package core.app.view.scene_part;
 
+import core.app.data.ExpressManager;
 import core.app.view.scene_components.FunctionComboBoxController;
 import core.services.mathLibrary.equation.EquationX;
 import core.services.mathLibrary.exception.CalculatorException;
+import core.services.mathLibrary.parser.Parser;
 import core.services.mathLibrary.util.Round;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -39,7 +41,8 @@ public class EquationController {
         String choiceA = functionComboEquation1Controller.getFunction();
         String choiceB = functionComboEquation2Controller.getFunction();
 
-        EquationX eq = new EquationX((choiceA + "=" + choiceB));
+        Parser.setDegree(ExpressManager.getDegree());
+        EquationX eq = new EquationX((choiceA + "=" + choiceB), ExpressManager.getDegree());
         Double res = 0.0;
         Double resB = 0.0;
         boolean resBExist = false;
