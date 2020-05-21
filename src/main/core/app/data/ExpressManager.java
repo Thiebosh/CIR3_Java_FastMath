@@ -33,7 +33,36 @@ public class ExpressManager {
         writer.close();
     }
 
-    public static boolean containsExpress(String name) { return allExpress.containsKey(name); }
+    public static boolean containsExpress(String name) {
+        return allExpress.containsKey(name);
+    }
+
+    public static String refactorExpress(String name)
+    {
+        Map<String, Express> treeMap = new TreeMap<>(
+            new Comparator<String>() {
+                @Override
+                public int compare(String s1, String s2) {
+                    if (s1.length() > s2.length()) {
+                        return -1;
+                    } else if (s1.length() < s2.length()) {
+                        return 1;
+                    } else {
+                        return s1.compareTo(s2);
+                    }
+                }
+            });
+        treeMap.putAll(allExpress);
+        for(int i = 0; i < treeMap.size(); i++)
+        {
+            String key = String.valueOf(treeMap.keySet().toArray()[i]);
+            if(name.contains(key))
+            {
+                name = name.replace(key, treeMap.get(key).getFunction());
+            }
+        }
+        return name;
+    }
 
     public static Express getExpress(String name) { return allExpress.get(name); }
 

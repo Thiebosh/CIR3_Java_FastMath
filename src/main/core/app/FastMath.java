@@ -9,7 +9,6 @@ import javafx.stage.Stage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-
 /**
  * Main class of the application
  */
@@ -19,6 +18,8 @@ public class FastMath extends Application {//NOPMD
      * @param args arguments
      */
     public static final void main(final String[] args) {
+
+
         //charger expressions
         try {
             ExpressManager.load();
