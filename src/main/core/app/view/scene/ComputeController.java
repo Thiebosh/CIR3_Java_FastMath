@@ -106,7 +106,8 @@ public class ComputeController implements Initializable {
 
         switch (attribute) {
             case "name":
-                ExpressManager.renameExpress(expression.getName(), event.getNewValue());
+                if (event.getNewValue().length() == 0) ExpressManager.removeFromExpressList(event.getOldValue());
+                else ExpressManager.renameExpress(expression.getName(), event.getNewValue());
                 break;
             case "function":
                 expression.setFunction(event.getNewValue());

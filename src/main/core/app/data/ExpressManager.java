@@ -70,7 +70,20 @@ public class ExpressManager {
         return allExpress.containsKey(name);
     }
 
-    public static String refactorWithExpress(String name) {
+    public static String replaceExpressNameByFunctionRecursively(String function) {
+        int secu = 0;
+        while(function != refactorWithExpress(function)) {
+            function = refactorWithExpress(function);
+            if(secu++ >= 50) {
+                System.out.println("Créer exception : récursivité au sein d'une fonction");
+                function = "0";
+                break;
+            }
+        }
+        return function;
+    }
+
+    private static String refactorWithExpress(String name) {
         Map<String, Express> treeMap = new TreeMap<>(
                 (string1, string2) -> {
                     if (string1.length() > string2.length()) {
@@ -162,6 +175,15 @@ public class ExpressManager {
 
         allExpress.get(name).setIsActive(true);//if added but disabled, enable
         graphExpress.add(name);//set so no verification needed
+    }
+
+    public static void removeFromExpressList(final String name) {
+        if (graphExpress.contains(name)) graphExpress.remove(name);
+        if (allExpress.containsKey(name)) allExpress.remove(name);
+    }
+
+    public static void removeFromGraphList(final String name) {
+        if (graphExpress.contains(name)) graphExpress.remove(name);
     }
 
     /**

@@ -3,3 +3,4 @@ fix;2.35*x
 sinus;sin(x)
 test;fix*4
 testy;3.14159265
+tmp;e^x

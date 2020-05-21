@@ -2,6 +2,7 @@ package core.app.view.scene;
 
 import core.app.data.Express;
 import core.app.data.ExpressManager;
+import core.app.view.scene_components.ToggleSwitch;
 import core.services.mathLibrary.parser.Parser;
 import core.services.mathLibrary.parser.util.Point;
 import core.services.windowHolder.StageService;
@@ -25,6 +26,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
 import java.net.URL;
@@ -32,11 +34,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-
 /**
  * Contrôleur de la page de visualisation graphic.fxml
  */
 public class GraphicController implements Initializable {
+    /**
+     * Instance courante pour garder un accès
+     */
+    private static GraphicController instance;
+
     /**
      * Element du fxml : affiche les courbes
      */
@@ -46,19 +52,23 @@ public class GraphicController implements Initializable {
     /**
      * axe x : valeur minimale
      */
-    private static Double xAxisLowerBound = -10.0;
+    private static Double xAxisLowerBound = -20.0;
     /**
      * axe x : valeur maximale
      */
-    private static Double xAxisUpperBound = 10.0;
+    private static Double xAxisUpperBound = 20.0;
+    /**
+     * Nombre de points maximum par courbe
+     */
+    private static double samplingMax;
     /**
      * axe y : valeur minimale
      */
-    private static Double yAxisLowerBound = -10.0;
+    private static Double yAxisLowerBound = -20.0;
     /**
      * axe y : valeur maximale
      */
-    private static Double yAxisUpperBound = 10.0;
+    private static Double yAxisUpperBound = 20.0;
 
     /**
      * axe x : valeur de graduation
@@ -106,19 +116,17 @@ public class GraphicController implements Initializable {
     @FXML
     private TableColumn<Express, Integer> samplingCol;
     /**
-     * Nombre de points maximum par courbe
-     */
-    private static final double SAMPLING_MAX = 600;
-    /**
      * Element du fxml (colonne de functionTableViewGraphic) : affiche la couleur sous forme d'un colorPicker
      */
     @FXML
     private TableColumn<Express, Color> colorCol;
 
     /**
-     * Instance courante pour garder un accès
+     * Element du fxml (bouton toggle) : affiche le mode (degrés ou radians)
      */
-    private static GraphicController instance;
+    @FXML
+    private HBox toggleSwitchLocation;
+    private ToggleSwitch toggleSwitch = new ToggleSwitch();
 
     /**
      * Constructeur de l'instance : enregistre un accès à l'instance courante
@@ -180,6 +188,17 @@ public class GraphicController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        //place toggleSwitch and configure it
+        {
+            toggleSwitchLocation.getChildren().add(toggleSwitch);
+            toggleSwitch.getButton().setOnMouseClicked(mouseEvent -> {
+                toggleSwitch.switchedOnProperty().set(!toggleSwitch.switchedOnProperty().get());
+                ExpressManager.setDegree(toggleSwitch.switchedOnProperty().getValue());
+                updateGraphDisplay();
+            });
+            toggleSwitch.getLabel().setOnMouseClicked(toggleSwitch.getButton().getOnMouseClicked());
+        }
+
         //Remplissage du ChoiceBox
         {
             ArrayList<String> list = new ArrayList<>();
@@ -251,7 +270,7 @@ public class GraphicController implements Initializable {
         }
 
         //Part 3 : injection des données
-        refreshTableViewGraphic();
+        updateTableViewGraphic();
     }
 
     /**
@@ -261,7 +280,7 @@ public class GraphicController implements Initializable {
     private void addFunctionToTable() {
         String express = (String) functionChoiceBox.getValue();
         ExpressManager.addToGraphList(express.substring(0, express.indexOf(SEPARATOR)));//creation
-        refreshTableViewGraphic();//visibilité
+        updateTableViewGraphic();//visibilité
         updateGraphDisplay();
     }
 
@@ -269,8 +288,8 @@ public class GraphicController implements Initializable {
      * Applique la liste de fonctions au TableView + mise en place derniers liens instance - colonne
      * @see Express
      */
-    private void refreshTableViewGraphic() {
-        samplingCol.setCellFactory(SliderTableCell.forTableColumn(2,(int) SAMPLING_MAX));
+    private void updateTableViewGraphic() {
+        samplingCol.setCellFactory(SliderTableCell.forTableColumn(2,(int) samplingMax));
 
         //cas 3 : update globale avec 1 seul appel mais pas initialisation (alourdit ajout)
         //create link to the instance (1 time)
@@ -316,13 +335,18 @@ public class GraphicController implements Initializable {
                     double range = (xMax - xMin) / element.getSampling();
                     XYChart.Series<Number, Number> coords = new XYChart.Series<>();
                     coords.setName(element.getName());
+
                     for (double i = xMin; i < xMax + range; i += range) {
-                        coords.getData().add(new XYChart.Data<>(i, Parser.eval(element.getFunction(), new Point("x", i)).getValue()));
+                        Double result = Parser.eval(ExpressManager.replaceExpressNameByFunctionRecursively(element.getFunction()), new Point("x", i)).getValue();
+                        coords.getData().add(new XYChart.Data<>(i, result));
+
                         //creating anonymous threads here will cause java.util.ConcurrentModificationException but it's really funny to break
                         /*double finalI = i;
                         new Thread(() -> {
-                            XYChart.Data<Number, Number> result = new XYChart.Data<>(finalI, Parser.eval(expression.getFunction(), new Point("x", finalI)).getValue());
-                            synchronized (coords) { coords.getData().add(result); }
+                            XYChart.Data<Number, Number> result = new XYChart.Data<>(finalI, Parser.eval(ExpressManager.replaceExpressNameByFunctionRecursively(element.getFunction()), new Point("x", finalI)).getValue());
+                            synchronized (underlock) {
+                                coords.getData().add(result);
+                            }
                         }).start();*/
                     }
 
@@ -369,6 +393,16 @@ public class GraphicController implements Initializable {
         ((NumberAxis) instance.graphDisplay.getYAxis()).setUpperBound(yAxisUpperBound);
         ((NumberAxis) instance.graphDisplay.getYAxis()).setTickUnit(yAxisTickUnit);//distance between two graduation
 
+        computeSamplingMax();
+
+        instance.updateTableViewGraphic();//update sliders
         instance.updateGraphDisplay();//recalculate all function points
+    }
+
+    /**
+     * Calcule le nombre de points max selon les valeurs extrêmes de l'axe x
+     */
+    private static void computeSamplingMax() {
+        samplingMax = (xAxisUpperBound-xAxisLowerBound > 2) ? (int)(10*Math.log(50*Math.pow(xAxisUpperBound-xAxisLowerBound,5))) : 50;
     }
 }

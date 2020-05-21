@@ -22,7 +22,7 @@ public class ComputeContextController extends ContextControllerFactory {
             "Racine cubique : "+FunctionX.getCBRT()+"()",
             "Racine cubique : "+FunctionX.getCBRT()+"()",
             "",
-            "Exponentielle : "+FunctionX.getE()+"()",
+            "Exponentielle : "+FunctionX.getE()+"^()",
             "Logarithme népérien : "+FunctionX.getLN()+"()",
             "Logarithme base 10 : "+FunctionX.getLOG()+"()",
             "",

@@ -45,6 +45,7 @@
                         <Font size="18.0" />
                      </font>
                   </Text>
+                   <HBox fx:id="toggleSwitchLocation" layoutX="284.0" layoutY="13.0" prefHeight="25.0" prefWidth="100.0" />
                    <TabPane layoutY="48.0" prefHeight="324.0" prefWidth="382.0" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
                         <Tab text="Evaluation">
@@ -69,7 +70,6 @@
                         </Tab>
                     </tabs>
                   </TabPane>
-                   <HBox fx:id="toggleSwitchLocation" layoutX="284.0" layoutY="13.0" prefHeight="25.0" prefWidth="100.0" />
                </children>
             </AnchorPane>
          </items>
