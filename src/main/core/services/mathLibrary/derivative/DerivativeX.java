@@ -1,5 +1,6 @@
 package core.services.mathLibrary.derivative;
 
+import core.app.data.ExpressManager;
 import core.services.mathLibrary.exception.CalculatorException;
 import core.services.mathLibrary.function.FunctionX;
 
@@ -23,6 +24,7 @@ public class DerivativeX {
      */
     public DerivativeX(final String f_x) {
         this.f_x = new FunctionX(f_x);
+        this.f_x.setDegree(ExpressManager.getDegree());
     }
 
     public double getDerivative_xo(final double xo) throws CalculatorException {

@@ -1,5 +1,6 @@
 package core.services.mathLibrary.integral;
 
+import core.app.data.ExpressManager;
 import core.services.mathLibrary.exception.CalculatorException;
 import core.services.mathLibrary.function.FunctionX;
 import core.services.mathLibrary.matrix.Matrix;
@@ -25,6 +26,7 @@ public class Integral {
      */
     public Integral(final String f_x) {
         this.f_x = new FunctionX(f_x);
+        this.f_x.setDegree(ExpressManager.getDegree());
     }
 
     /**
