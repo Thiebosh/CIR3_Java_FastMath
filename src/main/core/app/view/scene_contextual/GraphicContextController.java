@@ -13,7 +13,7 @@ import java.util.HashMap;
 /**
  * Contrôleur de la fenêtre contextuelle graphicContext.fxml
  */
-public class GraphicContextControllerFactory extends ContextControllerFactory {
+public class GraphicContextController extends ContextControllerFactory {
     /**
      * Element du fxml : texte de la valeur min de l'axe x
      */

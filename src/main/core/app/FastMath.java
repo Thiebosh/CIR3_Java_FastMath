@@ -1,6 +1,7 @@
 package core.app;
 
 import core.app.data.ExpressManager;
+import core.services.mathLibrary.parser.Parser;
 import core.services.windowHolder.StageService;
 import javafx.application.Application;
 import javafx.scene.image.Image;

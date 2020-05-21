@@ -2,6 +2,7 @@ package core.app.view.scene_part;
 
 import core.app.data.ExpressManager;
 import core.app.view.scene_components.FunctionComboBoxController;
+import core.services.mathLibrary.function.FunctionX;
 import core.services.mathLibrary.parser.Parser;
 import core.services.mathLibrary.parser.util.Point;
 import core.services.mathLibrary.util.Round;
@@ -37,10 +38,15 @@ public class EvaluateController {
      */
     @FXML
     private void executeEvaluation() {
-        String function = functionComboEvaluateController.getFunction();
-        Point value = new Point("x", Double.parseDouble(valueFunction.getCharacters().toString()));
         Parser.setDegree(ExpressManager.getDegree());
-        Double res = Parser.eval(function, value).getValue();
-        resultFunction.setText(Double.toString(Round.rint(res, 8)));
+
+        String function = functionComboEvaluateController.getFunction();
+        String userValue =  valueFunction.getCharacters().toString().replaceAll(FunctionX.getPI(), String.valueOf(Math.PI));
+
+        Double result = Parser.eval(userValue).getValue();//case of expression like 2*pi/3
+        Point value = new Point("x", result);
+
+        result = Parser.eval(function, value).getValue();
+        resultFunction.setText(Double.toString(Round.rint(result, 8)));
     }
 }

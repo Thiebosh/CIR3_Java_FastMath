@@ -5,7 +5,7 @@ import core.app.data.ExpressManager;
 import core.services.mathLibrary.parser.Parser;
 import core.services.mathLibrary.parser.util.Point;
 import core.services.windowHolder.StageService;
-import core.app.view.scene_contextual.GraphicContextControllerFactory;
+import core.app.view.scene_contextual.GraphicContextController;
 import core.services.javafxCustom.ColorTableCell;
 import core.services.javafxCustom.SliderTableCell;
 import javafx.application.Platform;
@@ -108,7 +108,7 @@ public class GraphicController implements Initializable {
     /**
      * Nombre de points maximum par courbe
      */
-    private static final double SAMPLING_MAX = 1000;
+    private static final double SAMPLING_MAX = 600;
     /**
      * Element du fxml (colonne de functionTableViewGraphic) : affiche la couleur sous forme d'un colorPicker
      */
@@ -302,12 +302,13 @@ public class GraphicController implements Initializable {
      */
     public void updateGraphDisplay() {
         graphDisplay.getData().clear();
+        Parser.setDegree(ExpressManager.getDegree());
 
         for (Express element : ExpressManager.getExpressGraphList()) {
             if (element.isActive()) {//pas de création de thread juste pour vérif
                 new Thread(() -> {
                     double xMin = 0, xMax = 0;
-                    synchronized (lock) {//un seul accès
+                    synchronized (lock) {//un seul accès aux éléments externe du thread
                         xMin = xAxisLowerBound;
                         xMax = xAxisUpperBound;
                     }
@@ -353,7 +354,7 @@ public class GraphicController implements Initializable {
             put("scaleX", xAxisTickUnit);
             put("scaleY", yAxisTickUnit);
         }};
-        StageService.Holder.openContextWindows("Propriétés","graphicContext", new GraphicContextControllerFactory(), arguments);
+        StageService.Holder.openContextWindows("Propriétés","graphicContext", new GraphicContextController(), arguments);
     }
 
     /**

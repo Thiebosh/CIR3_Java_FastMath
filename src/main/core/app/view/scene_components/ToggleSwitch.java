@@ -8,7 +8,6 @@ import javafx.scene.layout.HBox;
 
 
 public class ToggleSwitch extends HBox {
-
     private final Label label = new Label();
     private final Button button = new Button();
 
@@ -19,8 +18,23 @@ public class ToggleSwitch extends HBox {
     private SimpleBooleanProperty switchedOn = new SimpleBooleanProperty(true);
     public SimpleBooleanProperty switchedOnProperty() { return switchedOn; }
 
-    private void init() {
+    public ToggleSwitch() {
+        init();
+        switchedOn.addListener((a,b,c) -> {
+            if (!c) {
+                label.setText("Radians");
+                setStyle("-fx-background-color: lightgreen; -fx-background-radius: 4;");
+                label.toFront();
+            }
+            else {
+                label.setText("Degrés");
+                setStyle("-fx-background-color: lightblue; -fx-background-radius: 4;");
+                button.toFront();
+            }
+        });
+    }
 
+    private void init() {
         label.setText("Degrés");
 
         getChildren().addAll(label, button);
@@ -36,9 +50,9 @@ public class ToggleSwitch extends HBox {
 
     private void setStyle() {
         //Default Width
-        setWidth(80);
+        setWidth(90);
         label.setAlignment(Pos.CENTER);
-        setStyle("-fx-background-color: grey; -fx-text-fill:black; -fx-background-radius: 4;");
+        setStyle("-fx-background-color: lightblue; -fx-text-fill:black; -fx-background-radius: 4;");
         setAlignment(Pos.CENTER_LEFT);
     }
 
@@ -47,21 +61,5 @@ public class ToggleSwitch extends HBox {
         label.prefHeightProperty().bind(heightProperty());
         button.prefWidthProperty().bind(widthProperty().divide(2));
         button.prefHeightProperty().bind(heightProperty());
-    }
-
-    public ToggleSwitch() {
-        init();
-        switchedOn.addListener((a,b,c) -> {
-            if (!c) {
-                label.setText("Radians");
-                setStyle("-fx-background-color: green;");
-                label.toFront();
-            }
-            else {
-                label.setText("Degrés");
-                setStyle("-fx-background-color: grey;");
-                button.toFront();
-            }
-        });
     }
 }

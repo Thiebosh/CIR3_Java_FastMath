@@ -1,5 +1,5 @@
 cosinus;cos(x)
 fix;2.35*x
-pi;3.14159265
 sinus;sin(x)
 test;fix*4
+testy;3.14159265

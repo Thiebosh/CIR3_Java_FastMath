@@ -25,7 +25,66 @@ public class FunctionX {
     public static final String SQRT = "sqrt";
     public static final String CBRT = "cbrt";
 
-    
+    public static String getSIN() {
+        return SIN;
+    }
+
+    public static String getCOS() {
+        return COS;
+    }
+
+    public static String getSINH() {
+        return SINH;
+    }
+
+    public static String getCOSH() {
+        return COSH;
+    }
+
+    public static String getTAN() {
+        return TAN;
+    }
+
+    public static String getTANH() {
+        return TANH;
+    }
+
+    public static String getASIN() {
+        return ASIN;
+    }
+
+    public static String getACOS() {
+        return ACOS;
+    }
+
+    public static String getATAN() {
+        return ATAN;
+    }
+
+    public static String getE() {
+        return E;
+    }
+
+    public static String getPI() {
+        return PI;
+    }
+
+    public static String getLN() {
+        return LN;
+    }
+
+    public static String getLOG() {
+        return LOG;
+    }
+
+    public static String getSQRT() {
+        return SQRT;
+    }
+
+    public static String getCBRT() {
+        return CBRT;
+    }
+
     /**
      * degree
      */

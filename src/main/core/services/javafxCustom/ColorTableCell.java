@@ -11,7 +11,7 @@ public class ColorTableCell<T> extends TableCell<T, Color> {
     /**
      * Gestionnaire de couleur intégré à la cellule
      */
-    private final ColorPicker colorPicker;
+    private final ColorPicker colorPicker = new ColorPicker();
 
     /**
      * Constructeur de l'instance :
@@ -21,7 +21,6 @@ public class ColorTableCell<T> extends TableCell<T, Color> {
      * @param column colonne à convertir en colorTableCell
      */
     public ColorTableCell(TableColumn<T, Color> column) {
-        this.colorPicker = new ColorPicker();
         this.colorPicker.editableProperty().bind(column.editableProperty());
         this.colorPicker.disableProperty().bind(column.editableProperty().not());
         this.colorPicker.setOnShowing(event -> {
