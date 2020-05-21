@@ -56,9 +56,9 @@ public class FunctionComboBoxController {
         if (comboBox.getValue() instanceof String) {
             String userChoice = comboBox.getValue().toString();
             int secu = 0;
-            while(userChoice != ExpressManager.refactorExpress(userChoice))
+            while(userChoice != ExpressManager.refactorWithExpress(userChoice))
             {
-                userChoice = ExpressManager.refactorExpress(userChoice);
+                userChoice = ExpressManager.refactorWithExpress(userChoice);
                 if(secu++ >= 50)
                 {
                     System.out.println("Créer exception : récursivité au sein d'une fonction");

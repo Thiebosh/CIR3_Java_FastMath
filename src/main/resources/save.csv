@@ -1,3 +1,4 @@
-cosinus;cos(x)
+cosinus;cos(x)+fix
 fix;2.35*x
+fonction;fix*4
 sinus;sin(x)

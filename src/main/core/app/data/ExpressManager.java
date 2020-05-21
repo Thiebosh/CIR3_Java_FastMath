@@ -52,7 +52,6 @@ public class ExpressManager {
         }
     }
 
-
     /**
      * Permet de savoir si le nom est associé à une expression
      * @param name nom à tester
@@ -61,21 +60,18 @@ public class ExpressManager {
     public static boolean containsExpress(final String name) {
         return allExpress.containsKey(name);
     }
-    public static String refactorExpress(String name)
-    {
+
+    public static String refactorWithExpress(String name) {
         Map<String, Express> treeMap = new TreeMap<>(
-            new Comparator<String>() {
-                @Override
-                public int compare(String s1, String s2) {
-                    if (s1.length() > s2.length()) {
+                (string1, string2) -> {
+                    if (string1.length() > string2.length()) {
                         return -1;
-                    } else if (s1.length() < s2.length()) {
+                    } else if (string1.length() < string2.length()) {
                         return 1;
                     } else {
-                        return s1.compareTo(s2);
+                        return string1.compareTo(string2);
                     }
-                }
-            });
+                });
         treeMap.putAll(allExpress);
         for(int i = 0; i < treeMap.size(); i++)
         {
