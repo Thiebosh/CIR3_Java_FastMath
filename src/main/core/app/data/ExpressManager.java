@@ -6,6 +6,8 @@ import core.services.windowHolder.StageService;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -227,10 +229,21 @@ public class ExpressManager {
             allExpress.remove(oldName);
 
             for (String key : allExpress.keySet()) {
-                //verifier que oldName entouré de signes (ne remplace pas qu'une partie, ex i dans sin) : regex?
-                String newFunction = allExpress.get(key).getFunction().replace(oldName, newName);
+                //verifier que oldName entouré de signes (ne remplace pas qu'une partie, ex i dans sin)
+                String replacement = newName;
+                Pattern r = Pattern.compile("[\\\\+\\\\-\\\\*\\\\/\\\\s]("+oldName+")[\\\\+\\\\-\\\\*\\\\/\\\\s]");
+                Matcher m = r.matcher(allExpress.get(key).getFunction());
+                StringBuffer sb = new StringBuffer();
+                while (m.find()) {
+                    StringBuffer buf = new StringBuffer(m.group());
+                    buf.replace(m.start(1)-m.start(), m.end(1)-m.start(), replacement);
+                    m.appendReplacement(sb, buf.toString());
+                }
+                m.appendTail(sb);
+                String newFunction = sb.toString();
                 allExpress.get(key).setFunction(newFunction);
             }
+
 
             if (graphExpress.contains(oldName)) {
                 graphExpress.remove(oldName);

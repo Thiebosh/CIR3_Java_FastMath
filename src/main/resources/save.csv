@@ -4,4 +4,4 @@ log;ln(x)
 sinus;sin(x)
 test;2*x
 test2;x^2
-testo;3*x^2
+testo;cosinus+sinus/3

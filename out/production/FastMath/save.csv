@@ -1,5 +1,7 @@
 cosinus;-cos(x)
-sinus;sin(x)
+exp;e^x
+log;ln(x)
+sinusa;sin(x)
 test;2*x
 test2;x^2
 testo;3*x^2
