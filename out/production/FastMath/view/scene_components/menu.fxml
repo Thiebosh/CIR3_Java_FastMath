@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.VBox?>
 
-<MenuBar fx:controller="core.app.view.scene_components.MenuController" VBox.vgrow="NEVER" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<MenuBar VBox.vgrow="NEVER" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.app.view.scene_components.MenuController">
     <menus>
         <Menu>
             <graphic>
-                <Label onMouseClicked="#handleHomePageButton" text="Accueil"/>
+                <Label onMouseClicked="#handleHomePageButton" text="Accueil" />
             </graphic>
         </Menu>
         <Menu mnemonicParsing="false" text="Outils">
             <items>
-                <MenuItem onAction="#handleComputePageButton" mnemonicParsing="false" text="Calcul algébrique" />
-                <MenuItem onAction="#handleGraphicPageButton" mnemonicParsing="false" text="Visualisation graphique" />
+                <MenuItem mnemonicParsing="false" onAction="#handleComputePageButton" text="Calcul algébrique" />
+                <MenuItem mnemonicParsing="false" onAction="#handleGraphicPageButton" text="Visualisation graphique" />
             </items>
         </Menu>
+      <Menu mnemonicParsing="false" text="Documentation" onAction="#openDoc">
+          <items>
+              <MenuItem mnemonicParsing="false" onAction="#openDoc" text="Open" />
+          </items>
+      </Menu>
     </menus>
 </MenuBar>
