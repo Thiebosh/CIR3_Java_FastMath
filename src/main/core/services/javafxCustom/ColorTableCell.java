@@ -21,15 +21,15 @@ public class ColorTableCell<T> extends TableCell<T, Color> {
      * @param column colonne à convertir en colorTableCell
      */
     public ColorTableCell(TableColumn<T, Color> column) {
-        this.colorPicker.editableProperty().bind(column.editableProperty());
-        this.colorPicker.disableProperty().bind(column.editableProperty().not());
-        this.colorPicker.setOnShowing(event -> {
+        colorPicker.editableProperty().bind(column.editableProperty());
+        colorPicker.disableProperty().bind(column.editableProperty().not());
+        colorPicker.setOnShowing(event -> {
             final TableView<T> tableView = getTableView();
             tableView.getSelectionModel().select(getTableRow().getIndex());
             tableView.edit(tableView.getSelectionModel().getSelectedIndex(), column);
         });
 
-        this.colorPicker.setOnHiding(event -> { if (isEditing()) { commitEdit(this.colorPicker.getValue()); } });
+        colorPicker.setOnHiding(event -> { if (isEditing()) { commitEdit(colorPicker.getValue()); } });
 
         setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
     }
@@ -47,8 +47,8 @@ public class ColorTableCell<T> extends TableCell<T, Color> {
         if(empty) {
             setGraphic(null);
         } else {
-            this.colorPicker.setValue(item);
-            this.setGraphic(this.colorPicker);
+            colorPicker.setValue(item);
+            setGraphic(colorPicker);
         }
     }
 }

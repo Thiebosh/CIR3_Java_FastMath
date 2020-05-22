@@ -10,7 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 
-public class TransformController {
+public class DerivationController {
     /**
      * Element du fxml : comboBox listant les fonctions - subController
      * @see FunctionComboBoxController

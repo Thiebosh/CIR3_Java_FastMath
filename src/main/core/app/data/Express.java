@@ -21,6 +21,8 @@ public class Express {
      * @see core.app.view.scene.GraphicController
      */
     private final BooleanProperty isActive = new SimpleBooleanProperty();
+
+    private final IntegerProperty degree = new SimpleIntegerProperty(0);//derivation
     /**
      * le nombre de points à calculer pour la courbe (affichage graphique)
      * @see core.app.view.scene.GraphicController
@@ -100,6 +102,18 @@ public class Express {
      */
     public StringProperty functionProperty() {
         return function;
+    }
+
+    public int getDegree() {
+        return degree.get();
+    }
+
+    public IntegerProperty degreeProperty() {
+        return degree;
+    }
+
+    public void setDegree(int degree) {
+        this.degree.set(degree);
     }
 
     /**

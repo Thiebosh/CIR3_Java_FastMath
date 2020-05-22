@@ -53,20 +53,20 @@
                                 <fx:include source="../scene_part/evaluate.fxml" />
                             </content>
                         </Tab>
-                        <Tab text="Equation">
-                           <content>
-                                <fx:include source="../scene_part/equation.fxml" />
-                           </content>
-                        </Tab>
                         <Tab text="Dérivée">
                             <content>
-                                <fx:include source="../scene_part/transform.fxml" />
+                                <fx:include source="../scene_part/derivation.fxml" />
                             </content>
                         </Tab>
                         <Tab text="Intégrale">
                             <content>
                                 <fx:include source="../scene_part/integral.fxml" />
                             </content>
+                        </Tab>
+                        <Tab text="Equation">
+                           <content>
+                                <fx:include source="../scene_part/equation.fxml" />
+                           </content>
                         </Tab>
                     </tabs>
                   </TabPane>

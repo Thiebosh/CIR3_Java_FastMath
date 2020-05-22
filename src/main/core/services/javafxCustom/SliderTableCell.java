@@ -15,11 +15,6 @@ import javafx.util.Callback;
  */
 public class SliderTableCell<T> extends TableCell<T, Integer> {
     /**
-     * La dernière propriété sur laquelle l'éditeur a été lié.
-     */
-    private ObservableValue<Number> numberProperty;
-
-    /**
      * Slider intégré à la cellule
      */
     private final Slider slider = new Slider();
@@ -29,11 +24,18 @@ public class SliderTableCell<T> extends TableCell<T, Integer> {
      * @param min
      * @param max
      */
-    public SliderTableCell(final int min, final int max) {
+    private SliderTableCell(final int min, final int max) {
         slider.setMin(min);
         slider.setMax(max);
         slider.setShowTickLabels(true);
         slider.setBlockIncrement(2);//avec flèches directionnelles
+    }
+
+    /**
+     * Fabrique statique
+     */
+    public static <T> Callback<TableColumn<T, Integer>, TableCell<T, Integer>> forTableColumn(final int min, final int max) {
+        return (TableColumn<T, Integer> tableColumn) -> new SliderTableCell<T>(min, max);
     }
 
     /**
@@ -46,30 +48,22 @@ public class SliderTableCell<T> extends TableCell<T, Integer> {
         super.updateItem(item, empty);
         setText(null);
         Node graphic = null;
+
         if (item != null && !empty) {
             graphic = slider;
-            // On casse la liaison avec la propriété précédente.
-            if (numberProperty instanceof IntegerProperty) {
-                slider.valueProperty().unbindBidirectional((IntegerProperty) numberProperty);
-            }
+
             // On établit une liaison avec la propriété actuelle.
-            final int row = getIndex();
-            final ObservableValue observableValue = getTableColumn().getCellObservableValue(row);
+            final ObservableValue observableValue = getTableColumn().getCellObservableValue(getIndex());
             if (observableValue instanceof IntegerProperty) {
                 slider.valueProperty().bindBidirectional((IntegerProperty) observableValue);
             }
+
             // La réglette n'est pas activable si la cellule ou la colonne ou la table ne sont pas éditables.
             slider.disableProperty().bind(Bindings.not(
                     getTableView().editableProperty().and(getTableColumn().editableProperty()).and(editableProperty())
             ));
         }
-        setGraphic(graphic);
-    }
 
-    /**
-     * Fabrique statique
-     */
-    public static <T> Callback<TableColumn<T, Integer>, TableCell<T, Integer>> forTableColumn(final int min, final int max) {
-        return (TableColumn<T, Integer> tableColumn) -> new SliderTableCell<T>(min, max);
+        setGraphic(graphic);
     }
 }

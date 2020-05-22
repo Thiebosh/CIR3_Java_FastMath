@@ -3,8 +3,11 @@ package core.app.view.scene;
 import core.app.data.Express;
 import core.app.data.ExpressManager;
 import core.app.view.scene_components.ToggleSwitch;
+import core.services.javafxCustom.SpinnerTableCell;
+import core.services.mathLibrary.derivative.DerivativeX;
 import core.services.mathLibrary.parser.Parser;
 import core.services.mathLibrary.parser.util.Point;
+import core.services.mathLibrary.util.Round;
 import core.services.windowHolder.StageService;
 import core.app.view.scene_contextual.GraphicContextController;
 import core.services.javafxCustom.ColorTableCell;
@@ -14,6 +17,7 @@ import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -26,8 +30,10 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.util.Callback;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -105,6 +111,9 @@ public class GraphicController implements Initializable {
      */
     @FXML
     private TableColumn<Express, String> expressCol;
+
+    @FXML
+    private TableColumn<Express, Integer> derivateCol;
     /**
      * Element du fxml (colonne de functionTableViewGraphic) : affiche l'état (actif ou non) sous forme de checkbox
      */
@@ -229,6 +238,7 @@ public class GraphicController implements Initializable {
                     cellData.getValue().nameProperty(),
                     cellData.getValue().functionProperty()
             ));
+            derivateCol.setCellValueFactory(new PropertyValueFactory<>("degree"));
             stateCol.setCellValueFactory(new PropertyValueFactory<>("isActive"));
             samplingCol.setCellValueFactory(new PropertyValueFactory<>("sampling"));
             colorCol.setCellValueFactory(new PropertyValueFactory<>("color"));
@@ -236,6 +246,8 @@ public class GraphicController implements Initializable {
 
         //part 2 : update data
         {
+            //derivateCol.setCellFactory(SpinnerValueFactory);//TextFieldTableCell.<Integer>forTableColumn());
+
             //cas 1 : intialisation mais update ponctuelle (met pas à jour toutes les cases de la même fonction)
             stateCol.setCellFactory(CheckBoxTableCell.forTableColumn(stateCol));
             stateCol.setCellValueFactory((TableColumn.CellDataFeatures<Express, Boolean> p) -> {
@@ -259,6 +271,14 @@ public class GraphicController implements Initializable {
                 return input.isActiveProperty();
             }));
             */
+
+            derivateCol.setCellFactory(SpinnerTableCell.forTableColumn(0,4,1));
+            derivateCol.setOnEditCommit((TableColumn.CellEditEvent<Express, Integer> event) -> {
+                TablePosition<Express, Integer> pos = event.getTablePosition();
+                Express express = event.getTableView().getItems().get(pos.getRow());
+                express.setDegree(event.getNewValue());
+                updateGraphDisplay();//conséquence
+            });
 
             colorCol.setCellFactory(ColorTableCell::new);
             colorCol.setOnEditCommit((TableColumn.CellEditEvent<Express, Color> event) -> {
@@ -337,7 +357,33 @@ public class GraphicController implements Initializable {
                     coords.setName(element.getName());
 
                     for (double i = xMin; i < xMax + range; i += range) {
-                        Double result = Parser.eval(ExpressManager.replaceExpressNameByFunctionRecursively(element.getFunction()), new Point("x", i)).getValue();
+                        final String function = ExpressManager.replaceExpressNameByFunctionRecursively(element.getFunction());
+                        Double result = 0.0;
+
+                        try {
+                            DerivativeX deriv = new DerivativeX(function);
+                            switch(element.getDegree()) {
+                                case 1:
+                                    result = Round.rint(deriv.getDerivative_xo_accurate(i), 8);
+                                    break;
+                                case 2:
+                                    result = Round.rint(deriv.getDerivativeOrderTwo_xo_accurate(i), 8);
+                                    break;
+                                case 3:
+                                    result = Round.rint(deriv.getDerivativeOrderThree_xo_accurate(i), 8);
+                                    break;
+                                case 4:
+                                    result = Round.rint(deriv.getDerivativeOrderFour_xo_accurate(i), 8);
+                                    break;
+                                default://0
+                                    result = Parser.eval(function, new Point("x", i)).getValue();
+                                    break;
+                            }
+                        } catch (Exception e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+
                         coords.getData().add(new XYChart.Data<>(i, result));
 
                         //creating anonymous threads here will cause java.util.ConcurrentModificationException but it's really funny to break

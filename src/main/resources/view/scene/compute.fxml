@@ -55,7 +55,7 @@
                         </Tab>
                         <Tab text="Dérivée">
                             <content>
-                                <fx:include source="../scene_part/transform.fxml" />
+                                <fx:include source="../scene_part/derivation.fxml" />
                             </content>
                         </Tab>
                         <Tab text="Intégrale">
