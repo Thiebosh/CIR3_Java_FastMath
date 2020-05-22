@@ -262,7 +262,6 @@ public class GraphicController implements Initializable {
                                 case 0:
                                     val = Parser.eval(function, new Point("x", i));
                                     if(val.isComplex()){
-                                        y = val.getComplexValue().getI();
                                         result = val.getComplexValue().getR();
                                     }
                                     else
