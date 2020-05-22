@@ -40,7 +40,7 @@
                 <Font size="16.0" />
             </font>
         </Text>
-        <Button onAction="#action" layoutX="258.0" layoutY="172.0" mnemonicParsing="false" text="=" />
+        <Button onAction="#executeIntegral" layoutX="258.0" layoutY="172.0" mnemonicParsing="false" text="=" />
         <Label fx:id="resultFunction" layoutX="294.0" layoutY="172.0" prefHeight="26.0" prefWidth="200.0" text="Résultat">
             <font>
                 <Font size="14.0" />

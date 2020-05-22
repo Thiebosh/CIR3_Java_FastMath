@@ -44,7 +44,7 @@ public class FunctionComboBoxController {
      * @return
      */
     public String getValue() {
-        return (comboBox.getValue() instanceof String) ? comboBox.getValue().toString() : "";
+        return (comboBox.getValue() instanceof String) ? comboBox.getValue().toString() : "0";
     }
 
     /**

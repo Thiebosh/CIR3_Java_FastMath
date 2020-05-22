@@ -40,10 +40,13 @@ public class EquationController {
      */
     @FXML
     public void executeEquation() {
+        Parser.setDegree(ExpressManager.getDegree());
+
+        //input secure
         String choiceA = functionComboEquation1Controller.getFunction();
         String choiceB = functionComboEquation2Controller.getFunction();
 
-        Parser.setDegree(ExpressManager.getDegree());
+        //calcul
         EquationX eq = new EquationX((choiceA + "=" + choiceB), ExpressManager.getDegree());
         Double res = 0.0;
         Double resB = 0.0;
@@ -54,7 +57,7 @@ public class EquationController {
                 res = 0.0;
             //if(res > 10e4 || res < -10e4 || (res > -10e-4 && res < 10e-4 && res != 0)) {
             //if(Round.rint(res, 8) != res){
-                boolean loop = false;
+                boolean loop;
                 int factor = 1;
                 do {
                     loop = false;
@@ -76,6 +79,8 @@ public class EquationController {
 
             Point value = new Point("x", res);
             ParserResult verif = Parser.eval(EquationX.simplify(choiceA+"="+choiceB), value);
+
+            //display
             if(!verif.isComplex() && verif.getValue()>(resBExist?-1e-6:-1e-1) && verif.getValue()<(resBExist?1e-6:1e-1))
                 resultEquation.setText(Double.toString(res));
             else

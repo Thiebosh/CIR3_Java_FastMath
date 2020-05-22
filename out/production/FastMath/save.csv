@@ -5,5 +5,5 @@ g;cosinus+sinus/3
 log;ln(x)
 sinus;sin(x)
 test;2*x
-test2;test+x^2
+test2;test+x^2+test
 testo;cosinus+sinus/3

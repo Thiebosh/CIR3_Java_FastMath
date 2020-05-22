@@ -1,9 +1,11 @@
 package core.app.view.scene_part;
 
+import core.app.data.ExpressManager;
 import core.app.view.scene_components.FunctionComboBoxController;
 import core.services.mathLibrary.derivative.DerivativeX;
 import core.services.mathLibrary.function.FunctionX;
 import core.services.mathLibrary.parser.Parser;
+import core.services.mathLibrary.parser.util.ParserResult;
 import core.services.mathLibrary.util.Round;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -34,26 +36,37 @@ public class DerivationController {
      * onAction du fxml : effectue la transformation et affiche le résultat
      */
     @FXML
-    private void action() {
+    private void executeDerivation() {
+        Parser.setDegree(ExpressManager.getDegree());
+
+        //input secure
         String functionChoice = functionComboTransformController.getFunction();
-        Double xo = Parser.eval(valueFunction.getText().replaceAll(FunctionX.getPI(), String.valueOf(Math.PI))).getValue();
+        String userValue = valueFunction.getCharacters().toString();
+        if (userValue.length() == 0) userValue = "0";
+        else userValue = userValue.replaceAll(FunctionX.getPI(), String.valueOf(Math.PI)).replaceAll(",", ".");
 
-        DerivativeX der = new DerivativeX(functionChoice);
-
-        try {
-            switch(degreeSpinner.getValue())
-            {
-                case 1: resultFunction.setText(String.valueOf(Round.rint(der.getDerivative_xo_accurate(xo), 8)));
-                break;
-                case 2: resultFunction.setText(String.valueOf(Round.rint(der.getDerivativeOrderTwo_xo_accurate(xo), 8)));
-                break;
-                case 3: resultFunction.setText(String.valueOf(Round.rint(der.getDerivativeOrderThree_xo_accurate(xo), 8)));
-                break;
-                default: resultFunction.setText(String.valueOf(Round.rint(der.getDerivativeOrderFour_xo_accurate(xo), 8)));
+        if (degreeSpinner.getValue() instanceof Number) {
+            //calcul & display
+            Double xo = Parser.eval(userValue).getValue();
+            DerivativeX der = new DerivativeX(functionChoice);
+            try {
+                switch (degreeSpinner.getValue()) {
+                    case 1:
+                        resultFunction.setText(String.valueOf(Round.rint(der.getDerivative_xo_accurate(xo), 8)));
+                        break;
+                    case 2:
+                        resultFunction.setText(String.valueOf(Round.rint(der.getDerivativeOrderTwo_xo_accurate(xo), 8)));
+                        break;
+                    case 3:
+                        resultFunction.setText(String.valueOf(Round.rint(der.getDerivativeOrderThree_xo_accurate(xo), 8)));
+                        break;
+                    default:
+                        resultFunction.setText(String.valueOf(Round.rint(der.getDerivativeOrderFour_xo_accurate(xo), 8)));
+                }
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
     }
 }

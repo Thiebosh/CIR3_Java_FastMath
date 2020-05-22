@@ -11,6 +11,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Contrôleur de l'élément de fenêtre evaluate.fxml
  */
@@ -41,20 +43,29 @@ public class EvaluateController {
     private void executeEvaluation() {
         Parser.setDegree(ExpressManager.getDegree());
 
+        //input secure
         String function = functionComboEvaluateController.getFunction();
-        String userValue =  valueFunction.getCharacters().toString().replaceAll(FunctionX.getPI(), String.valueOf(Math.PI)).replaceAll(",", ".");
+        String userValue = valueFunction.getCharacters().toString();
+        if (userValue.length() == 0) userValue = "0";
+        else userValue = userValue.replaceAll(FunctionX.getPI(), String.valueOf(Math.PI)).replaceAll(",", ".");
 
+        //calcul
         ParserResult result = Parser.eval(userValue);//case of expression like 2*pi/3
         Point value;
-        if(result.isComplex())
+        if (result.isComplex()) {
             value = new Point("x", result.getComplexValue());
-        else
+        }
+        else {
             value = new Point("x", result.getValue());
-
+        }
         result = Parser.eval(function, value);
-        if(result.isComplex())
+
+        //display
+        if (result.isComplex()) {
             resultFunction.setText(Round.rint(result.getComplexValue().getR(), 8) + " + " + result.getComplexValue().getI() + "i");
-        else
+        }
+        else {
             resultFunction.setText(Double.toString(Round.rint(result.getValue(), 8)));
+        }
     }
 }

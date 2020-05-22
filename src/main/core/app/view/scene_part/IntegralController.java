@@ -1,5 +1,6 @@
 package core.app.view.scene_part;
 
+import core.app.data.ExpressManager;
 import core.app.view.scene_components.FunctionComboBoxController;
 import core.services.mathLibrary.function.FunctionX;
 import core.services.mathLibrary.integral.Integral;
@@ -41,17 +42,28 @@ public class IntegralController implements Initializable {
      * onAction du fxml : effectue la transformation et affiche le résultat
      */
     @FXML
-    private void action() {
+    private void executeIntegral() {
+        Parser.setDegree(ExpressManager.getDegree());
+
+        //input secure
         String functionChoice = functionComboTransformController.getFunction();
         String methodChoice = method.getValue();
 
-        Double a = Parser.eval(intervalA.getText().replaceAll(FunctionX.getPI(), String.valueOf(Math.PI))).getValue();//case of expression like 2*pi/3
-        Double b = Parser.eval(intervalB.getText().replaceAll(FunctionX.getPI(), String.valueOf(Math.PI))).getValue();
+        String userValueA = intervalA.getCharacters().toString();
+        if (userValueA.length() == 0) userValueA = "0";
+        else userValueA = userValueA.replaceAll(FunctionX.getPI(), String.valueOf(Math.PI)).replaceAll(",", ".");
+
+        String userValueB = intervalB.getCharacters().toString();
+        if (userValueB.length() == 0) userValueB = "0";
+        else userValueB = userValueB.replaceAll(FunctionX.getPI(), String.valueOf(Math.PI)).replaceAll(",", ".");
+
+        //calcul & display
+        Double a = Parser.eval(userValueA).getValue();
+        Double b = Parser.eval(userValueB).getValue();
 
         Integral integral = new Integral(functionChoice);
         try {
-            switch (methodChoice)
-            {
+            switch (methodChoice) {
                 case "Trapèzes": resultFunction.setText(String.valueOf(Round.rint(integral.trapezoidal(a, b), 8)));
                     break;
                 case "Simpson": resultFunction.setText(String.valueOf(Round.rint(integral.simpson(a, b), 8)));
