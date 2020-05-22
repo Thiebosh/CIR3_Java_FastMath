@@ -7,24 +7,19 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-
 import java.io.IOException;
 import java.util.HashMap;
 
 /**
  * Gestionnaire auto-hébergé de contenu de fenêtre
  */
-public class StageService {//NOPMD
+public class StageService {
     /**
      * unique instance auto hébergée de la fenêtre
      */
     private static Stage mainStage;
-
     /**
      * getter : récupérer l'instance de fenêtre contrôlée
      * @return
@@ -32,14 +27,13 @@ public class StageService {//NOPMD
     private Stage getMainStage() {
         return mainStage;
     }
-
     /**
      * setter : modifier la fenêtre affichée/contrôlée
      * @param newStage fenêtre à contrôler
      * @param title titre de la fenêtre
      * @param icon icone de la fenêtre
      */
-    public void setMainStage(final Stage newStage, final String title, Image icon) {
+    public void setMainStage(final Stage newStage, final String title, final Image icon) {
         this.mainStage = newStage;
         if (title != null) this.mainStage.setTitle(title);
         if (icon != null) this.mainStage.getIcons().add(icon);
@@ -49,39 +43,24 @@ public class StageService {//NOPMD
     /**
      * partie statique (nécessairement dans classe non statique) : accès et pilotage de l'instance (regroupement)
      */
-    public static class Holder {//NOPMD
+    public static class Holder {
         /**
          * unique instance de la classe, accès à la scène
          */
         protected static final StageService INSTANCE = new StageService();
-
-        /**
-         * chemin d'accès aux fichiers fxml
-         */
-        private final static String RESOURCE_FOLDER_PATH = "/view/scene/";
-
-        /**
-         * chemin d'accès aux fichiers fxml de fenêtre contextuelle
-         */
-        private final static String CONTEXTUAL_FOLDER_PATH = "/view/scene_contextual/";
-
-        /**
-         * chemin d'accès aux fichiers fxml de fenêtre d'erreur
-         */
-        private final static String ERROR_FOLDER_PATH = "/view/scene_error/";
-
         /**
          * getter : accès à l'unique instance de scène
-         *
          * @return unique instance de la classe
          */
         public static StageService getInstance() {
             return INSTANCE;
         }
-
+        /**
+         * chemin d'accès aux fichiers fxml
+         */
+        private final static String RESOURCE_FOLDER_PATH = "/view/scene/";
         /**
          * met à jour la scène affichée dans la fenêtre
-         *
          * @param pageName nom du fichier fxml à afficher
          */
         public static void loadMainWindowsScene(final String pageName) {
@@ -97,8 +76,24 @@ public class StageService {//NOPMD
             }
         }
 
-        private static Stage contextStage = new Stage();
 
+        /**
+         * instance de la fenêtre contextuelle
+         */
+        private static Stage contextStage = new Stage();
+        /**
+         * chemin d'accès aux fichiers fxml de fenêtre contextuelle
+         */
+        private final static String CONTEXTUAL_FOLDER_PATH = "/view/scene_contextual/";
+        /**
+         * ouverture de la fenêtre contextuelle
+         * @param title titre de la page
+         * @param pageName nom du fichier fxml
+         * @param config type d'ouverture
+         * @param controller instance de controleur de la page
+         * @param args données d'initialisation (map clé valeur)
+         * @param <T> controleur de la page
+         */
         public static <T extends ContextControllerFactory> void openContextWindows(final String title, final String pageName, Modality config, T controller, final HashMap<String, ?> args) {
             if (contextStage.isShowing()) contextStage.toFront();
             else {
@@ -129,8 +124,21 @@ public class StageService {//NOPMD
             }
         }
 
-        private static Stage errorStage = new Stage();
 
+        /**
+         * instance de fenêtre d'erreur
+         */
+        private static Stage errorStage = new Stage();
+        /**
+         * chemin d'accès aux fichiers fxml de fenêtre d'erreur
+         */
+        private final static String ERROR_FOLDER_PATH = "/view/scene_error/";
+        /**
+         * ouverture de la fenêtre d'erreur
+         * @param pageName fichier fxml
+         * @param error code d'erreur à afficher
+         * @param <T> controlleur de la fenêtre
+         */
         public static <T extends ContextControllerFactory> void openErrorWindows(final String pageName, final ErrorCode error) {
             final FXMLLoader loader = new FXMLLoader();
             loader.setLocation(StageService.class.getResource(ERROR_FOLDER_PATH + pageName + ".fxml"));

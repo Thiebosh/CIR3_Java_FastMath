@@ -19,10 +19,6 @@ VM option : --module-path <yourPath>\javafx-sdk-11.0.2\lib --add-modules javafx.
 
 Opérations mathématiques : GitHub - sbesada/java.math.numerical.library
 
-### Plugin
-
-JetBrain - PMDPugin (plugins.jetbrains.com/plugin/1137-pmdplugin) -> modifier (simplifier) les règles
-
 ### Démo
 
 #### Créer une fonction
