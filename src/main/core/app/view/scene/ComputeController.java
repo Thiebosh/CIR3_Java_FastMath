@@ -19,6 +19,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -131,6 +132,6 @@ public class ComputeController implements Initializable {
 
     @FXML
     private void showWritingConvention() {
-        StageService.Holder.openContextWindows("Tokens","computeContext", new ComputeContextController(), null);
+        StageService.Holder.openContextWindows("Tokens","computeContext", Modality.WINDOW_MODAL, new ComputeContextController(), null);
     }
 }

@@ -33,6 +33,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.util.Callback;
 
 import java.net.URL;
@@ -424,7 +425,7 @@ public class GraphicController implements Initializable {
             put("scaleX", xAxisTickUnit);
             put("scaleY", yAxisTickUnit);
         }};
-        StageService.Holder.openContextWindows("Propriétés","graphicContext", new GraphicContextController(), arguments);
+        StageService.Holder.openContextWindows("Propriétés","graphicContext", Modality.APPLICATION_MODAL, new GraphicContextController(), arguments);//pas d'accès aux autres fenêtres
     }
 
     /**
