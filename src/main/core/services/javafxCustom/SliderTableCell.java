@@ -19,6 +19,8 @@ public class SliderTableCell<T> extends TableCell<T, Integer> {
      */
     private final Slider slider = new Slider();
 
+    private static int max;
+
     /**
      * Constructeur de l'instance : définit les paramètres du slider
      * @param min
@@ -27,6 +29,7 @@ public class SliderTableCell<T> extends TableCell<T, Integer> {
     private SliderTableCell(final int min, final int max) {
         slider.setMin(min);
         slider.setMax(max);
+        SliderTableCell.max = max;
         slider.setShowTickLabels(true);
         slider.setBlockIncrement(2);//avec flèches directionnelles
     }
@@ -36,6 +39,10 @@ public class SliderTableCell<T> extends TableCell<T, Integer> {
      */
     public static <T> Callback<TableColumn<T, Integer>, TableCell<T, Integer>> forTableColumn(final int min, final int max) {
         return (TableColumn<T, Integer> tableColumn) -> new SliderTableCell<T>(min, max);
+    }
+
+    public static void setMaxValue(final int max) {
+        SliderTableCell.max = max;
     }
 
     /**
@@ -48,6 +55,7 @@ public class SliderTableCell<T> extends TableCell<T, Integer> {
         super.updateItem(item, empty);
         setText(null);
         Node graphic = null;
+        slider.setMax(SliderTableCell.max);
 
         if (item != null && !empty) {
             graphic = slider;

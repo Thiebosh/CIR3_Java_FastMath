@@ -18,7 +18,6 @@ import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -31,11 +30,9 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
-import javafx.util.Callback;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -68,7 +65,7 @@ public class GraphicController implements Initializable {
     /**
      * Nombre de points maximum par courbe
      */
-    private static double samplingMax;
+    private static int samplingMax;
     /**
      * axe y : valeur minimale
      */
@@ -292,7 +289,7 @@ public class GraphicController implements Initializable {
         }
 
         //Part 3 : injection des données
-        updateTableViewGraphic();
+        refreshTableViewGraphic();
     }
 
     /**
@@ -302,7 +299,7 @@ public class GraphicController implements Initializable {
     private void addFunctionToTable() {
         String express = (String) functionChoiceBox.getValue();
         ExpressManager.addToGraphList(express.substring(0, express.indexOf(SEPARATOR)));//creation
-        updateTableViewGraphic();//visibilité
+        refreshTableViewGraphic();//visibilité
         updateGraphDisplay();
     }
 
@@ -310,8 +307,8 @@ public class GraphicController implements Initializable {
      * Applique la liste de fonctions au TableView + mise en place derniers liens instance - colonne
      * @see Express
      */
-    private void updateTableViewGraphic() {
-        samplingCol.setCellFactory(SliderTableCell.forTableColumn(2,(int) samplingMax));
+    private void refreshTableViewGraphic() {
+        samplingCol.setCellFactory(SliderTableCell.forTableColumn(2, samplingMax));
 
         //cas 3 : update globale avec 1 seul appel mais pas initialisation (alourdit ajout)
         //create link to the instance (1 time)
@@ -335,7 +332,9 @@ public class GraphicController implements Initializable {
         //fill list
         list.addAll(ExpressManager.getExpressGraphList());
 
+        SliderTableCell.setMaxValue(samplingMax);
         functionTableViewGraphic.setItems(list);
+        functionTableViewGraphic.refresh();
     }
 
     /**
@@ -347,7 +346,6 @@ public class GraphicController implements Initializable {
 
         for (Express element : ExpressManager.getExpressGraphList()) {
             if (element.isActive()) {//pas de création de thread juste pour vérif
-                System.out.println(element.getDegree());
                 new Thread(() -> {
                     double xMin = 0, xMax = 0;
                     synchronized (lock) {//un seul accès aux éléments externe du thread
@@ -366,6 +364,9 @@ public class GraphicController implements Initializable {
                         try {
                             DerivativeX deriv = new DerivativeX(function);
                             switch(element.getDegree()) {
+                                case 0:
+                                    result = Parser.eval(function, new Point("x", i)).getValue();
+                                    break;
                                 case 1:
                                     result = Round.rint(deriv.getDerivative_xo_accurate(i), 8);
                                     break;
@@ -378,15 +379,12 @@ public class GraphicController implements Initializable {
                                 case 4:
                                     result = Round.rint(deriv.getDerivativeOrderFour_xo_accurate(i), 8);
                                     break;
-                                case -1:
+                                default://-1
                                     Integral integral = new Integral(function);
                                     if(i>0)
                                         result = Round.rint(integral.simpson(0, i), 8);
                                     else
                                         result = -Round.rint(integral.simpson(i, 0), 8);
-                                    break;
-                                default://0
-                                    result = Parser.eval(function, new Point("x", i)).getValue();
                                     break;
                             }
                         } catch (Exception e) {
@@ -451,7 +449,7 @@ public class GraphicController implements Initializable {
 
         computeSamplingMax();
 
-        instance.updateTableViewGraphic();//update sliders
+        instance.refreshTableViewGraphic();//update sliders
         instance.updateGraphDisplay();//recalculate all function points
     }
 

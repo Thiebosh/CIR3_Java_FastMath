@@ -1,7 +1,8 @@
 cosinus;-cos(x)
 exp;e^x
+fonction;f
+g;cosinus+sinus/3
 log;ln(x)
-sinusa;sin(x)
+sinus;sin(x)
 test;2*x
 test2;x^2
-testo;3*x^2
