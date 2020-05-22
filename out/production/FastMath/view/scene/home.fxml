@@ -14,7 +14,7 @@
     <fx:include source="../scene_components/menu.fxml" />
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <children>
-        <Label alignment="CENTER" layoutX="222.0" layoutY="22.0" style="&#10;" text="Bienvenue sur FastMath!" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false">
+        <Label alignment="CENTER" layoutX="222.0" layoutY="150.0" style="&#10;" text="Bienvenue sur FastMath!" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false">
           <font>
             <Font size="18.0" />
           </font>

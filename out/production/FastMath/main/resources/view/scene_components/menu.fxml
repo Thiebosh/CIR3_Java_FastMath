@@ -19,10 +19,10 @@
                 <MenuItem mnemonicParsing="false" onAction="#handleGraphicPageButton" text="Visualisation graphique" />
             </items>
         </Menu>
-      <Menu mnemonicParsing="false" text="Documentation" onAction="#openDoc">
-          <items>
-              <MenuItem mnemonicParsing="false" onAction="#openDoc" text="Open" />
-          </items>
+      <Menu>
+          <graphic>
+              <Label mnemonicParsing="false" text="Documentation" onMouseClicked="#openDoc" />
+          </graphic>
       </Menu>
     </menus>
 </MenuBar>
