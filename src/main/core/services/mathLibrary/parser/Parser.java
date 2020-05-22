@@ -48,7 +48,7 @@ public class Parser {
 
 		if ((function != null) && !function.isEmpty()) {
 
-			if (Parser.pointIsComplex(values) || function.toLowerCase().contains("j")) { // Complex
+			if (Parser.pointIsComplex(values) || function.toLowerCase().contains("j") || function.toLowerCase().contains("i")) { // Complex
 
 				complexFunction = new ComplexFunction(function);
 				final List<Complex> valuesList = pointToComplexValue(values);

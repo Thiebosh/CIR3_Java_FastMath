@@ -7,6 +7,7 @@ import core.services.javafxCustom.SpinnerTableCell;
 import core.services.mathLibrary.derivative.DerivativeX;
 import core.services.mathLibrary.integral.Integral;
 import core.services.mathLibrary.parser.Parser;
+import core.services.mathLibrary.parser.util.ParserResult;
 import core.services.mathLibrary.parser.util.Point;
 import core.services.mathLibrary.util.Round;
 import core.services.windowHolder.StageService;
@@ -309,7 +310,6 @@ public class GraphicController implements Initializable {
      */
     private void refreshTableViewGraphic() {
         samplingCol.setCellFactory(SliderTableCell.forTableColumn(2, samplingMax));
-
         //cas 3 : update globale avec 1 seul appel mais pas initialisation (alourdit ajout)
         //create link to the instance (1 time)
         ObservableList<Express> list = FXCollections.observableArrayList(param -> new Observable[] {param.samplingProperty()});
@@ -360,12 +360,19 @@ public class GraphicController implements Initializable {
                     for (double i = xMin; i < xMax + range; i += range) {
                         final String function = ExpressManager.replaceExpressNameByFunctionRecursively(element.getFunction());
                         Double result = 0.0;
-
+                        Double y = i;
+                        ParserResult val;
                         try {
                             DerivativeX deriv = new DerivativeX(function);
                             switch(element.getDegree()) {
                                 case 0:
-                                    result = Parser.eval(function, new Point("x", i)).getValue();
+                                    val = Parser.eval(function, new Point("x", i));
+                                    if(val.isComplex()){
+                                        y = val.getComplexValue().getI();
+                                        result = val.getComplexValue().getR();
+                                    }
+                                    else
+                                        result = val.getValue();
                                     break;
                                 case 1:
                                     result = Round.rint(deriv.getDerivative_xo_accurate(i), 8);
@@ -392,7 +399,7 @@ public class GraphicController implements Initializable {
                             e.printStackTrace();
                         }
 
-                        coords.getData().add(new XYChart.Data<>(i, result));
+                        coords.getData().add(new XYChart.Data<>(y, result));
 
                         //creating anonymous threads here will cause java.util.ConcurrentModificationException but it's really funny to break
                         /*double finalI = i;
