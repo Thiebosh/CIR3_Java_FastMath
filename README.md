@@ -9,7 +9,7 @@ JavaFX project
 
 ### Requirements
 
-SDK 13.0.1
+SDK 11 ou 13.0.1
 
 jafaFX sdk 11.0.2
 
@@ -23,6 +23,5 @@ Opérations mathématiques : GitHub - sbesada/java.math.numerical.library
 
 JetBrain - PMDPugin (plugins.jetbrains.com/plugin/1137-pmdplugin) -> modifier (simplifier) les règles
 
-### idées
-
-calcul de nombres complexes (changement d'écriture en a+ib, avec argument et module...)
+### Démo
+![Output sample](https://github.com/Thiebosh/FastMath/tree/master/src/main/resources/images/test.gif)
