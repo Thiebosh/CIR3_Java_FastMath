@@ -42,7 +42,7 @@ public class EvaluateController {
         Parser.setDegree(ExpressManager.getDegree());
 
         String function = functionComboEvaluateController.getFunction();
-        String userValue =  valueFunction.getCharacters().toString().replaceAll(FunctionX.getPI(), String.valueOf(Math.PI));
+        String userValue =  valueFunction.getCharacters().toString().replaceAll(FunctionX.getPI(), String.valueOf(Math.PI)).replaceAll(",", ".");
 
         ParserResult result = Parser.eval(userValue);//case of expression like 2*pi/3
         Point value;
