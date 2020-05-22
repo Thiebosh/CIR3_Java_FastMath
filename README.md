@@ -24,4 +24,6 @@ Opérations mathématiques : GitHub - sbesada/java.math.numerical.library
 JetBrain - PMDPugin (plugins.jetbrains.com/plugin/1137-pmdplugin) -> modifier (simplifier) les règles
 
 ### Démo
-![Output sample](https://github.com/Thiebosh/FastMath/tree/master/src/main/resources/images/test.gif)
+
+(changer blob en raw dans les output sample pour charger les gifs)
+![Output sample](https://github.com/Thiebosh/FastMath/raw/master/src/main/resources/images/test.gif)
