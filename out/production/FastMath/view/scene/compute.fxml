@@ -54,9 +54,9 @@
                             </content>
                         </Tab>
                         <Tab text="Equation">
-                           <content>
+                            <content>
                                 <fx:include source="../scene_part/equation.fxml" />
-                           </content>
+                            </content>
                         </Tab>
                         <Tab text="Dérivée">
                             <content>
