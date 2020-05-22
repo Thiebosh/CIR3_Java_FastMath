@@ -231,8 +231,8 @@ public class ExpressManager {
             for (String key : allExpress.keySet()) {
                 //verifier que oldName entouré de signes (ne remplace pas qu'une partie, ex i dans sin)
                 String replacement = newName;
-                Pattern r = Pattern.compile("[\\\\+\\\\-\\\\*\\\\/\\\\s]*("+oldName+")[\\\\+\\\\-\\\\*\\\\/\\\\s]*");
-                Matcher m = r.matcher(allExpress.get(key).getFunction());
+                Pattern r = Pattern.compile("[\\+\\-\\*\\/\\s]("+oldName+")[\\+\\-\\*\\/\\s]");
+                Matcher m = r.matcher(" "+allExpress.get(key).getFunction()+" ");
                 StringBuffer sb = new StringBuffer();
                 while (m.find()) {
                     StringBuffer buf = new StringBuffer(m.group());

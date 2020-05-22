@@ -69,7 +69,7 @@ public class Express {
      * @param function nouvelle fonction
      */
     public void setFunction(final String function) {
-        if (function.length() != 0) this.function.set(function);
+        if (function.length() != 0) this.function.set(function.replace(" ", ""));
         else StageService.Holder.openErrorWindows("messageOnly", ErrorCode.UnhautorizedDeletion);
     }
 
