@@ -1,9 +1,3 @@
-cosinus;cos(x)+i*sin(x)
-exp;e^x
-fonction;2*i+sqrt(x/7)*i^x
-g;cosinus+sinus/3
-log;ln(x)
-sinus;sin(x)
-test;2*x
-test2;test+x^2+test
-testo;cosinus+sinus/3
+F(x);1/3*x^3
+f'(x);2*x
+f(x);x^2
