@@ -4,6 +4,7 @@ import core.app.data.ExpressManager;
 import core.app.view.scene_components.FunctionComboBoxController;
 import core.services.mathLibrary.function.FunctionX;
 import core.services.mathLibrary.parser.Parser;
+import core.services.mathLibrary.parser.util.ParserResult;
 import core.services.mathLibrary.parser.util.Point;
 import core.services.mathLibrary.util.Round;
 import javafx.fxml.FXML;
@@ -43,10 +44,17 @@ public class EvaluateController {
         String function = functionComboEvaluateController.getFunction();
         String userValue =  valueFunction.getCharacters().toString().replaceAll(FunctionX.getPI(), String.valueOf(Math.PI));
 
-        Double result = Parser.eval(userValue).getValue();//case of expression like 2*pi/3
-        Point value = new Point("x", result);
+        ParserResult result = Parser.eval(userValue);//case of expression like 2*pi/3
+        Point value;
+        if(result.isComplex())
+            value = new Point("x", result.getComplexValue());
+        else
+            value = new Point("x", result.getValue());
 
-        result = Parser.eval(function, value).getValue();
-        resultFunction.setText(Double.toString(Round.rint(result, 8)));
+        result = Parser.eval(function, value);
+        if(result.isComplex())
+            resultFunction.setText(Round.rint(result.getComplexValue().getR(), 8) + " + " + result.getComplexValue().getI() + "i");
+        else
+            resultFunction.setText(Double.toString(Round.rint(result.getValue(), 8)));
     }
 }
