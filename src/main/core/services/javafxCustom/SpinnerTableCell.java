@@ -20,7 +20,7 @@ public class SpinnerTableCell<T> extends TableCell<T, Integer> {
      * @param max limite max
      * @param step écart entre deux valeurs
      */
-    private SpinnerTableCell(int min, int max, int step) {
+    private SpinnerTableCell(final int min, final int max, final int step) {
         spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, 0, step));
         spinner.setEditable(true);
 
@@ -30,12 +30,22 @@ public class SpinnerTableCell<T> extends TableCell<T, Integer> {
     }
     /**
      * Fabrique statique (accès au constructeur privé)
+     * @param min limite min
+     * @param max limite max
+     * @param step écart entre deux valeurs
+     * @param <T> entité du tableView
+     * @return instance de spinnerTableCell
      */
-
-    public static <T> Callback<TableColumn<T, Integer>, TableCell<T, Integer>> forTableColumn(int min, int max, int step) {
+    public static <T> Callback<TableColumn<T, Integer>, TableCell<T, Integer>> forTableColumn(final int min, final int max, final int step) {
         return (TableColumn<T, Integer> tableColumn) -> new SpinnerTableCell<T>(min, max, step);
     }
 
+
+    /**
+     * Rééecriture de la mise à jour d'élément de tableCell pour la rendre compatible avec le spinner
+     * @param item élément mis à jour par la méthode
+     * @param empty flag de modification
+     */
     @Override
     public void updateItem(Integer item, boolean empty) {
         super.updateItem(item, empty);
@@ -49,7 +59,10 @@ public class SpinnerTableCell<T> extends TableCell<T, Integer> {
         }
          */
     }
-
+    /**
+     * Rendre compatible le comitEdit avec le spinner
+     * @param item élément mis à jour par la méthode
+     */
     @Override
     public void commitEdit(Integer item) {
         // This block is necessary to support commit on losing focus, because

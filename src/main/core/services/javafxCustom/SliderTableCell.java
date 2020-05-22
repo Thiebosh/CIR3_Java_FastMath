@@ -32,6 +32,10 @@ public class SliderTableCell<T> extends TableCell<T, Integer> {
     }
     /**
      * Fabrique statique (accès au constructeur privé)
+     * @param min limite min
+     * @param max limite max
+     * @param <T> Entité du tableView
+     * @return instance de sliderTableCell
      */
     public static <T> Callback<TableColumn<T, Integer>, TableCell<T, Integer>> forTableColumn(final int min, final int max) {
         return (TableColumn<T, Integer> tableColumn) -> new SliderTableCell<T>(min, max);
