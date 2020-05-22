@@ -12,7 +12,6 @@ public class ColorTableCell<T> extends TableCell<T, Color> {
      * Gestionnaire de couleur intégré à la cellule
      */
     private final ColorPicker colorPicker = new ColorPicker();
-
     /**
      * Constructeur de l'instance :
      * lie le colorPicker à l'entité générique pour répercuter les modifications
@@ -33,6 +32,7 @@ public class ColorTableCell<T> extends TableCell<T, Color> {
 
         setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
     }
+
 
     /**
      * Rééecriture de la mise à jour d'élément de tableCell pour la rendre compatible avec le colorPicker

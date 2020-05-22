@@ -1,4 +1,4 @@
-package core.app.view.scene_part;
+package core.app.view.scene.compute_part;
 
 import core.app.data.ExpressManager;
 import core.app.view.scene_components.FunctionComboBoxController;
@@ -12,7 +12,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
 /**
- * Contrôleur de l'élément de fenêtre equation.fxml
+ * Contrôleur de l'onglet d'équation de compute.fxml
  */
 public class EquationController {
     /**
@@ -21,19 +21,18 @@ public class EquationController {
      */
     @FXML
     private FunctionComboBoxController functionComboEquation1Controller;
-
     /**
      * Element du fxml : comboBox listant les fonctions - subController
      * @see FunctionComboBoxController
      */
     @FXML
     private FunctionComboBoxController functionComboEquation2Controller;
-
     /**
      * Element du fxml : texte affichant le résultat
      */
     @FXML
     private Label resultEquation;
+
 
     /**
      * onAction du fxml : résoud l'équation et affiche le résultat

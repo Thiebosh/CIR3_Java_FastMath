@@ -1,4 +1,4 @@
-package core.app.view.scene_part;
+package core.app.view.scene.compute_part;
 
 import core.app.data.ExpressManager;
 import core.app.view.scene_components.FunctionComboBoxController;
@@ -10,34 +10,47 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Contrôleur de l'onglet d'intégration dans compute.fxml
+ */
 public class IntegralController implements Initializable {
+    /**
+     * Chargement initial (après le constructeur) du fxml lié au contrôleur  : prépration des éléments du fxml
+     * @param location paramètre par défaut
+     * @param resources paramètre par défaut
+     */
+    @Override
+    public void initialize(final URL location, final ResourceBundle resources) {
+        method.setItems(FXCollections.observableArrayList("Trapèzes", "Simpson", "Romberg"));
+    }
+
+
     /**
      * Element du fxml : comboBox listant les fonctions - subController
      * @see FunctionComboBoxController
      */
     @FXML
     private FunctionComboBoxController functionComboTransformController;
-
     /**
-     * Element du fxml : textfield contenant la valeur d'évaluation
+     * Element du fxml : textfield contenant les valeurs d'évaluation
      */
     @FXML
     private TextField intervalA, intervalB;
-
+    /**
+     * Element du fxml : ChoiceBox listant les méthodes d'intégration
+     */
     @FXML
     private ChoiceBox<String> method;
-
+    /**
+     * Element du fxml : label ou afficher le résultat
+     */
     @FXML
     private Label resultFunction;
 
-    @Override
-    public void initialize(final URL location, final ResourceBundle resources) {
-        method.setItems(FXCollections.observableArrayList("Trapèzes", "Simpson", "Romberg"));
-    }
+
     /**
      * onAction du fxml : effectue la transformation et affiche le résultat
      */

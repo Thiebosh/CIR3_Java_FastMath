@@ -88,7 +88,7 @@ public class MultidimensionalIntegral {
 
         final Vector point = new Vector(points.size(), true);
         for (int i = 0; i < points.size(); i++) {
-            final Integer ni = new Integer(0);
+            final Integer ni = 0;
             indexes.add(ni);
         }
 
@@ -122,9 +122,9 @@ public class MultidimensionalIntegral {
     private Integer modNumber(final Integer number, final int module) {
 
         if (number.intValue() == (module - 1)) {
-            return new Integer(0);
+            return 0;
         } else {
-            return new Integer(number.intValue() + 1);
+            return number.intValue() + 1;
         }
     }
 
@@ -141,7 +141,7 @@ public class MultidimensionalIntegral {
         final double h = space / numPoints;
         double step = interval.getA();
         for (int i = 0; i < numPoints; i++) {
-            final Double d = new Double(step);
+            final Double d = step;
             step += h;
             result.add(d);
         }

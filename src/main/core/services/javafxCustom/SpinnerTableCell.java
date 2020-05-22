@@ -1,37 +1,37 @@
 package core.services.javafxCustom;
 
-//import com.sun.javafx.binding.BidirectionalBinding;
 import javafx.application.Platform;
-import javafx.beans.property.*;
-import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.scene.control.*;
 import javafx.util.Callback;
 
-
+/**
+ * TableCell personnalisé par l'intégration d'un spinner
+ * @param <T> Type générique hérité de TableCell : instance d'entité
+ */
 public class SpinnerTableCell<T> extends TableCell<T, Integer> {
     /**
      * Spinner intégré à la cellule
      */
     private final Spinner<Integer> spinner = new Spinner();
-
-
+    /**
+     * Constructeur de l'instance : définit les paramètres du slider
+     * @param min limite min
+     * @param max limite max
+     * @param step écart entre deux valeurs
+     */
     private SpinnerTableCell(int min, int max, int step) {
         spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, 0, step));
         spinner.setEditable(true);
 
         spinner.valueProperty().addListener((obs, oldValue, newValue) -> {
-            if (newValue != oldValue) {
-                Platform.runLater(() -> {
-                    commitEdit(spinner.getValue());
-                });
-            }
+            if (newValue != oldValue) { Platform.runLater(() -> { commitEdit(spinner.getValue()); }); }
         });
     }
-
     /**
-     * Fabrique statique
+     * Fabrique statique (accès au constructeur privé)
      */
+
     public static <T> Callback<TableColumn<T, Integer>, TableCell<T, Integer>> forTableColumn(int min, int max, int step) {
         return (TableColumn<T, Integer> tableColumn) -> new SpinnerTableCell<T>(min, max, step);
     }

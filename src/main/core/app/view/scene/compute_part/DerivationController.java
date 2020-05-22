@@ -1,17 +1,19 @@
-package core.app.view.scene_part;
+package core.app.view.scene.compute_part;
 
 import core.app.data.ExpressManager;
 import core.app.view.scene_components.FunctionComboBoxController;
 import core.services.mathLibrary.derivative.DerivativeX;
 import core.services.mathLibrary.function.FunctionX;
 import core.services.mathLibrary.parser.Parser;
-import core.services.mathLibrary.parser.util.ParserResult;
 import core.services.mathLibrary.util.Round;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 
+/**
+ * Contrôleur de l'onglet de dérivation de compute.fxml
+ */
 public class DerivationController {
     /**
      * Element du fxml : comboBox listant les fonctions - subController
@@ -19,18 +21,22 @@ public class DerivationController {
      */
     @FXML
     private FunctionComboBoxController functionComboTransformController;
-
     /**
      * Element du fxml : textfield contenant la valeur d'évaluation
      */
     @FXML
     private TextField valueFunction;
-
+    /**
+     * Element du fxml : spinner contenant le nombre de dérivation à appliquer
+     */
     @FXML
     private Spinner<Integer> degreeSpinner;
-
+    /**
+     * Element du fxml : label ou afficher le résultat
+     */
     @FXML
     private Label resultFunction;
+
 
     /**
      * onAction du fxml : effectue la transformation et affiche le résultat

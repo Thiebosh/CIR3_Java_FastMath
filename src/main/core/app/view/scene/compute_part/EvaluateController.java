@@ -1,4 +1,4 @@
-package core.app.view.scene_part;
+package core.app.view.scene.compute_part;
 
 import core.app.data.ExpressManager;
 import core.app.view.scene_components.FunctionComboBoxController;
@@ -11,10 +11,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-import java.lang.reflect.InvocationTargetException;
-
 /**
- * Contrôleur de l'élément de fenêtre evaluate.fxml
+ * Contrôleur de l'onglet d'évaluation dans compute.fxml
  */
 public class EvaluateController {
     /**
@@ -23,18 +21,17 @@ public class EvaluateController {
      */
     @FXML
     private FunctionComboBoxController functionComboEvaluateController;
-
     /**
      * Element du fxml : textfield contenant la valeur d'évaluation
      */
     @FXML
     private TextField valueFunction;
-
     /**
      * Element du fxml : texte affichant le résultat
      */
     @FXML
     private Label resultFunction;
+
 
     /**
      * onAction du fxml : évalue la fonction et affiche le résultat

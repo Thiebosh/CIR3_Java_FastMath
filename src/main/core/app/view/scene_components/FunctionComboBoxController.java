@@ -13,20 +13,12 @@ public class FunctionComboBoxController {
      * Liste des instances : garde un accès pour mettre à jour chque instance
      */
     private static ArrayList<FunctionComboBoxController> instanceList = new ArrayList<>();
-
-    /**
-     * Element du fxml : choix de la fonction ou écriture libre
-     */
-    @FXML
-    private ComboBox comboBox;
-
     /**
      * Constructeur de la classe : ajoute l'instance à la liste
      */
     public FunctionComboBoxController() {
         instanceList.add(this);
     }
-
     /**
      * Met à jour pour chaque instance la liste des fonctions dans la comboBox
      */
@@ -39,6 +31,12 @@ public class FunctionComboBoxController {
         }
     }
 
+
+    /**
+     * Element du fxml : choix de la fonction ou écriture libre
+     */
+    @FXML
+    private ComboBox comboBox;
     /**
      * Getter sécurisé du texte inscrit dans la comboBox
      * @return
@@ -46,7 +44,6 @@ public class FunctionComboBoxController {
     public String getValue() {
         return (comboBox.getValue() instanceof String) ? comboBox.getValue().toString() : "0";
     }
-
     /**
      * Getter sécurisé de la fonction sélectionnée ou écrite dans la comboBox
      * @return

@@ -34,7 +34,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,147 +47,11 @@ public class GraphicController implements Initializable {
      * Instance courante pour garder un accès
      */
     private static GraphicController instance;
-
-    /**
-     * Element du fxml : affiche les courbes
-     */
-    @FXML
-    private LineChart graphDisplay;
-
-    /**
-     * axe x : valeur minimale
-     */
-    private static Double xAxisLowerBound = -20.0;
-    /**
-     * axe x : valeur maximale
-     */
-    private static Double xAxisUpperBound = 20.0;
-    /**
-     * Nombre de points maximum par courbe
-     */
-    private static int samplingMax;
-    /**
-     * axe y : valeur minimale
-     */
-    private static Double yAxisLowerBound = -20.0;
-    /**
-     * axe y : valeur maximale
-     */
-    private static Double yAxisUpperBound = 20.0;
-
-    /**
-     * axe x : valeur de graduation
-     */
-    private static Double xAxisTickUnit = 5.0;
-    /**
-     * axe y : valeur de graduation
-     */
-    private static Double yAxisTickUnit = 5.0;
-
-    /**
-     * verrou thread-safe : synchronisation sur cet element uniquement
-     */
-    private Object lock = new Object();
-
-    /**
-     * Element du fxml : liste les expressions enregistrées
-     */
-    @FXML
-    private ChoiceBox functionChoiceBox;
-    /**
-     * Elément d'affichage pour le functionChoiceBox
-     */
-    private static final String SEPARATOR = " : ";
-
-    /**
-     * Element du fxml : affiche les expressions utilisées pour le graphe
-     * @see Express
-     */
-    @FXML
-    private TableView<Express> functionTableViewGraphic;
-    /**
-     * Element du fxml (colonne de functionTableViewGraphic) : affiche le nom, le séparateur et l'expression
-     */
-    @FXML
-    private TableColumn<Express, String> expressCol;
-
-    @FXML
-    private TableColumn<Express, Integer> derivateCol;
-    /**
-     * Element du fxml (colonne de functionTableViewGraphic) : affiche l'état (actif ou non) sous forme de checkbox
-     */
-    @FXML
-    private TableColumn<Express, Boolean> stateCol;
-    /**
-     * Element du fxml (colonne de functionTableViewGraphic) : affiche le sampling (nb de points) sous forme d'un slider
-     */
-    @FXML
-    private TableColumn<Express, Integer> samplingCol;
-    /**
-     * Element du fxml (colonne de functionTableViewGraphic) : affiche la couleur sous forme d'un colorPicker
-     */
-    @FXML
-    private TableColumn<Express, Color> colorCol;
-
-    /**
-     * Element du fxml (bouton toggle) : affiche le mode (degrés ou radians)
-     */
-    @FXML
-    private HBox toggleSwitchLocation;
-    private ToggleSwitch toggleSwitch = new ToggleSwitch();
-
     /**
      * Constructeur de l'instance : enregistre un accès à l'instance courante
      */
     public GraphicController() { GraphicController.instance = this; }
 
-    /**
-     * Setter statique de la valeur minimale de l'axe x
-     * @param xAxisLowerBound valeur à appliquer
-     */
-    public static void setXAxisLowerBound(final double xAxisLowerBound) {
-        GraphicController.xAxisLowerBound = xAxisLowerBound;
-    }
-
-    /**
-     * Setter statique de la valeur maximale de l'axe x
-     * @param xAxisUpperBound valeur à appliquer
-     */
-    public static void setXAxisUpperBound(final double xAxisUpperBound) {
-        GraphicController.xAxisUpperBound = xAxisUpperBound;
-    }
-
-    /**
-     * Setter statique de la valeur minimale de l'axe y
-     * @param yAxisLowerBound valeur à appliquer
-     */
-    public static void setYAxisLowerBound(final double yAxisLowerBound) {
-        GraphicController.yAxisLowerBound = yAxisLowerBound;
-    }
-
-    /**
-     * Setter statique de la valeur maximale de l'axe y
-     * @param yAxisUpperBound valeur à appliquer
-     */
-    public static void setYAxisUpperBound(final double yAxisUpperBound) {
-        GraphicController.yAxisUpperBound = yAxisUpperBound;
-    }
-
-    /**
-     * Setter statique de la graduation de l'axe x
-     * @param xAxisTickUnit valeur à appliquer
-     */
-    public static void setXAxisTickUnit(final double xAxisTickUnit) {
-        GraphicController.xAxisTickUnit = xAxisTickUnit;
-    }
-
-    /**
-     * Setter statique de la graduation de l'axe y
-     * @param yAxisTickUnit valeur à appliquer
-     */
-    public static void setYAxisTickUnit(final double yAxisTickUnit) {
-        GraphicController.yAxisTickUnit = yAxisTickUnit;
-    }
 
     /**
      * Chargement initial (après le constructeur) du fxml lié au contrôleur  : prépration des éléments du fxml
@@ -225,7 +88,6 @@ public class GraphicController implements Initializable {
 
         initializeGraphTableView();
     }
-
     /**
      * Lie les instance de Express aux colonnes de TableViews + injection de données
      * @see Express
@@ -293,50 +155,82 @@ public class GraphicController implements Initializable {
         refreshTableViewGraphic();
     }
 
+
     /**
-     * onAction du fxml : ajoute fonction sélectionnée au TableView et l'affiche dans le graphe
+     * Element du fxml : affiche les courbes
      */
     @FXML
-    private void addFunctionToTable() {
-        String express = (String) functionChoiceBox.getValue();
-        ExpressManager.addToGraphList(express.substring(0, express.indexOf(SEPARATOR)));//creation
-        refreshTableViewGraphic();//visibilité
-        updateGraphDisplay();
-    }
-
+    private LineChart graphDisplay;
     /**
-     * Applique la liste de fonctions au TableView + mise en place derniers liens instance - colonne
-     * @see Express
+     * axe x : valeur minimale
      */
-    private void refreshTableViewGraphic() {
-        samplingCol.setCellFactory(SliderTableCell.forTableColumn(2, samplingMax));
-        //cas 3 : update globale avec 1 seul appel mais pas initialisation (alourdit ajout)
-        //create link to the instance (1 time)
-        ObservableList<Express> list = FXCollections.observableArrayList(param -> new Observable[] {param.samplingProperty()});
-
-        //create listener triggered by checkbox update (x times)
-        list.addListener((ListChangeListener<Express>) expression -> {
-            while (expression.next()) {
-                if (expression.wasUpdated()) {
-                    Express current = ExpressManager.getExpressGraphList().get(expression.getFrom());
-                    if (current.getSampling() % 2 != 0) current.setSampling(current.getSampling()-1);
-
-                    if (current.getSampling() != current.getSamplingBefore()) {
-                        current.setSamplingBefore(current.getSampling());//limiter les rafraichissements
-                        updateGraphDisplay();//consequence
-                    }
-                }
-            }
-        });
-
-        //fill list
-        list.addAll(ExpressManager.getExpressGraphList());
-
-        SliderTableCell.setMaxValue(samplingMax);
-        functionTableViewGraphic.setItems(list);
-        functionTableViewGraphic.refresh();
+    private static Double xAxisLowerBound = -20.0;
+    /**
+     * Setter statique de la valeur minimale de l'axe x
+     * @param xAxisLowerBound valeur à appliquer
+     */
+    public static void setXAxisLowerBound(final double xAxisLowerBound) {
+        GraphicController.xAxisLowerBound = xAxisLowerBound;
     }
-
+    /**
+     * axe x : valeur maximale
+     */
+    private static Double xAxisUpperBound = 20.0;
+    /**
+     * Setter statique de la valeur maximale de l'axe x
+     * @param xAxisUpperBound valeur à appliquer
+     */
+    public static void setXAxisUpperBound(final double xAxisUpperBound) {
+        GraphicController.xAxisUpperBound = xAxisUpperBound;
+    }
+    /**
+     * axe y : valeur minimale
+     */
+    private static Double yAxisLowerBound = -20.0;
+    /**
+     * Setter statique de la valeur minimale de l'axe y
+     * @param yAxisLowerBound valeur à appliquer
+     */
+    public static void setYAxisLowerBound(final double yAxisLowerBound) {
+        GraphicController.yAxisLowerBound = yAxisLowerBound;
+    }
+    /**
+     * axe y : valeur maximale
+     */
+    private static Double yAxisUpperBound = 20.0;
+    /**
+     * Setter statique de la valeur maximale de l'axe y
+     * @param yAxisUpperBound valeur à appliquer
+     */
+    public static void setYAxisUpperBound(final double yAxisUpperBound) {
+        GraphicController.yAxisUpperBound = yAxisUpperBound;
+    }
+    /**
+     * axe x : valeur de graduation
+     */
+    private static Double xAxisTickUnit = 5.0;
+    /**
+     * Setter statique de la graduation de l'axe x
+     * @param xAxisTickUnit valeur à appliquer
+     */
+    public static void setXAxisTickUnit(final double xAxisTickUnit) {
+        GraphicController.xAxisTickUnit = xAxisTickUnit;
+    }
+    /**
+     * axe y : valeur de graduation
+     */
+    private static Double yAxisTickUnit = 5.0;
+    /**
+     * Setter statique de la graduation de l'axe y
+     * @param yAxisTickUnit valeur à appliquer
+     */
+    public static void setYAxisTickUnit(final double yAxisTickUnit) {
+        GraphicController.yAxisTickUnit = yAxisTickUnit;
+    }
+    /**
+     * Nombre de points maximum par courbe
+     */
+    private static int samplingMax;
     /**
      * Génération parallèle des points des fonctions à afficher puis application de la couleur associée
      */
@@ -426,6 +320,109 @@ public class GraphicController implements Initializable {
         }
     }
 
+
+    /**
+     * Element du fxml (bouton toggle) : affiche le mode (degrés ou radians)
+     */
+    @FXML
+    private HBox toggleSwitchLocation;
+    /**
+     * Element personnalisé ajouté au fxml dans toggleSwitchLocation
+     * @see ToggleSwitch
+     */
+    private ToggleSwitch toggleSwitch = new ToggleSwitch();
+
+
+    /**
+     * Element du fxml : liste les expressions enregistrées
+     */
+    @FXML
+    private ChoiceBox functionChoiceBox;
+    /**
+     * onAction du fxml : ajoute fonction sélectionnée au TableView et l'affiche dans le graphe
+     */
+    @FXML
+    private void addFunctionToTable() {
+        String express = (String) functionChoiceBox.getValue();
+        ExpressManager.addToGraphList(express.substring(0, express.indexOf(SEPARATOR)));//creation
+        refreshTableViewGraphic();//visibilité
+        updateGraphDisplay();
+    }
+
+
+    /**
+     * Element du fxml : affiche les expressions utilisées pour le graphe
+     * @see Express
+     */
+    @FXML
+    private TableView<Express> functionTableViewGraphic;
+    /**
+     * Element du fxml (colonne de functionTableViewGraphic) : affiche le nom, le séparateur et l'expression
+     */
+    @FXML
+    private TableColumn<Express, String> expressCol;
+    /**
+     * Elément d'affichage pour le functionChoiceBox
+     */
+    private static final String SEPARATOR = " : ";
+    /**
+     * Element du fxml (colonne de functionTableViewGraphic) : affiche le degré de dérivée (-1 : primitive)
+     */
+    @FXML
+    private TableColumn<Express, Integer> derivateCol;
+    /**
+     * Element du fxml (colonne de functionTableViewGraphic) : affiche l'état (actif ou non) sous forme de checkbox
+     */
+    @FXML
+    private TableColumn<Express, Boolean> stateCol;
+    /**
+     * Element du fxml (colonne de functionTableViewGraphic) : affiche le sampling (nb de points) sous forme d'un slider
+     */
+    @FXML
+    private TableColumn<Express, Integer> samplingCol;
+    /**
+     * Element du fxml (colonne de functionTableViewGraphic) : affiche la couleur sous forme d'un colorPicker
+     */
+    @FXML
+    private TableColumn<Express, Color> colorCol;
+    /**
+     * verrou thread-safe : synchronisation sur cet element uniquement
+     */
+    private Object lock = new Object();
+    /**
+     * Applique la liste de fonctions au TableView + mise en place derniers liens instance - colonne
+     * @see Express
+     */
+    private void refreshTableViewGraphic() {
+        samplingCol.setCellFactory(SliderTableCell.forTableColumn(2, samplingMax));
+        //cas 3 : update globale avec 1 seul appel mais pas initialisation (alourdit ajout)
+        //create link to the instance (1 time)
+        ObservableList<Express> list = FXCollections.observableArrayList(param -> new Observable[] {param.samplingProperty()});
+
+        //create listener triggered by checkbox update (x times)
+        list.addListener((ListChangeListener<Express>) expression -> {
+            while (expression.next()) {
+                if (expression.wasUpdated()) {
+                    Express current = ExpressManager.getExpressGraphList().get(expression.getFrom());
+                    if (current.getSampling() % 2 != 0) current.setSampling(current.getSampling()-1);
+
+                    if (current.getSampling() != current.getSamplingBefore()) {
+                        current.setSamplingBefore(current.getSampling());//limiter les rafraichissements
+                        updateGraphDisplay();//consequence
+                    }
+                }
+            }
+        });
+
+        //fill list
+        list.addAll(ExpressManager.getExpressGraphList());
+
+        SliderTableCell.setMaxValue(samplingMax);
+        functionTableViewGraphic.setItems(list);
+        functionTableViewGraphic.refresh();
+    }
+
+
     /**
      * onAction du fxml : ouvre une fenêtre contextuelle pour modifier les valeurs des axes du graphe
      */
@@ -441,7 +438,6 @@ public class GraphicController implements Initializable {
         }};
         StageService.Holder.openContextWindows("Propriétés","graphicContext", Modality.APPLICATION_MODAL, new GraphicContextController(), arguments);//pas d'accès aux autres fenêtres
     }
-
     /**
      * Modifie les valeurs des axes et actualise l'afichage du graphe
      */
@@ -459,7 +455,6 @@ public class GraphicController implements Initializable {
         instance.refreshTableViewGraphic();//update sliders
         instance.updateGraphDisplay();//recalculate all function points
     }
-
     /**
      * Calcule le nombre de points max selon les valeurs extrêmes de l'axe x
      */

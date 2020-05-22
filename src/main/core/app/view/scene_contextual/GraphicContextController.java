@@ -3,11 +3,9 @@ package core.app.view.scene_contextual;
 import core.services.windowHolder.ContextControllerFactory;
 import core.app.view.scene.GraphicController;
 import javafx.fxml.FXML;
-
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
-
 import java.util.HashMap;
 
 /**
@@ -35,6 +33,7 @@ public class GraphicContextController extends ContextControllerFactory {
     @FXML
     private TextField textfieldYMax;
 
+
     /**
      * Element du fxml : spinner de la graduation de l'axe x
      */
@@ -45,7 +44,6 @@ public class GraphicContextController extends ContextControllerFactory {
      */
     @FXML
     private Spinner<Double> spinnerScaleY;
-
     /**
      * Valeur min des graduations
      */
@@ -58,6 +56,7 @@ public class GraphicContextController extends ContextControllerFactory {
      * Pas des graduations
      */
     private final static Double SCALE_STEP = 0.5;
+
 
     /**
      * Remplissage des éléments fxml avec les valeurs initiales, passées en paramètre
@@ -80,6 +79,7 @@ public class GraphicContextController extends ContextControllerFactory {
             e.printStackTrace();
         }
     }
+
 
     /**
      * onAction du fxml : fermeture de la fenêtre contextuelle et répercussion des valeurs

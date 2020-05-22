@@ -8,13 +8,16 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import java.util.HashMap;
 
-
+/**
+ * Fenêtre contextuelle listant les token réservés par le parser mathématique
+ */
 public class ComputeContextController extends ContextControllerFactory {
     /**
      * Liste contenant les token utilisés par la bibliothèque mathématique
      */
     private static final ObservableList<String> WRITING_CONVENTION = FXCollections.observableArrayList(
             "Symboles : + - * /",
+            "Imaginaire : i",
             "Pi : "+FunctionX.getPI(),
             "",
             "Puissance : ^()",

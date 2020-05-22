@@ -18,13 +18,10 @@ public class SliderTableCell<T> extends TableCell<T, Integer> {
      * Slider intégré à la cellule
      */
     private final Slider slider = new Slider();
-
-    private static int max;
-
     /**
      * Constructeur de l'instance : définit les paramètres du slider
-     * @param min
-     * @param max
+     * @param min limite min
+     * @param max limite max
      */
     private SliderTableCell(final int min, final int max) {
         slider.setMin(min);
@@ -33,17 +30,26 @@ public class SliderTableCell<T> extends TableCell<T, Integer> {
         slider.setShowTickLabels(true);
         slider.setBlockIncrement(2);//avec flèches directionnelles
     }
-
     /**
-     * Fabrique statique
+     * Fabrique statique (accès au constructeur privé)
      */
     public static <T> Callback<TableColumn<T, Integer>, TableCell<T, Integer>> forTableColumn(final int min, final int max) {
         return (TableColumn<T, Integer> tableColumn) -> new SliderTableCell<T>(min, max);
     }
 
+
+    /**
+     * valeur max du slider
+     */
+    private static int max;
+    /**
+     * setter statique du slider
+     * @param max nouveau maximum
+     */
     public static void setMaxValue(final int max) {
         SliderTableCell.max = max;
     }
+
 
     /**
      * Rééecriture de la mise à jour d'élément de tableCell pour la rendre compatible avec le colorPicker

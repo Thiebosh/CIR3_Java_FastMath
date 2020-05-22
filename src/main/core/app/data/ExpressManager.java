@@ -1,9 +1,8 @@
 package core.app.data;
 
 import core.app.error.ErrorCode;
-import core.app.error.ErrorMessage;
+import core.services.mathLibrary.function.FunctionX;
 import core.services.windowHolder.StageService;
-
 import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -16,32 +15,15 @@ import java.util.stream.Collectors;
  */
 public class ExpressManager {
     /**
-     * La liste de l'ensemble des expressions chargées en mémoire
-     * @see Express
+     * Constructeur de la classe : crée le dossier de sauvegarde s'il n'existe pas
      */
-    private static HashMap<String, Express> allExpress = new HashMap<>();
-    /**
-     * La liste des noms des expressions affichées graphiquement
-     * @see core.app.view.scene.GraphicController
-     */
-    private static LinkedHashSet<String> graphExpress = new LinkedHashSet<>();
-
-    /**
-     * Le mode des expressions (degrés ou radians)
-     */
-    private static boolean isDegree = true;
-
     ExpressManager() {
         File directory = new File("./src/main/resources/");
-        if (! directory.exists()){
-            directory.mkdir();
-        }
+        if (! directory.exists()) directory.mkdir();
     }
-
-    public static void setDegree(final boolean b){ isDegree = b; }
-
-    public static boolean getDegree(){ return isDegree; }
-
+    /**
+     * Chargement en mémoire des expressions à partir du fichier de sauvegarde
+     */
     public static void load() {
         try {
             File file = new File("./src/main/resources/save.csv");
@@ -55,7 +37,9 @@ public class ExpressManager {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Enregistrement des expressions en mémoire dans un fichier de sauvegarde
+     */
     public static void save() {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter("./src/main/resources/save.csv"));
@@ -73,6 +57,47 @@ public class ExpressManager {
         }
     }
 
+
+    /**
+     * La liste de l'ensemble des expressions chargées en mémoire
+     * @see Express
+     */
+    private static HashMap<String, Express> allExpress = new HashMap<>();
+    /**
+     * La liste des noms des expressions affichées graphiquement
+     * @see core.app.view.scene.GraphicController
+     */
+    private static LinkedHashSet<String> graphExpress = new LinkedHashSet<>();
+
+
+    /**
+     * Le mode des expressions (degrés ou radians)
+     */
+    private static boolean isDegree = true;
+    /**
+     * Récupérer le mode actif (degré / radian)
+     * @return mode actif (true : degré, false : radian)
+     */
+    public static boolean getDegree(){ return isDegree; }
+    /**
+     * Modifier le mode actf (degré / radian)
+     * @param b mode à activer (true : degré, false : radian)
+     */
+    public static void setDegree(final boolean b) { isDegree = b; }
+
+
+    /**
+     * Getter de la liste des noms de toutes les expressions sous forme d'ArrayList itérable
+     * @return ArrayList contenant tous les noms d'expression
+     */
+    public static ArrayList<String> getExpressNames() { return new ArrayList<>(allExpress.keySet()); }
+    /**
+     * Getter de la liste de toutes les expression sous forme d'ArrayList itérable
+     * @return ArrayList contenant toutes les expression
+     */
+    public static ArrayList<Express> getExpressList() { return new ArrayList<>(allExpress.values()); }
+
+
     /**
      * Permet de savoir si le nom est associé à une expression
      * @param name nom à tester
@@ -81,43 +106,6 @@ public class ExpressManager {
     public static boolean containsExpress(final String name) {
         return allExpress.containsKey(name);
     }
-
-    public static String replaceExpressNameByFunctionRecursively(String function) {
-        int secu = 0;
-        while(function != refactorWithExpress(function)) {
-            function = refactorWithExpress(function);
-            if(secu++ >= 50) {
-                System.out.println("Créer exception : récursivité au sein d'une fonction");
-                function = "0";
-                break;
-            }
-        }
-        return function;
-    }
-
-    private static String refactorWithExpress(String name) {
-        Map<String, Express> treeMap = new TreeMap<>(
-                (string1, string2) -> {
-                    if (string1.length() > string2.length()) {
-                        return -1;
-                    } else if (string1.length() < string2.length()) {
-                        return 1;
-                    } else {
-                        return string1.compareTo(string2);
-                    }
-                });
-        treeMap.putAll(allExpress);
-        for(int i = 0; i < treeMap.size(); i++)
-        {
-            String key = String.valueOf(treeMap.keySet().toArray()[i]);
-            if(name.contains(key))
-            {
-                name = name.replace(key, treeMap.get(key).getFunction());
-            }
-        }
-        return name;
-    }
-
     /**
      * Getter d'une expression spécifique
      * @param name nom de l'expresson que l'on veut récupérer
@@ -126,23 +114,6 @@ public class ExpressManager {
     public static Express getExpress(final String name) {
         return allExpress.get(name);
     }
-
-    /**
-     * Getter de la liste de toutes les expression sous forme d'ArrayList itérable
-     * @return ArrayList contenant toutes les expression
-     */
-    public static ArrayList<Express> getExpressList() {
-        return new ArrayList<>(allExpress.values());
-    }
-
-    /**
-     * Getter de la liste des noms de toutes les expressions sous forme d'ArrayList itérable
-     * @return ArrayList contenant tous les noms d'expression
-     */
-    public static ArrayList<String> getExpressNames() {
-        return new ArrayList<>(allExpress.keySet());
-    }
-
     /**
      * Getter de la liste des expressions utilisées par le graphe sous forme d'ArrayList itérable
      * @return ArrayList contenant les expression utilisées par le graphe
@@ -151,7 +122,6 @@ public class ExpressManager {
     public static ArrayList<Express> getExpressGraphList() {
         return new ArrayList<>(graphExpress.stream().map(allExpress::get).filter(Objects::nonNull).collect(Collectors.toList()));
     }
-
     /**
      * Supprimer toutes les instances enregistrées : libère la mémoire
      */
@@ -159,6 +129,7 @@ public class ExpressManager {
         allExpress.clear();
         graphExpress.clear();
     }
+
 
     /**
      * Créer une nouvelle instance d'express et l'ajouter à la liste totale
@@ -174,7 +145,6 @@ public class ExpressManager {
 
         allExpress.put(name, new Express(name, function));
     }
-
     /**
      * Ajouter une expression à la liste du graphe en vérifiant qu'elle existe
      * @param name nom de l'expression à ajouter
@@ -188,15 +158,15 @@ public class ExpressManager {
         allExpress.get(name).setIsActive(true);//if added but disabled, enable
         graphExpress.add(name);//set so no verification needed
     }
-
+    /**
+     * Retire une expression de la mémoire
+     * @param name l'expression à supprimer
+     */
     public static void removeFromExpressList(final String name) {
         if (graphExpress.contains(name)) graphExpress.remove(name);
         if (allExpress.containsKey(name)) allExpress.remove(name);
     }
 
-    public static void removeFromGraphList(final String name) {
-        if (graphExpress.contains(name)) graphExpress.remove(name);
-    }
 
     /**
      * Modifier le nom d'une expression existante dans l'instance de l'expression et dans les listes de stockage
@@ -219,7 +189,28 @@ public class ExpressManager {
                 return;
             }
 
-            if (newName.equals("fonction") /* || sin || cos || ...*/) {//nom réservé pour ajout ligne
+            if (newName.equals("fonction") ||//nom réservé pour ajout ligne
+                    newName.equals("+") ||
+                    newName.equals("-") ||
+                    newName.equals("*") ||
+                    newName.equals("/") ||
+                    newName.equals("^") ||
+                    newName.equals("i") ||
+                    newName.equals(FunctionX.getPI()) ||
+                    newName.equals(FunctionX.getSQRT()) ||
+                    newName.equals(FunctionX.getCBRT()) ||
+                    newName.equals(FunctionX.getE()) ||
+                    newName.equals(FunctionX.getLN()) ||
+                    newName.equals(FunctionX.getLOG()) ||
+                    newName.equals(FunctionX.getCOS()) ||
+                    newName.equals(FunctionX.getSIN()) ||
+                    newName.equals(FunctionX.getTAN()) ||
+                    newName.equals(FunctionX.getACOS()) ||
+                    newName.equals(FunctionX.getASIN()) ||
+                    newName.equals(FunctionX.getATAN()) ||
+                    newName.equals(FunctionX.getCOSH()) ||
+                    newName.equals(FunctionX.getSINH()) ||
+                    newName.equals(FunctionX.getTANH())) {
                 StageService.Holder.openErrorWindows("messageOnly", ErrorCode.InvalidNameCauseSyntax);
                 return;
             }
@@ -250,5 +241,49 @@ public class ExpressManager {
                 graphExpress.add(newName);
             }
         }
+    }
+    /**
+     * Permet l'inclusion de noms d'expressions dans les fonctions : remplace les noms par leur fonction
+     * @param function fonction à "déplier" : réduire en token de base
+     * @return la fonction sous forme de token de base
+     */
+    public static String replaceExpressNameByFunctionRecursively(String function) {
+        int secu = 0;
+        while(function != refactorWithExpress(function)) {
+            function = refactorWithExpress(function);
+            if(secu++ >= 50) {
+                System.out.println("Créer exception : récursivité au sein d'une fonction");
+                function = "0";
+                break;
+            }
+        }
+        return function;
+    }
+    /**
+     * Moteur de replaceExpressNameByFunctionRecursively
+     * @param name fonction à traiter
+     * @return fonction sans nom d'expression
+     */
+    private static String refactorWithExpress(String name) {
+        Map<String, Express> treeMap = new TreeMap<>(
+                (string1, string2) -> {
+                    if (string1.length() > string2.length()) {
+                        return -1;
+                    } else if (string1.length() < string2.length()) {
+                        return 1;
+                    } else {
+                        return string1.compareTo(string2);
+                    }
+                });
+        treeMap.putAll(allExpress);
+        for(int i = 0; i < treeMap.size(); i++)
+        {
+            String key = String.valueOf(treeMap.keySet().toArray()[i]);
+            if(name.contains(key))
+            {
+                name = name.replace(key, treeMap.get(key).getFunction());
+            }
+        }
+        return name;
     }
 }
