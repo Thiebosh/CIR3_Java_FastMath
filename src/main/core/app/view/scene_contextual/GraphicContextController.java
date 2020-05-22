@@ -86,10 +86,20 @@ public class GraphicContextController extends ContextControllerFactory {
      */
     @FXML
     private void validateButton() {
-        double xMin = Double.parseDouble(textfieldXMin.getCharacters().toString()),
-                xMax = Double.parseDouble(textfieldXMax.getCharacters().toString()),
-                yMin = Double.parseDouble(textfieldYMin.getCharacters().toString()),
-                yMax = Double.parseDouble(textfieldYMax.getCharacters().toString());
+        double xMin=0, xMax=0, yMin=0, yMax=0, scaleX=0, scaleY=0;
+        try {
+            xMin = Double.parseDouble(textfieldXMin.getCharacters().toString().replace(',','.'));
+            xMax = Double.parseDouble(textfieldXMax.getCharacters().toString().replace(',','.'));
+            yMin = Double.parseDouble(textfieldYMin.getCharacters().toString().replace(',','.'));
+            yMax = Double.parseDouble(textfieldYMax.getCharacters().toString().replace(',','.'));
+
+            scaleX = Double.parseDouble(spinnerScaleX.getEditor().getText().replace(',','.'));
+            scaleY = Double.parseDouble(spinnerScaleY.getEditor().getText().replace(',','.'));
+        }
+        catch(NumberFormatException e) {
+            e.printStackTrace();
+        }
+
 
         if (xMin < xMax) {
             GraphicController.setXAxisLowerBound(xMin);
@@ -100,8 +110,8 @@ public class GraphicContextController extends ContextControllerFactory {
             GraphicController.setYAxisUpperBound(yMax);
         }
 
-        GraphicController.setXAxisTickUnit(Double.parseDouble(spinnerScaleX.getEditor().getText().replace(',','.')));
-        GraphicController.setYAxisTickUnit(Double.parseDouble(spinnerScaleY.getEditor().getText().replace(',','.')));
+        if (scaleX > 0) GraphicController.setXAxisTickUnit(scaleX);
+        if (scaleY > 0) GraphicController.setYAxisTickUnit(scaleY);
 
         GraphicController.updateGraphAxis();
 

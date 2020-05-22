@@ -100,7 +100,7 @@ public class StageService {//NOPMD
         private static Stage contextStage = new Stage();
 
         public static <T extends ContextControllerFactory> void openContextWindows(final String title, final String pageName, Modality config, T controller, final HashMap<String, ?> args) {
-            if (!contextStage.isShowing()) contextStage.toFront();
+            if (contextStage.isShowing()) contextStage.toFront();
             else {
                 final FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(StageService.class.getResource(CONTEXTUAL_FOLDER_PATH + pageName + ".fxml"));

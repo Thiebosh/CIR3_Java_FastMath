@@ -29,10 +29,16 @@ public class ExpressManager {
      */
     private static boolean isDegree = true;
 
+    ExpressManager() {
+        File directory = new File("./src/main/resources/");
+        if (! directory.exists()){
+            directory.mkdir();
+        }
+    }
+
     public static void setDegree(final boolean b){ isDegree = b; }
 
     public static boolean getDegree(){ return isDegree; }
-
 
     public static void load() {
         try {
