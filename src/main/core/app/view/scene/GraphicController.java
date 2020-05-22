@@ -5,6 +5,7 @@ import core.app.data.ExpressManager;
 import core.app.view.scene_components.ToggleSwitch;
 import core.services.javafxCustom.SpinnerTableCell;
 import core.services.mathLibrary.derivative.DerivativeX;
+import core.services.mathLibrary.integral.Integral;
 import core.services.mathLibrary.parser.Parser;
 import core.services.mathLibrary.parser.util.Point;
 import core.services.mathLibrary.util.Round;
@@ -273,7 +274,7 @@ public class GraphicController implements Initializable {
             }));
             */
 
-            derivateCol.setCellFactory(SpinnerTableCell.forTableColumn(0,4,1));
+            derivateCol.setCellFactory(SpinnerTableCell.forTableColumn(-1,4,1));
             derivateCol.setOnEditCommit((TableColumn.CellEditEvent<Express, Integer> event) -> {
                 TablePosition<Express, Integer> pos = event.getTablePosition();
                 Express express = event.getTableView().getItems().get(pos.getRow());
@@ -346,6 +347,7 @@ public class GraphicController implements Initializable {
 
         for (Express element : ExpressManager.getExpressGraphList()) {
             if (element.isActive()) {//pas de création de thread juste pour vérif
+                System.out.println(element.getDegree());
                 new Thread(() -> {
                     double xMin = 0, xMax = 0;
                     synchronized (lock) {//un seul accès aux éléments externe du thread
@@ -375,6 +377,13 @@ public class GraphicController implements Initializable {
                                     break;
                                 case 4:
                                     result = Round.rint(deriv.getDerivativeOrderFour_xo_accurate(i), 8);
+                                    break;
+                                case -1:
+                                    Integral integral = new Integral(function);
+                                    if(i>0)
+                                        result = Round.rint(integral.simpson(0, i), 8);
+                                    else
+                                        result = -Round.rint(integral.simpson(i, 0), 8);
                                     break;
                                 default://0
                                     result = Parser.eval(function, new Point("x", i)).getValue();

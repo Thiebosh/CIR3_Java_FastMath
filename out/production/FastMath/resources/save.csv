@@ -1,5 +1,5 @@
-cosinus;cos(x)
-fonction;7
+cosinus;-cos(x)
 sinus;sin(x)
+test;2*x
+test2;x^2
 testo;3*x^2
-testy;0

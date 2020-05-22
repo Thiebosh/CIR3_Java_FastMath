@@ -1,6 +1,6 @@
 package core.services.javafxCustom;
 
-import com.sun.javafx.binding.BidirectionalBinding;
+//import com.sun.javafx.binding.BidirectionalBinding;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
@@ -17,7 +17,7 @@ public class SpinnerTableCell<T> extends TableCell<T, Integer> {
 
 
     private SpinnerTableCell(int min, int max, int step) {
-        spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, min, step));
+        spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, 0, step));
         spinner.setEditable(true);
 
         spinner.valueProperty().addListener((obs, oldValue, newValue) -> {
@@ -56,7 +56,7 @@ public class SpinnerTableCell<T> extends TableCell<T, Integer> {
         // the baked-in mechanism sets our editing state to false before we can
         // intercept the loss of focus. The default commitEdit(...) method
         // simply bails if we are not editing...
-        if (!isEditing() && !item.equals(getItem())) {
+        if (!isEditing()){// && !item.equals(getItem())) {
             TableView<T> table = getTableView();
             if (table != null) {
                 TableColumn<T, Integer> column = getTableColumn();
