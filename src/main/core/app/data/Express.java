@@ -1,5 +1,7 @@
 package core.app.data;
 
+import core.app.error.ErrorCode;
+import core.services.windowHolder.StageService;
 import javafx.beans.property.*;
 import javafx.scene.paint.Color;
 
@@ -59,8 +61,7 @@ public class Express {
      * @param name nouveau nom
      */
     public void setName(final String name) {
-        if (name.length() != 0) this.name.set(name);
-        else System.out.println("afficher une erreur nom de fonction vide");
+        this.name.set(name);
     }
 
     /**
@@ -69,7 +70,7 @@ public class Express {
      */
     public void setFunction(final String function) {
         if (function.length() != 0) this.function.set(function);
-        else System.out.println("afficher une erreur expression de fonction vide");
+        else StageService.Holder.openErrorWindows("messageOnly", ErrorCode.UnhautorizedDeletion);
     }
 
     /**
@@ -106,10 +107,6 @@ public class Express {
 
     public int getDegree() {
         return degree.get();
-    }
-
-    public IntegerProperty degreeProperty() {
-        return degree;
     }
 
     public void setDegree(int degree) {

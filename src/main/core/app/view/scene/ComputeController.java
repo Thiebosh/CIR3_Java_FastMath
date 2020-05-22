@@ -92,6 +92,7 @@ public class ComputeController implements Initializable {
     private void refreshTableView() {
         ObservableList<Express> list = FXCollections.observableArrayList(ExpressManager.getExpressList());
         functionTableView.setItems(list);
+        functionTableView.refresh();
 
         FunctionComboBoxController.updateList();
     }

@@ -1,5 +1,7 @@
 package core.services.windowHolder;
 
+import core.app.error.ErrorCode;
+import core.app.error.ErrorMessage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -129,12 +131,12 @@ public class StageService {//NOPMD
 
         private static Stage errorStage = new Stage();
 
-        public static <T extends ContextControllerFactory> void openErrorWindows(final String pageName, final String errorMessage) {
+        public static <T extends ContextControllerFactory> void openErrorWindows(final String pageName, final ErrorCode error) {
             final FXMLLoader loader = new FXMLLoader();
             loader.setLocation(StageService.class.getResource(ERROR_FOLDER_PATH + pageName + ".fxml"));
 
             final HashMap<String, String> args = new HashMap<>();
-            args.put("error",errorMessage);
+            args.put("error", ErrorMessage.getMessage(error));
 
             try {
                 errorStage = new Stage();

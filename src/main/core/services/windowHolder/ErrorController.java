@@ -2,20 +2,19 @@ package core.services.windowHolder;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
+import javafx.scene.layout.AnchorPane;
 
 import java.util.HashMap;
 
 public class ErrorController extends ContextControllerFactory {
     @FXML
-    private Label message;
-
-    private Stage stage;
+    private AnchorPane messageLocation;
 
     @Override
     public void setInitialValues(HashMap args) {
-        message.setText((String) args.get("error"));
-        stage = (Stage) args.get("scene");
+        Label message = new Label();
+        message.setText("\t"+args.get("error")+"\t");
+        messageLocation.getChildren().add(message);
     }
 
     @FXML

@@ -28,8 +28,6 @@ public class FastMath extends Application {//NO PMD
         ExpressManager.load();
         StageService.Holder.getInstance().setMainStage(primaryStage, "FastMath", new Image("file:src/main/resources/images/icon.png"));
         StageService.Holder.loadMainWindowsScene("home");
-
-        StageService.Holder.openErrorWindows("messageOnly", "test de message d'erreur");
     }
 
     /**

@@ -1,5 +1,9 @@
 package core.app.data;
 
+import core.app.error.ErrorCode;
+import core.app.error.ErrorMessage;
+import core.services.windowHolder.StageService;
+
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -156,7 +160,7 @@ public class ExpressManager {
      */
     public static void addToExpressList(final String name, final String function) {
         if (allExpress.containsKey(name)) {
-            System.out.println("créer une exception \"already used name\" et faire pop une fenêtre d'erreur?");
+            StageService.Holder.openErrorWindows("messageOnly", ErrorCode.AlreadyUsedName);
             return;
         }
 
@@ -169,7 +173,7 @@ public class ExpressManager {
      */
     public static void addToGraphList(final String name) {
         if (!allExpress.containsKey(name)) {
-            System.out.println("créer une exception \"unknown function name\" et faire pop une fenêtre d'erreur?");
+            StageService.Holder.openErrorWindows("messageOnly", ErrorCode.UnknowName);
             return;
         }
 
@@ -194,29 +198,38 @@ public class ExpressManager {
     public static void renameExpress(final String oldName, final String newName) {
         if (newName.equals(oldName)) return;//no modification
 
-        if (newName.equals("fonction") /* || sin || cos || ...*/) {//nom réservé pour ajout ligne
-            System.out.println("créer une exception \"reserved name\" et faire pop une fenêtre d'erreur?");
-            return;
-        }
+        try {
+            Double.parseDouble(newName);
 
-        if (allExpress.containsKey(newName)) {
-            System.out.println("créer une exception \"already used name\" et faire pop une fenêtre d'erreur?");
-            return;
-        }
+            //pas catch : nombre
+            StageService.Holder.openErrorWindows("messageOnly", ErrorCode.InvalidNameCauseNumber);
+        } catch (NumberFormatException e){
+            //pas un nombre
 
-        allExpress.get(oldName).setName(newName);
-        allExpress.put(newName, allExpress.get(oldName));
-        allExpress.remove(oldName);
+            if (allExpress.containsKey(newName)) {
+                StageService.Holder.openErrorWindows("messageOnly", ErrorCode.AlreadyUsedName);
+                return;
+            }
 
-        for (String key : allExpress.keySet()) {
-            //verifier verif que oldName entouré de signes (ne remplace pas qu'une partie, ex i dans sin) : regex?
-            String newFunction = allExpress.get(key).getFunction().replace(oldName, newName);
-            allExpress.get(key).setFunction(newFunction);
-        }
+            if (newName.equals("fonction") /* || sin || cos || ...*/) {//nom réservé pour ajout ligne
+                StageService.Holder.openErrorWindows("messageOnly", ErrorCode.InvalidNameCauseSyntax);
+                return;
+            }
 
-        if (graphExpress.contains(oldName)) {
-            graphExpress.remove(oldName);
-            graphExpress.add(newName);
+            allExpress.get(oldName).setName(newName);
+            allExpress.put(newName, allExpress.get(oldName));
+            allExpress.remove(oldName);
+
+            for (String key : allExpress.keySet()) {
+                //verifier que oldName entouré de signes (ne remplace pas qu'une partie, ex i dans sin) : regex?
+                String newFunction = allExpress.get(key).getFunction().replace(oldName, newName);
+                allExpress.get(key).setFunction(newFunction);
+            }
+
+            if (graphExpress.contains(oldName)) {
+                graphExpress.remove(oldName);
+                graphExpress.add(newName);
+            }
         }
     }
 }
