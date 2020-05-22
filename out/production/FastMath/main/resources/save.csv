@@ -1,6 +1,6 @@
-cosinus;-cos(x)
+cosinus;cos(x)+i*sin(x)
 exp;e^x
-fonction;f
+fonction;2*i+sqrt(x/7)*i^x
 g;cosinus+sinus/3
 log;ln(x)
 sinus;sin(x)
