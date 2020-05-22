@@ -25,5 +25,55 @@ JetBrain - PMDPugin (plugins.jetbrains.com/plugin/1137-pmdplugin) -> modifier (s
 
 ### Démo
 
-(changer blob en raw dans les output sample pour charger les gifs)
-![Output sample](https://github.com/Thiebosh/FastMath/raw/master/src/main/resources/images/test.gif)
+#### Créer une fonction
+
+![](D:\Java\FastMath\src\main\resources\images\createFunction.gif)
+
+
+
+#### Évaluer une fonction
+
+![evaluateFunction](D:\Java\FastMath\src\main\resources\images\evaluateFunction.gif)
+
+
+
+#### Résoudre une équation
+
+![equation](D:\Java\FastMath\src\main\resources\images\equation.gif)
+
+
+
+#### Dériver une fonction
+
+![derivative](D:\Java\FastMath\src\main\resources\images\derivative.gif)
+
+
+
+#### Intégrer une fonction
+
+![integral](D:\Java\FastMath\src\main\resources\images\integral.gif)
+
+
+
+#### Changer de mode (degrés/radians)
+
+![degres_radians](D:\Java\FastMath\src\main\resources\images\degres_radians.gif)
+
+
+
+#### Tracer la courbe d'une fonction
+
+![plot](D:\Java\FastMath\src\main\resources\images\plot.gif)
+
+
+
+#### Tracer les dérivées et une primitive d'une fonction
+
+![derivative_primitive](D:\Java\FastMath\src\main\resources\images\derivative_primitive.gif)
+
+
+
+
+
+
+
