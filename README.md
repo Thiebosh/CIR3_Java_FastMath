@@ -1,3 +1,8 @@
+**Mai 2020 – Java, JavaFX et SceneBuilder : Solveur mathématique graphique**
+- Application multifenêtre, calculs avancés et affichage de graphes avec multithreading
+
+<br><hr><br>
+
 # FastMath
 Projet java 3e année - solveur mathématique
 
